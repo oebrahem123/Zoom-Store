@@ -352,7 +352,9 @@
                         <div class="row">
                             <div class="col-sm-10 col-md-8 col-lg-6 m-lr-auto">
                                 <div class="p-b-30 m-lr-15-sm">
-                                    <!-- Review -->
+
+                                    <!-- عرض آراء العملاء الخاصة بهذا المنتج -->
+                                    @forelse($product->reviews as $review)
                                     <div class="flex-w flex-t p-b-68" dir="rtl">
                                         <div class="wrap-pic-s size-109 bor0 of-hidden m-l-18 m-t-6">
                                             <img src="{{ asset('assets/frontend/images/avatar-01.jpg') }}" alt="AVATAR">
@@ -360,28 +362,51 @@
 
                                         <div class="size-207">
                                             <div class="flex-w flex-sb-m p-b-17">
-                                                <span class="mtext-107 cl2 p-r-20">
-                                                    Ariana Grande
+                                                <span class="mtext-107 cl2 black">
+                                                    {{ $review->name }}
                                                 </span>
 
                                                 <span class="fs-18 cl11">
-                                                    <i class="zmdi zmdi-star"></i>
-                                                    <i class="zmdi zmdi-star"></i>
-                                                    <i class="zmdi zmdi-star"></i>
-                                                    <i class="zmdi zmdi-star"></i>
-                                                    <i class="zmdi zmdi-star-half"></i>
+                                                    @php
+                                                    $fullStars = floor($review->rating);
+                                                    $halfStar = $review->rating - $fullStars >= 0.5;
+                                                    @endphp
+
+                                                    @for($i = 1; $i <= 5; $i++) @if($i <=$fullStars) <i
+                                                        class="zmdi zmdi-star"></i>
+                                                        @elseif($i == $fullStars + 1 && $halfStar)
+                                                        <i class="zmdi zmdi-star-half"></i>
+                                                        @else
+                                                        <i class="zmdi zmdi-star-outline"></i>
+                                                        @endif
+                                                        @endfor
                                                 </span>
                                             </div>
 
                                             <p class="stext-102 cl6" dir="rtl">
-                                                هذا نص تجريبي يُستخدم لعرض شكل المحتوى ويمكن استبداله لاحقًا بالمحتوى
-                                                الحقيقي.
+                                                {{ $review->message }}
                                             </p>
+
+                                            <small class="stext-102 cl8" style="font-size: 12px;">
+                                                {{ $review->created_at->diffForHumans() }}
+                                            </small>
                                         </div>
                                     </div>
+                                    @empty
+                                    <div class="alert alert-info text-center" dir="rtl"
+                                        style="background: #f8f9fa; border: 1px solid #d1ecf1; color: #0c5460; padding: 20px; border-radius: 10px; margin-bottom: 30px;">
+                                        <i class="zmdi zmdi-comment-outline" style="font-size: 24px;"></i>
+                                        <p style="margin-top: 10px; margin-bottom: 0;">لا توجد تعليقات على هذا المنتج
+                                            بعد. كن أول من يقيّم!</p>
+                                    </div>
+                                    @endforelse
 
                                     <!-- Add review -->
-                                    <form class="w-full">
+                                    <form class="w-full" method="POST" action="{{ route('storeReview') }}"
+                                        id="reviewForm">
+                                        @csrf
+                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+
                                         <h5 class="mtext-108 black cl2 p-b-7" dir="rtl">
                                             إضافة مراجعة
                                         </h5>
@@ -395,41 +420,77 @@
                                                 ما هو تقييمك؟
                                             </span>
 
-                                            <span class="wrap-rating fs-18 cl11 pointer">
-                                                <i class="item-rating pointer zmdi zmdi-star-outline"></i>
-                                                <i class="item-rating pointer zmdi zmdi-star-outline"></i>
-                                                <i class="item-rating pointer zmdi zmdi-star-outline"></i>
-                                                <i class="item-rating pointer zmdi zmdi-star-outline"></i>
-                                                <i class="item-rating pointer zmdi zmdi-star-outline"></i>
-                                                <input class="dis-none" type="number" name="rating">
+                                            <span class="wrap-rating fs-18 cl11 pointer" id="ratingStars">
+                                                <i class="item-rating pointer zmdi zmdi-star-outline"
+                                                    data-value="1"></i>
+                                                <i class="item-rating pointer zmdi zmdi-star-outline"
+                                                    data-value="2"></i>
+                                                <i class="item-rating pointer zmdi zmdi-star-outline"
+                                                    data-value="3"></i>
+                                                <i class="item-rating pointer zmdi zmdi-star-outline"
+                                                    data-value="4"></i>
+                                                <i class="item-rating pointer zmdi zmdi-star-outline"
+                                                    data-value="5"></i>
+                                                <input type="hidden" name="rating" id="ratingValue" value="5">
                                             </span>
                                         </div>
 
                                         <div class="row p-b-25" dir="rtl">
+
                                             <div class="col-12 p-b-5">
-                                                <label class="stext-102 cl3" for="review"> اكتب تقييمك </label>
-                                                <textarea class="size-110 bor8 stext-102 cl2 p-lr-20 p-tb-10"
-                                                    id="review" name="review"></textarea>
+                                                <label class="stext-102 cl3" for="message"> اكتب تقييمك <span
+                                                        class="text-danger">*</span></label>
+                                                <textarea class="size-110 bor8 stext-102 cl2 black p-lr-20 p-tb-10"
+                                                    id="message" name="message"
+                                                    required>{{ old('message', session('review_data.message')) }}</textarea>
+                                                @error('message')
+                                                <small class="text-danger">{{ $message }}</small>
+                                                @enderror
                                             </div>
 
                                             <div class="col-sm-6 p-b-5">
-                                                <label class="stext-102 cl3" for="name">الاسم</label>
-                                                <input class="size-111 bor8 stext-102 cl2 p-lr-20" id="name" type="text"
-                                                    name="name">
+                                                <label class="stext-102 cl3" for="name">الاسم <span
+                                                        class="text-danger">*</span></label>
+                                                <input class="size-111 bor8 stext-102 black cl2 p-lr-20" id="name"
+                                                    type="text" name="name"
+                                                    value="{{ old('name', session('review_data.name')) }}" required>
+                                                @error('name')
+                                                <small class="text-danger">{{ $message }}</small>
+                                                @enderror
                                             </div>
 
                                             <div class="col-sm-6 p-b-5">
-                                                <label class="stext-102 cl3" for="email"> البريد الإلكتروني </label>
-                                                <input class="size-111 bor8 stext-102 cl2 p-lr-20" id="email"
-                                                    type="text" name="email">
+                                                <label class="stext-102 cl3" for="email"> البريد الإلكتروني <span
+                                                        class="text-danger">*</span></label>
+                                                <input class="size-111 bor8 stext-102 cl2 black p-lr-20" id="email"
+                                                    type="email" name="email"
+                                                    value="{{ old('email', session('review_data.email')) }}" required>
+                                                @error('email')
+                                                <small class="text-danger">{{ $message }}</small>
+                                                @enderror
                                             </div>
                                         </div>
 
-                                        <button
+                                        <button type="submit"
                                             class="flex-c-m stext-101 cl0 size-112 bg7 bor11 hov-btn3 p-lr-15 trans-04 m-b-10">
                                             إرسال
                                         </button>
                                     </form>
+
+                                    <!-- عرض رسائل النجاح أو الخطأ -->
+                                    @if(session('success'))
+                                    <div class="alert alert-success text-center" dir="rtl"
+                                        style="background: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 12px; border-radius: 10px; margin-top: 20px;">
+                                        <i class="zmdi zmdi-check-circle"></i> {{ session('success') }}
+                                    </div>
+                                    @endif
+
+                                    @if($errors->any())
+                                    <div class="alert alert-danger text-center" dir="rtl"
+                                        style="background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 12px; border-radius: 10px; margin-top: 20px;">
+                                        <i class="zmdi zmdi-alert-circle"></i> يرجى التحقق من البيانات المدخلة
+                                    </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>

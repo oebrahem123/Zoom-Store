@@ -58,11 +58,11 @@ Route::get('/single-product/{productid}', [ProductController::class, 'showProduc
 Route::get('/category', [FirstController::class, 'GetAllGetCategoryWithProducts'])->name('cats');
 
 // تخزين ريفيو جديد
-Route::post('/storeReview', [FirstController::class, 'storeReview']);
-
+Route::post('/storeReview', [FirstController::class, 'storeReview'])->name('storeReview');
 // صفحة أراء العملاء
 Route::get('/reviews', [FirstController::class, 'reviews']);
 
+Route::get('/single-product/{id}', [FirstController::class, 'showProduct']);
 // البحث عن منتج
 Route::post('/search', function (Request $request) {
     $products = Product::where('name', 'like', '%'.$request->searchkey.'%')->get();

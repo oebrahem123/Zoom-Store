@@ -33,39 +33,57 @@ class FirstController extends Controller
         $categories = Category::all();
         $order = null;
         $reviews = Review::orderBy('created_at', 'desc')->take(6)->get();
+        $allReviews = Review::orderBy('created_at', 'desc')->get();
         if (Auth::check()) {
             $order = Order::where('user_id', Auth::id())->latest()->first();
         }
 
-        return view('welcome', compact('categories', 'reviews', 'order'));
+        return view('welcome', compact('categories', 'reviews', 'order', 'allReviews'));
     }
 
     // حفظ رأي عميل جديد
     public function storeReview(Request $request)
     {
+        if (! Auth::check()) {
+
+            // حفظ البيانات مؤقتًا
+            session([
+                'review_data' => $request->only('name', 'email', 'message', 'rating', 'product_id'),
+            ]);
+
+            return redirect()->route('login')->with('error', ' يرجى تسجيل الدخول أولاً ');
+        }
+
         $request->validate([
             'name' => 'required',
             'email' => 'required',
-            'phone' => 'required',
-            'subject' => 'required',
             'message' => 'required',
+            'product_id' => 'required',
         ]);
-        $newReview = new Review;
-        $newReview->name = $request->name;
-        $newReview->email = $request->email;
-        $newReview->phone = $request->phone;
-        $newReview->subject = $request->subject;
-        $newReview->message = $request->message;
-        $newReview->save();
 
-        // بعد الحفظ نعرض صفحة آراء العملاء
-        $reviews = Review::all();
+        Review::create([
+            'product_id' => $request->product_id,
+            'name' => $request->name,
+            'email' => $request->email,
+            'message' => $request->message,
+            'rating' => $request->rating ?? 5,
+        ]);
 
-        return view('reviews', ['reviews' => $reviews]);
+        session()->forget('review_data');
+
+        return back()->with('success', 'تم نشر التقييم بنجاح');
     }
 
-    // صفحة المنتجات
-    // جلب المنتجات الخاصة بقسم معين (أو جميع المنتجات لو مفيش قسم محدد)
+    public function allReviews()
+    {
+        // استخدم paginate(10) وليس get()
+        $reviews = Review::with('product')
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);  // مهم جداً: paginate وليس get
+
+        return view('all-reviews', compact('reviews'));
+    }
+
     public function GetCategoryProducts($catid = null)
     {
         if ($catid) {
@@ -77,8 +95,6 @@ class FirstController extends Controller
         return view('product', compact('products'));
     }
 
-    // إنتهاء صفحة المنتجات
-    // عرض جميع أقسام المنتجات مع كل المنتجات
     public function GetAllGetCategoryWithProducts()
     {
         $categories = Category::all();
