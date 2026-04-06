@@ -1,0 +1,194 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\Category;
+use App\Models\Product;
+use App\Models\ProductPoto;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+
+class ProductController extends Controller
+{
+    // صفحة إضافة منتج
+    public function showProduct($productid)
+    {
+        $product = Product::with('category', 'productphotos')->find($productid);
+        $price = $product->price;
+        $minPrice = $price * 0.8;
+        $maxPrice = $price * 1.2;
+        $relatedProducts = Product::where('category_id', $product->category_id)->where('id', '!=', $productid)
+            ->whereBetween('price', [$minPrice, $maxPrice])
+            ->inRandomOrder()
+            ->limit(3)
+            ->get();
+
+        return view('products.showProduct', ['product' => $product, 'relatedProducts' => $relatedProducts]);
+
+    }
+
+    // صفحه إضافه للمنتج أكثر من صورة
+    public function AddProductImages($productid)
+    {
+        $product = product::find($productid);
+        $productImages = ProductPoto::where('product_id', $productid)->get();
+
+        return view('admin.Products.AddProductImages', ['product' => $product, 'productImages' => $productImages, 'productid' => $productid,
+
+        ]);
+
+    }
+
+    // حذف لصورة
+    public function Removeproductphoto($imageid)
+    {
+
+        if ($imageid != null) {
+            $photo = ProductPoto::findOrFail($imageid);
+
+            // حذف الصورة من المجلد إن وجدت
+            if (file_exists(public_path($photo->imagepath))) {
+                unlink(public_path($photo->imagepath));
+            }
+            $product_id = $photo->product_id;
+            $photo->delete();
+
+            return redirect()
+                ->route('admin.products.AddProductImages', $product_id)
+                ->with('success', '✅ تم حذف الصورة بنجاح');
+        } else {
+            abort(403, 'please enter image id in the route');
+        }
+
+    }
+
+    public function create()
+    {
+        $allcategories = Category::all();
+
+        return view('admin.products.addproduct', ['allcategories' => $allcategories]);
+
+    }
+
+    // أضافه الصورة لصفحه إضافه أكثر من صورة للمنتج
+    public function storeProductImage(Request $request)
+    {
+        $request->validate([
+
+            'product_id' => 'required',
+            'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+        $photo = new ProductPoto;
+        $photo->product_id = $request->product_id;
+        if ($request->has('photo')) {
+            $path = $request->photo->move(
+                'uploads',
+                Str::uuid()->toString().'_'.$request->photo->getClientOriginalName()
+            );
+            $photo->imagepath = $path;
+        }
+
+        $photo->save();
+
+        return redirect()->route('admin.products.index')->with('success', 'تمت إضافة الصورة بنجاح ✅');
+    }
+
+    // الأنتهاء من إضافه الصورة لصفحه إضافه أكثر من صورة للمنتج
+
+    // إضافه منتج جديد
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'price' => 'required|numeric',
+            'quantity' => 'required|integer',
+            'description' => 'required',
+            'category_id' => 'nullable|integer',
+            'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $product = new Product;
+        $product->name = $request->name;
+        $product->price = $request->price;
+        $product->quantity = $request->quantity;
+        $product->description = $request->description;
+        $product->category_id = $request->category_id;
+
+        $fileName = Str::uuid()->toString().'-'.$request->file('photo')->getClientOriginalName();
+        $request->file('photo')->move(public_path('uploads'), $fileName);
+        $product->imagepath = 'uploads/'.$fileName;
+
+        $product->save();
+
+        return redirect()->route('admin.products.index')->with('success', 'تمت إضافة المنتج بنجاح ✅');
+    }
+
+    // عرض كل المنتجات
+    public function index()
+    {
+
+        $products = Product::with('category')->get();
+
+        return view('admin.Products.showproduct', compact('products'));
+    }
+
+    // صفحة تعديل منتج
+    public function edit($id)
+    {
+        $product = Product::findOrFail($id);
+        $allcategories = Category::all();
+
+        return view('admin.products.editproduct', compact('product', 'allcategories'));
+    }
+
+    // تنفيذ تعديل المنتج
+    public function update(Request $request, $id)
+    {
+        $product = Product::findOrFail($id);
+
+        $request->validate([
+            'name' => 'required',
+            'price' => 'required|numeric',
+            'quantity' => 'required|integer',
+            'description' => 'required',
+            'category_id' => 'nullable|integer',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $product->name = $request->name;
+        $product->price = $request->price;
+        $product->quantity = $request->quantity;
+        $product->description = $request->description;
+        $product->category_id = $request->category_id;
+
+        // تحديث الصورة إن وُجدت
+        if ($request->hasFile('photo')) {
+            if ($product->imagepath && file_exists(public_path($product->imagepath))) {
+                unlink(public_path($product->imagepath));
+            }
+
+            $fileName = Str::uuid()->toString().'-'.$request->file('photo')->getClientOriginalName();
+            $request->file('photo')->move(public_path('uploads'), $fileName);
+            $product->imagepath = 'uploads/'.$fileName;
+        }
+
+        $product->save();
+
+        return redirect()->route('admin.products.index')->with('success', 'تم تعديل المنتج بنجاح ✅');
+    }
+
+    // حذف منتج
+    public function destroy($id)
+    {
+        $product = Product::findOrFail($id);
+
+        if ($product->imagepath && file_exists(public_path($product->imagepath))) {
+            unlink(public_path($product->imagepath));
+        }
+
+        $product->delete();
+
+        return redirect()->route('admin.products.index')->with('success', 'تم حذف المنتج بنجاح ✅');
+    }
+}
