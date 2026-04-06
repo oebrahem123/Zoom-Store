@@ -15,4 +15,9 @@ class product extends Model
     {
         return $this->hasMany(ProductPoto::class);
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
 }

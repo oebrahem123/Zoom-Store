@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
-            $table->text("name");
-            $table->text("email");
-            $table->text("phone");
-            $table->text("subject");
-            $table->text("message");
+            $table->foreignId('product_id')->constrained()->cascadeOnDelete();
+            $table->string('name');
+            $table->string('email');
+            $table->text('message');
+            $table->integer('rating')->default(5);
             $table->timestamps();
         });
     }
