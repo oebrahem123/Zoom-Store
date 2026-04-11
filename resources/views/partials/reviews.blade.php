@@ -27,7 +27,7 @@
                         <div class="review-content" dir="rtl">
                             <!-- بيانات المستخدم -->
                             <div class="d-flex align-items-center mb-2">
-                                <img src="{{ asset('assets/frontend/images/avatar.png') }}" class="user-img">
+                                <img src="{{ asset('assets/frontend/images/user.png') }}" class="user-img">
                                 <div class="ms-2 p-r-10">
                                     <div class="name">{{ $review->name }}</div>
                                     <small class="text-muted">{{ $review->created_at->diffForHumans() }}</small>

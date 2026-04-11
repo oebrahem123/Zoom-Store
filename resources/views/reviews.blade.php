@@ -25,7 +25,7 @@
                             @forelse($reviews as $review)
                             <div class="flex-w flex-t p-b-68" dir="rtl">
                                 <div class="wrap-pic-s size-109 bor0 of-hidden m-l-18 m-t-6">
-                                    <img src="{{ asset('assets/frontend/images/avatar.png') }}" alt="AVATAR">
+                                    <img src="{{ asset('assets/frontend/images/user.png') }}" alt="AVATAR">
                                 </div>
 
                                 <div class="size-207">

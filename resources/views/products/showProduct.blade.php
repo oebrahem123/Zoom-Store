@@ -1,6 +1,32 @@
 @extends('layouts.master')
 @section('content')
+<style>
+    .form-control {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        background-color: #fff;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
 
+    .form-control:focus {
+        border-color: #f28123;
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(242, 129, 35, 0.2);
+    }
+
+    select.form-control {
+        cursor: pointer;
+        appearance: none;
+        -webkit-appearance: none;
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: left 12px center;
+        background-size: 16px;
+    }
+</style>
 
 
 {{-- <div class="single-product-page mt-5">
@@ -194,13 +220,14 @@
 
                             <div class="size-204 respon6-next">
                                 <div class="rs1-select2 bor8 bg0">
-                                    <select class="js-select2" name="size">
-                                        <option>اختر المقاس</option>
-                                        <option>S</option>
-                                        <option>M</option>
-                                        <option>L</option>
-                                        <option>XL</option>
+                                    <select id="sizeSelect" class="form-control" name="size"
+                                        style="padding: 8px 12px; border-radius: 5px;">
+                                        <option value=""> اختر المقاس </option>
+                                        @foreach($product->variants->pluck('size')->unique() as $size)
+                                        <option value="{{ $size }}">{{ $size }}</option>
+                                        @endforeach
                                     </select>
+
 
                                     <!-- ده برا select -->
                                     <div class="dropDownSelect2"></div>
@@ -216,11 +243,9 @@
 
                             <div class="size-204 respon6-next">
                                 <div class="rs1-select2 bor8 bg0">
-                                    <select class="js-select2" name="color">
-                                        <option>اختر اللون</option>
-                                        <option>أحمر</option>
-                                        <option>أزرق</option>
-                                        <option>أسود</option>
+                                    <select id="colorSelect" class="form-control" name="color"
+                                        style="padding: 8px 12px; border-radius: 5px;">
+                                        <option value=""> اختر اللون أولاً </option>
                                     </select>
                                     <div class="dropDownSelect2"></div>
                                 </div>
@@ -298,29 +323,16 @@
                                             وزن
                                         </span>
 
-                                        <span class="stext-102 cl6 size-206">
-                                            0.79 kg
-                                        </span>
+                                        <span id="weight">--</span>
                                     </li>
 
-                                    <li class="flex-w flex-t p-b-7">
-                                        <span class="stext-102 cl3 size-205">
-                                            مقاس
-                                        </span>
-
-                                        <span class="stext-102 cl6 size-206">
-                                            110 x 33 x 100 cm
-                                        </span>
-                                    </li>
 
                                     <li class="flex-w flex-t p-b-7">
                                         <span class="stext-102 cl3 size-205">
                                             خامات
                                         </span>
 
-                                        <span class="stext-102 cl6 size-206">
-                                            60% cotton
-                                        </span>
+                                        <span id="material">--</span>
                                     </li>
 
                                     <li class="flex-w flex-t p-b-7">
@@ -328,9 +340,7 @@
                                             الألوان المتاحة
                                         </span>
 
-                                        <span class="stext-102 cl6 size-206">
-                                            أسود، أزرق، رمادي، أخضر، أحمر، أبيض
-                                        </span>
+                                        {{ $product->variants->pluck('color')->unique()->implode('، ') }}
                                     </li>
 
                                     <li class="flex-w flex-t p-b-7">
@@ -338,9 +348,7 @@
                                             المقاسات
                                         </span>
 
-                                        <span class="stext-102 cl6 size-206">
-                                            XL, L, M, S
-                                        </span>
+                                        {{ $product->variants->pluck('size')->unique()->implode(', ') }}
                                     </li>
                                 </ul>
                             </div>
@@ -357,7 +365,7 @@
                                     @forelse($product->reviews as $review)
                                     <div class="flex-w flex-t p-b-68" dir="rtl">
                                         <div class="wrap-pic-s size-109 bor0 of-hidden m-l-18 m-t-6">
-                                            <img src="{{ asset('assets/frontend/images/avatar.png') }}" alt="AVATAR">
+                                            <img src="{{ asset('assets/frontend/images/user.png') }}" alt="AVATAR">
                                         </div>
 
                                         <div class="size-207">
@@ -502,7 +510,55 @@
     </div>
 </section>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
 
+    const variants = @json($product->variants);
+
+    const sizeSelect = document.getElementById('sizeSelect');
+    const colorSelect = document.getElementById('colorSelect');
+    const weightSpan = document.getElementById('weight');
+    const materialSpan = document.getElementById('material');
+
+    sizeSelect.addEventListener('change', function () {
+
+        let selectedSize = this.value;
+
+        colorSelect.innerHTML = '<option value="">-- اختر اللون --</option>';
+        weightSpan.innerText = '--';
+        materialSpan.innerText = '--';
+
+        if (!selectedSize) return;
+
+        let colors = variants
+            .filter(v => v.size === selectedSize && v.color)
+            .map(v => v.color);
+
+        let uniqueColors = [...new Set(colors)];
+
+        uniqueColors.forEach(color => {
+            let option = document.createElement('option');
+            option.value = color;
+            option.text = color;
+            colorSelect.appendChild(option);
+        });
+    });
+
+    colorSelect.addEventListener('change', function () {
+
+        let size = sizeSelect.value;
+        let color = this.value;
+
+        let variant = variants.find(v => v.size === size && v.color === color);
+
+        if (variant) {
+            weightSpan.innerText = variant.weight ? variant.weight + ' كجم' : 'غير محدد';
+            materialSpan.innerText = variant.material || 'غير محدد';
+        }
+    });
+
+});
+</script>
 
 
 

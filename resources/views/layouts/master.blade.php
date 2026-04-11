@@ -27,7 +27,6 @@
     <link rel="stylesheet" type="text/css"
         href="{{ asset('assets/frontend/vendor/animsition/css/animsition.min.css') }}">
     <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/frontend/vendor/select2/select2.min.css') }}">
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css"
         href="{{ asset('assets/frontend/vendor/daterangepicker/daterangepicker.css') }}">
@@ -47,6 +46,7 @@
     <!--===============================================================================================-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="/vendor/select2/select2.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
 </head>
 
@@ -835,25 +835,23 @@
                 <i class="zmdi zmdi-chevron-up"></i>
             </span>
         </div>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+        <script src="{{ asset('assets/frontend/vendor/jquery/jquery-3.2.1.min.js') }}"></script>
+        <script src="{{ asset('assets/frontend/vendor/bootstrap/js/popper.js') }}"></script>
+        <link rel="stylesheet" type="text/css" href="{{ asset('assets/frontend/vendor/select2/select2.min.css') }}">
+        <script src="{{ asset('assets/frontend/vendor/select2/select2.min.js') }}"></script>
+
+
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
         <!--===============================================================================================-->
-        <script src="{{ asset('assets/frontend/vendor/jquery/jquery-3.2.1.min.js') }}"></script>
         <!--===============================================================================================-->
         <script src="{{ asset('assets/frontend/vendor/animsition/js/animsition.min.js') }}"></script>
         <!--===============================================================================================-->
-        <script src="{{ asset('assets/frontend/vendor/bootstrap/js/popper.js') }}"></script>
         <script src="{{ asset('assets/frontend/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
         <!--===============================================================================================-->
-        <script src="{{ asset('assets/frontend/vendor/select2/select2.min.js') }}"></script>
-        <script>
-            $(".js-select2").each(function () {
-			$(this).select2({
-				minimumResultsForSearch: 20,
-				dropdownParent: $(this).next('.dropDownSelect2')
-			});
-		})
-        </script>
+
         <!--===============================================================================================-->
         <script src="{{ asset('assets/frontend/vendor/daterangepicker/moment.min.js') }}"></script>
         <script src="{{ asset('assets/frontend/vendor/daterangepicker/daterangepicker.js') }}"></script>

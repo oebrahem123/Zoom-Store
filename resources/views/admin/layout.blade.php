@@ -8,11 +8,11 @@
     <title>Store Admin</title>
     <!-- plugins:css -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css">
-<!-- Feather Icons -->
-<script src="https://unpkg.com/feather-icons"></script>
+    <!-- Feather Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
 
-<!-- Material Design Icons -->
-<link href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css" rel="stylesheet">
+    <!-- Material Design Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/admin/vendors/feather/feather.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/admin/vendors/ti-icons/css/themify-icons.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/admin/vendors/css/vendor.bundle.base.css') }}">
@@ -107,143 +107,129 @@
 
         <!-- partial -->
         <div class="container-fluid page-body-wrapper">
-<nav class="sidebar sidebar-offcanvas" id="sidebar">
-    <ul class="nav">
+            <nav class="sidebar sidebar-offcanvas" id="sidebar">
+                <ul class="nav">
 
 
-        {{-- Dashboard --}}
-        <li class="nav-item">
-            <a class="nav-link" href="{{ route('admin.index') }}">
-                <i class="icon-grid menu-icon"></i>
-                <span class="menu-title">Dashboard</span>
-            </a>
-        </li>
-
-        {{-- الأقسام --}}
-        <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#categoriesMenu"
-                aria-controls="categoriesMenu"
-                data-menu="categories">
-                <i class="mdi mdi-folder-multiple-outline menu-icon"></i>
-                <span class="menu-title">الأقسام</span>
-                <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse " id="categoriesMenu">
-                <ul class="nav flex-column sub-menu">
+                    {{-- Dashboard --}}
                     <li class="nav-item">
-                        <a class="nav-link"
-                            href="{{ route('admin.categories.create') }}">إضافة قسم جديد</a>
+                        <a class="nav-link" href="{{ route('admin.index') }}">
+                            <i class="icon-grid menu-icon"></i>
+                            <span class="menu-title">Dashboard</span>
+                        </a>
                     </li>
+
+                    {{-- الأقسام --}}
                     <li class="nav-item">
-                        <a class="nav-link"
-                            href="{{ route('admin.categories.index') }}">كل الأقسام</a>
+                        <a class="nav-link" data-toggle="collapse" href="#categoriesMenu" aria-controls="categoriesMenu"
+                            data-menu="categories">
+                            <i class="mdi mdi-folder-multiple-outline menu-icon"></i>
+                            <span class="menu-title">الأقسام</span>
+                            <i class="menu-arrow"></i>
+                        </a>
+                        <div class="collapse " id="categoriesMenu">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('admin.categories.create') }}">إضافة قسم جديد</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('admin.categories.index') }}">كل الأقسام</a>
+                                </li>
+                            </ul>
+                        </div>
                     </li>
+
+                    {{-- المنتجات --}}
+                    <li class="nav-item ">
+                        <a class="nav-link" data-toggle="collapse" href="#productsMenu" aria-controls="productsMenu"
+                            data-menu="products">
+                            <i class="icon-bag menu-icon"></i>
+                            <span class="menu-title">المنتجات</span>
+                            <i class="menu-arrow"></i>
+                        </a>
+                        <div class="collapse" id="productsMenu">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item">
+                                    <a class="nav-link " href="{{ route('admin.products.create') }}">إضافة منتج جديد</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link " href="{{ route('admin.products.index') }}">كل المنتجات</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    {{-- السجلات --}}
+                    <li class="nav-item ">
+                        <a class="nav-link" data-toggle="collapse" href="#logsMenu" aria-controls="logsMenu"
+                            data-menu="logs">
+                            <i class="mdi mdi-clipboard-text menu-icon"></i>
+                            <span class="menu-title">السجلات</span>
+                            <i class="menu-arrow"></i>
+                        </a>
+                        <div class="collapse" id="logsMenu">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('admin.delete_logs.index') }}">سجل الحذف</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    {{-- 🔹 قسم الطلبات --}}
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="collapse" href="#ordersMenu" aria-controls="ordersMenu">
+                            <i class="mdi mdi-cart-plus menu-icon"></i>
+                            <span class="menu-title">عمليات الشراء</span>
+                            <i class="menu-arrow"></i>
+                        </a>
+
+                        <div class="collapse" id="ordersMenu">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('admin.orders.previousorder') }}">
+                                        كل الطلبات
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="">
+                                        الطلبات المكتملة
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link " href="">
+                                        قيد التنفيذ
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    {{-- 🔹 الموقع الرئيسي --}}
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="collapse" href="#homeMenu" aria-controls="homeMenu">
+                            <i class="mdi mdi-home menu-icon"></i>
+                            <span class="menu-title">الموقع الرئيسي</span>
+                            <i class="menu-arrow"></i>
+                        </a>
+
+                        <div class="collapse" id="homeMenu">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ url('/') }}">
+                                        الذهاب إلى الموقع
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+
+
+                    {{-- //////// --}}
+
                 </ul>
-            </div>
-        </li>
-
-        {{-- المنتجات --}}
-        <li class="nav-item ">
-            <a class="nav-link" data-toggle="collapse" href="#productsMenu"
-                aria-controls="productsMenu"
-                data-menu="products">
-                <i class="icon-bag menu-icon"></i>
-                <span class="menu-title">المنتجات</span>
-                <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="productsMenu">
-                <ul class="nav flex-column sub-menu">
-                    <li class="nav-item">
-                        <a class="nav-link "
-                            href="{{ route('admin.products.create') }}">إضافة منتج جديد</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link "
-                            href="{{ route('admin.products.index') }}">كل المنتجات</a>
-                    </li>
-                </ul>
-            </div>
-        </li>
-
-        {{-- السجلات --}}
-        <li class="nav-item ">
-            <a class="nav-link" data-toggle="collapse" href="#logsMenu"
-
-                aria-controls="logsMenu"
-                data-menu="logs">
-                <i class="mdi mdi-clipboard-text menu-icon"></i>
-                <span class="menu-title">السجلات</span>
-                <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="logsMenu">
-                <ul class="nav flex-column sub-menu">
-                    <li class="nav-item">
-                        <a class="nav-link"
-                            href="{{ route('admin.delete_logs.index') }}">سجل الحذف</a>
-                    </li>
-                </ul>
-            </div>
-        </li>
-
-       {{-- 🔹 قسم الطلبات --}}
-<li class="nav-item">
-    <a class="nav-link" data-toggle="collapse" href="#ordersMenu"
-       aria-controls="ordersMenu">
-        <i class="mdi mdi-cart-plus menu-icon"></i>
-        <span class="menu-title">عمليات الشراء</span>
-        <i class="menu-arrow"></i>
-    </a>
-
-    <div class="collapse" id="ordersMenu">
-        <ul class="nav flex-column sub-menu">
-            <li class="nav-item">
-                <a class="nav-link"
-                   href="{{ route('admin.orders.previousorder') }}">
-                    كل الطلبات
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link"
-                   href="">
-                    الطلبات المكتملة
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link "
-                   href="">
-                    قيد التنفيذ
-                </a>
-            </li>
-        </ul>
-    </div>
-</li>
-
-{{-- 🔹 الموقع الرئيسي --}}
-<li class="nav-item">
-    <a class="nav-link" data-toggle="collapse" href="#homeMenu"
-       aria-controls="homeMenu">
-        <i class="mdi mdi-home menu-icon"></i>
-        <span class="menu-title">الموقع الرئيسي</span>
-        <i class="menu-arrow"></i>
-    </a>
-
-    <div class="collapse" id="homeMenu">
-        <ul class="nav flex-column sub-menu">
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url('/') }}">
-                    الذهاب إلى الموقع
-                </a>
-            </li>
-        </ul>
-    </div>
-</li>
-
-
-
-          {{-- //////// --}}
-
-    </ul>
-</nav>
+            </nav>
 
 
 

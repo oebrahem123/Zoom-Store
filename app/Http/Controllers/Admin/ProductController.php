@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductPoto;
+use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -14,7 +15,7 @@ class ProductController extends Controller
     // صفحة إضافة منتج
     public function showProduct($productid)
     {
-        $product = Product::with('category', 'productphotos')->find($productid);
+        $product = Product::with('category', 'productphotos', 'variants', 'reviews')->findOrFail($productid);
         $price = $product->price;
         $minPrice = $price * 0.8;
         $maxPrice = $price * 1.2;
@@ -120,6 +121,22 @@ class ProductController extends Controller
         $product->imagepath = 'uploads/'.$fileName;
 
         $product->save();
+        if ($request->has('variants')) {
+
+            foreach ($request->variants as $variant) {
+
+                if (! empty($variant['size'])) {
+
+                    $product->variants()->create([
+                        'size' => $variant['size'],
+                        'color' => $variant['color'] ?? null,
+                        'quantity' => $variant['quantity'] ?? 0,
+                        'material' => $variant['material'] ?? null,
+                        'weight' => $variant['weight'] ?? null,
+                    ]);
+                }
+            }
+        }
 
         return redirect()->route('admin.products.index')->with('success', 'تمت إضافة المنتج بنجاح ✅');
     }
@@ -136,7 +153,7 @@ class ProductController extends Controller
     // صفحة تعديل منتج
     public function edit($id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::with('variants')->findOrFail($id);
         $allcategories = Category::all();
 
         return view('admin.products.editproduct', compact('product', 'allcategories'));
@@ -156,13 +173,15 @@ class ProductController extends Controller
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $product->name = $request->name;
-        $product->price = $request->price;
-        $product->quantity = $request->quantity;
-        $product->description = $request->description;
-        $product->category_id = $request->category_id;
+        $product->update([
+            'name' => $request->name,
+            'price' => $request->price,
+            'quantity' => $request->quantity,
+            'description' => $request->description,
+            'category_id' => $request->category_id,
+        ]);
 
-        // تحديث الصورة إن وُجدت
+        // الصورة
         if ($request->hasFile('photo')) {
             if ($product->imagepath && file_exists(public_path($product->imagepath))) {
                 unlink(public_path($product->imagepath));
@@ -171,11 +190,56 @@ class ProductController extends Controller
             $fileName = Str::uuid()->toString().'-'.$request->file('photo')->getClientOriginalName();
             $request->file('photo')->move(public_path('uploads'), $fileName);
             $product->imagepath = 'uploads/'.$fileName;
+            $product->save();
         }
 
-        $product->save();
+        // 🔥 أهم جزء (variants)
+        if ($request->has('variants')) {
 
-        return redirect()->route('admin.products.index')->with('success', 'تم تعديل المنتج بنجاح ✅');
+            $existingIds = $product->variants->pluck('id')->toArray();
+
+            $requestIds = [];
+
+            foreach ($request->variants as $variant) {
+
+                // لو فيه id → update
+                if (isset($variant['id'])) {
+
+                    $requestIds[] = $variant['id'];
+
+                    $existing = ProductVariant::find($variant['id']);
+
+                    if ($existing) {
+                        $existing->update([
+                            'size' => $variant['size'],
+                            'color' => $variant['color'],
+                            'quantity' => $variant['quantity'],
+                            'material' => $variant['material'] ?? null,
+                            'weight' => $variant['weight'] ?? null,
+                        ]);
+                    }
+
+                } else {
+                    // create جديد
+                    $new = $product->variants()->create([
+                        'size' => $variant['size'],
+                        'color' => $variant['color'],
+                        'quantity' => $variant['quantity'],
+                        'material' => $variant['material'] ?? null,
+                        'weight' => $variant['weight'] ?? null,
+                    ]);
+
+                    $requestIds[] = $new->id;
+                }
+            }
+
+            // 🔥 هنا السحر
+            $idsToDelete = array_diff($existingIds, $requestIds);
+
+            ProductVariant::whereIn('id', $idsToDelete)->delete();
+        }
+
+        return redirect()->route('admin.products.index')->with('success', 'تم التعديل بنجاح 🔥');
     }
 
     // حذف منتج
@@ -183,9 +247,13 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
 
+        // حذف الصورة
         if ($product->imagepath && file_exists(public_path($product->imagepath))) {
             unlink(public_path($product->imagepath));
         }
+
+        // 🔥 حذف variants
+        $product->variants()->delete();
 
         $product->delete();
 

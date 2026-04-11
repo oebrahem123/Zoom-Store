@@ -20,4 +20,18 @@ class product extends Model
     {
         return $this->hasMany(Review::class);
     }
+
+    public function variants()
+    {
+        return $this->hasMany(ProductVariant::class);
+    }
+
+    protected $fillable = [
+        'name',
+        'price',
+        'quantity',
+        'description',
+        'category_id',
+        'imagepath',
+    ];
 }
