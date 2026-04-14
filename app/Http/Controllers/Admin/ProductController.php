@@ -76,12 +76,15 @@ class ProductController extends Controller
     public function storeProductImage(Request $request)
     {
         $request->validate([
-
             'product_id' => 'required',
             'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'color' => 'nullable|string',
         ]);
+
         $photo = new ProductPoto;
         $photo->product_id = $request->product_id;
+        $photo->color = $request->color; // 🔥 أهم سطر
+
         if ($request->has('photo')) {
             $path = $request->photo->move(
                 'uploads',
@@ -92,7 +95,7 @@ class ProductController extends Controller
 
         $photo->save();
 
-        return redirect()->route('admin.products.index')->with('success', 'تمت إضافة الصورة بنجاح ✅');
+        return redirect()->back()->with('success', 'تمت إضافة الصورة بنجاح ✅');
     }
 
     // الأنتهاء من إضافه الصورة لصفحه إضافه أكثر من صورة للمنتج
