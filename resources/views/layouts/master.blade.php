@@ -414,7 +414,13 @@
                         <div class="header-cart-item-img"
                             onclick="document.getElementById('delete-{{ $item->id }}').submit();">
 
-                            <img src="{{ asset($item->product->imagepath) }}" alt="IMG">
+                            @php
+                            $variantImage = $item->product->productphotos
+                            ->where('color', $item->color)
+                            ->first();
+                            @endphp
+
+                            <img src="{{ asset($variantImage->imagepath ?? $item->product->imagepath) }}">
 
                             <!-- form مخفي -->
                             <form id="delete-{{ $item->id }}" action="{{ route('cart.delete', $item->id) }}"
@@ -432,7 +438,12 @@
                                 class="header-cart-item-name m-b-6 hov-cl1 trans-04">
                                 {{ $item->product->name }}
                             </a>
-
+                            <div>
+                                المقاس : {{ $item->size ?? '—' }}
+                            </div>
+                            <div>
+                                اللون : {{ $item->color ?? '—' }}
+                            </div>
                             <!-- الكمية -->
                             <div>
                                 الكمية: {{ $item->quantity }}

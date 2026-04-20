@@ -31,7 +31,14 @@
                                     <td class="column-1">
                                         <div class="how-itemcart1 delete-item" data-id="{{ $item->id }}">
 
-                                            <img src="{{ asset($item->product->imagepath) }}" alt="IMG">
+                                            @php
+                                            $variantImage = $item->product->productphotos
+                                            ->where('color', $item->color)
+                                            ->first();
+                                            @endphp
+
+                                            <img
+                                                src="{{ asset($variantImage->imagepath ?? $item->product->imagepath) }}">
 
                                             <form id="delete-{{ $item->id }}"
                                                 action="{{ route('cart.delete', $item->id) }}" method="POST">
