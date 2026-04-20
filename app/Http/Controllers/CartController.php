@@ -85,9 +85,16 @@ class CartController extends Controller
     public function removeItem($cartid)
     {
         $cartItem = Cart::findOrFail($cartid);
-        $cartItem->delete();
 
-        return redirect()->route('cart')->with('success', 'تم حذف المنتج من السلة بنجاح ✅');
+        if ($cartItem->quantity > 1) {
+            // 👇 ينقص واحد بس
+            $cartItem->decrement('quantity');
+        } else {
+            // 👇 لو آخر واحد يتمسح
+            $cartItem->delete();
+        }
+
+        return redirect()->route('cart')->with('success', 'تم تحديث السلة ✅');
     }
 
     public function Completeorder()
@@ -152,5 +159,117 @@ class CartController extends Controller
         $order = Order::findOrFail($id);
 
         return view('products.order-confirmation', compact('order'));
+    }
+
+    // تحديث منتج موجود في السلة (مقاس/لون مختلف)
+    // public function updateCartItem(Request $request, $cartId)
+    // {
+    //     $user_id = auth()->id();
+
+    //     // البحث عن العنصر الحالي في السلة
+    //     $oldCartItem = Cart::where('id', $cartId)
+    //         ->where('user_id', $user_id)
+    //         ->firstOrFail();
+
+    //     $request->validate([
+    //         'variant_id' => 'required|exists:product_variants,id',
+    //     ]);
+
+    //     $newVariantId = $request->variant_id;
+    //     $newVariant = ProductVariant::findOrFail($newVariantId);
+
+    //     // التحقق من الكمية المتوفرة
+    //     if ($newVariant->quantity <= 0) {
+    //         return back()->with('error', '❌ هذا المزيج من المقاس واللون غير متوفر حالياً');
+    //     }
+
+    //     // هل يوجد نفس المنتج بنفس الـ variant الجديد في السلة بالفعل؟
+    //     $existingCartItem = Cart::where('user_id', $user_id)
+    //         ->where('product_id', $oldCartItem->product_id)
+    //         ->where('variant_id', $newVariantId)
+    //         ->where('id', '!=', $cartId) // استثناء العنصر الحالي
+    //         ->first();
+
+    //     if ($existingCartItem) {
+    //         // إذا وجد، ندمج الكمية ونحذف القديم
+    //         $newQuantity = $existingCartItem->quantity + $oldCartItem->quantity;
+
+    //         // التحقق من الكمية المتوفرة
+    //         if ($newQuantity > $newVariant->quantity) {
+    //             return back()->with('error', '❌ الكمية المطلوبة غير متوفرة لهذا المزيج');
+    //         }
+
+    //         $existingCartItem->quantity = $newQuantity;
+    //         $existingCartItem->save();
+
+    //         // حذف العنصر القديم
+    //         $oldCartItem->delete();
+
+    //         return redirect()->route('cart')->with('success', '✅ تم تحديث المنتج في السلة');
+    //     } else {
+    //         // إذا لم يوجد، نقوم بتحديث العنصر الحالي بالـ variant الجديد
+    //         $oldCartItem->update([
+    //             'variant_id' => $newVariantId,
+    //             'size' => $newVariant->size,
+    //             'color' => $newVariant->color,
+    //             // نحتفظ بنفس الكمية أو يمكنك إعادة تعيينها إلى 1
+    //             'quantity' => $oldCartItem->quantity,
+    //         ]);
+
+    //         return redirect()->route('cart')->with('success', '✅ تم تعديل المنتج بنجاح');
+    //     }
+    // }
+
+    public function updateCartItem(Request $request, $cartId)
+    {
+        $user_id = auth()->id();
+
+        $oldCartItem = Cart::where('id', $cartId)
+            ->where('user_id', $user_id)
+            ->firstOrFail();
+
+        $request->validate([
+            'variant_id' => 'required|exists:product_variants,id',
+        ]);
+
+        $newVariant = ProductVariant::findOrFail($request->variant_id);
+
+        // ❗ لو الكمية = 1 → عادي update
+        if ($oldCartItem->quantity == 1) {
+
+            $oldCartItem->update([
+                'variant_id' => $newVariant->id,
+                'size' => $newVariant->size,
+                'color' => $newVariant->color,
+            ]);
+
+        } else {
+
+            // 🔥 1. نقلل الكمية من القديم
+            $oldCartItem->decrement('quantity');
+
+            // 🔥 2. نشوف هل فيه نفس الـ variant الجديد
+            $existing = Cart::where('user_id', $user_id)
+                ->where('product_id', $oldCartItem->product_id)
+                ->where('variant_id', $newVariant->id)
+                ->first();
+
+            if ($existing) {
+                // نزود عليه
+                $existing->increment('quantity');
+            } else {
+                // نعمل item جديد
+                Cart::create([
+                    'user_id' => $user_id,
+                    'product_id' => $oldCartItem->product_id,
+                    'quantity' => 1,
+                    'size' => $newVariant->size,
+                    'color' => $newVariant->color,
+                    'variant_id' => $newVariant->id,
+                ]);
+            }
+        }
+
+        return redirect()->route('cart')->with('success', 'تم تعديل عنصر واحد فقط ✅');
     }
 }

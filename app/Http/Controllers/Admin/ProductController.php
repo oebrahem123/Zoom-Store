@@ -13,9 +13,31 @@ use Illuminate\Support\Str;
 class ProductController extends Controller
 {
     // صفحة إضافة منتج
-    public function showProduct($productid)
+    public function showProduct($productid, Request $request) // <-- أضفنا Request $request هنا
     {
         $product = Product::with('category', 'productphotos', 'variants', 'reviews')->findOrFail($productid);
+
+        // --- الحل الجديد: استقبال size و color من الرابط ---
+        $selectedSize = $request->query('size'); // بيجيب قيمة size من URL
+        $selectedColor = $request->query('color'); // بيجيب قيمة color من URL
+
+        // متغير لتخزين الـ variant ID المطابق (لحالته في الـ select)
+        $selectedVariantId = null;
+
+        // لو فيه size و color تم إرسالهم من السلة
+        if ($selectedSize && $selectedColor) {
+            // البحث عن الـ variant المطابق
+            $variant = $product->variants()
+                ->where('size', $selectedSize)
+                ->where('color', $selectedColor)
+                ->first();
+
+            if ($variant) {
+                $selectedVariantId = $variant->id;
+            }
+        }
+        // ---------------------------------------------
+
         $price = $product->price;
         $minPrice = $price * 0.8;
         $maxPrice = $price * 1.2;
@@ -25,8 +47,14 @@ class ProductController extends Controller
             ->limit(3)
             ->get();
 
-        return view('products.showProduct', ['product' => $product, 'relatedProducts' => $relatedProducts]);
-
+        // تمرير المتغيرات الجديدة للـ View
+        return view('products.showProduct', [
+            'product' => $product,
+            'relatedProducts' => $relatedProducts,
+            'selectedSize' => $selectedSize,      // <-- جديد
+            'selectedColor' => $selectedColor,    // <-- جديد
+            'selectedVariantId' => $selectedVariantId, // <-- جديد
+        ]);
     }
 
     // صفحه إضافه للمنتج أكثر من صورة

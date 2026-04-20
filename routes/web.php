@@ -72,7 +72,12 @@ Route::post('/search', function (Request $request) {
     return view('product', compact('products', 'categories'));
 });
 // صفحه الشراء cart
+// تحديث منتج في السلة (للتعديل)
+Route::post('/cart/update/{cartId}', [CartController::class, 'updateCartItem'])
+    ->middleware('auth')
+    ->name('cart.update');
 // صفحة عرض السلة
+
 Route::get('/cart', [CartController::class, 'cart'])
     ->middleware('auth')
     ->name('cart');

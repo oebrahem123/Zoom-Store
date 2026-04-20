@@ -434,7 +434,7 @@
                         <div class="header-cart-item-txt p-t-8" style="padding-right:10px;">
 
                             <!-- اسم المنتج -->
-                            <a href="{{ route('product.details', $item->product->id) }}"
+                            <a href="{{ route('product.details', $item->product->id) }}?size={{ $item->size }}&color={{ $item->color }}&cart_item_id={{ $item->id }}"
                                 class="header-cart-item-name m-b-6 hov-cl1 trans-04">
                                 {{ $item->product->name }}
                             </a>

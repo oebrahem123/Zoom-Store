@@ -50,7 +50,8 @@
                                     </td>
 
                                     <td class="column-6 texx">
-                                        <a href="{{ route('product.details', $item->product->id) }}">
+                                        <a
+                                            href="{{ route('product.details', $item->product->id) }}?size={{ $item->size }}&color={{ $item->color }}&cart_item_id={{ $item->id }}">
                                             {{ $item->product->name }}
                                         </a>
                                     </td>
