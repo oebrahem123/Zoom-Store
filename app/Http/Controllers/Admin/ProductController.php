@@ -83,7 +83,7 @@ class ProductController extends Controller
 
         $photo = new ProductPoto;
         $photo->product_id = $request->product_id;
-        $photo->color = $request->color; // 🔥 أهم سطر
+        $photo->color = $request->color;
 
         if ($request->has('photo')) {
             $path = $request->photo->move(

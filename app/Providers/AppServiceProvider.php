@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Cart;
+use App\Models\Category;
 use App\Models\Order;
 use Illuminate\Support\ServiceProvider;
 
@@ -25,7 +26,9 @@ class AppServiceProvider extends ServiceProvider
 
             $order = null;
             $cartCount = 0;
-
+            $categories = Category::select('id', 'name', 'description', 'imagepath')
+                ->withCount('products')
+                ->get();
             if (auth()->check()) {
 
                 $order = Order::where('user_id', auth()->id())
@@ -39,6 +42,7 @@ class AppServiceProvider extends ServiceProvider
             $view->with([
                 'order' => $order,
                 'cartCount' => $cartCount,
+                'categories' => $categories,
             ]);
         });
     }

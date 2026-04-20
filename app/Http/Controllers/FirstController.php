@@ -32,13 +32,33 @@ class FirstController extends Controller
     {
         $categories = Category::all();
         $order = null;
+
         $reviews = Review::orderBy('created_at', 'desc')->take(6)->get();
         $allReviews = Review::orderBy('created_at', 'desc')->get();
+
         if (Auth::check()) {
             $order = Order::where('user_id', Auth::id())->latest()->first();
         }
 
-        return view('welcome', compact('categories', 'reviews', 'order', 'allReviews'));
+        // 👇 المنتجات
+        $products = Product::latest()->take(8)->get(); // 👈 الحل هنا
+
+        $bestSeller = Product::inRandomOrder()->take(8)->get();
+        $featured = Product::latest()->take(8)->get();
+        $sale = Product::latest()->take(8)->get();
+        $topRated = Product::latest()->take(8)->get();
+
+        return view('welcome', compact(
+            'categories',
+            'reviews',
+            'order',
+            'allReviews',
+            'products', // 👈 مهم
+            'bestSeller',
+            'featured',
+            'sale',
+            'topRated'
+        ));
     }
 
     // حفظ رأي عميل جديد
@@ -84,21 +104,59 @@ class FirstController extends Controller
         return view('all-reviews', compact('reviews'));
     }
 
-    public function GetCategoryProducts($catid = null)
+    public function GetCategoryProducts(Request $request, $catid = null)
     {
+        $query = Product::query();
+
+        // category
         if ($catid) {
-            $products = Product::where('category_id', $catid)->paginate(6);
-        } else {
-            $products = Product::paginate(6);
+            $query->where('category_id', $catid);
         }
 
-        return view('product', compact('products'));
+        // color (variants)
+        if ($request->filled('color')) {
+            $query->whereHas('variants', function ($q) use ($request) {
+                $q->where('color', $request->color);
+            });
+        }
+
+        // price
+        if ($request->price) {
+
+            if ($request->price == '500+') {
+                $query->where('price', '>=', 500);
+            } else {
+                [$min, $max] = explode('-', $request->price);
+                $query->whereBetween('price', [(int) $min, (int) $max]);
+            }
+        }
+
+        // sort
+        switch ($request->sort) {
+            case 'low-high':
+                $query->orderBy('price', 'asc');
+                break;
+
+            case 'high-low':
+                $query->orderBy('price', 'desc');
+                break;
+
+            case 'new':
+                $query->latest();
+                break;
+        }
+
+        $products = $query->paginate(8)->withQueryString();
+
+        $categories = Category::all();
+
+        return view('product', compact('products', 'categories', 'catid'));
     }
 
     public function GetAllGetCategoryWithProducts()
     {
         $categories = Category::all();
-        $products = Product::all();
+        $products = Product::paginate(8);
 
         return view('category', ['products' => $products, 'categories' => $categories]);
     }

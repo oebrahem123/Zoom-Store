@@ -112,189 +112,122 @@
         <!-- Filter -->
         <div class="dis-none panel-filter w-full p-t-10">
             <div class="wrap-filter flex-w bg6 w-full p-lr-40 p-t-27 p-lr-15-sm">
+
+                {{-- SORT --}}
                 <div class="filter-col1 p-r-15 p-b-27">
                     <div class="mtext-102 cl2 black p-b-15">
-                        Sort By
+                        ترتيب حسب
                     </div>
 
                     <ul>
                         <li class="p-b-6">
-                            <a href="#" class="filter-link stext-106 trans-04">
-                                Default
+                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'low-high']) }}"
+                                class="filter-link stext-106 trans-04 {{ request('sort') == 'low-high' ? 'filter-link-active' : '' }}">
+                                السعر: من الأقل للأعلى
                             </a>
                         </li>
 
                         <li class="p-b-6">
-                            <a href="#" class="filter-link stext-106 trans-04">
-                                Popularity
+                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'high-low']) }}"
+                                class="filter-link stext-106 trans-04 {{ request('sort') == 'high-low' ? 'filter-link-active' : '' }}">
+                                السعر: من الأعلى للأقل
                             </a>
                         </li>
 
                         <li class="p-b-6">
-                            <a href="#" class="filter-link stext-106 trans-04">
-                                Average rating
-                            </a>
-                        </li>
-
-                        <li class="p-b-6">
-                            <a href="#" class="filter-link stext-106 trans-04 filter-link-active">
-                                Newness
-                            </a>
-                        </li>
-
-                        <li class="p-b-6">
-                            <a href="#" class="filter-link stext-106 trans-04">
-                                Price: Low to High
-                            </a>
-                        </li>
-
-                        <li class="p-b-6">
-                            <a href="#" class="filter-link stext-106 trans-04">
-                                Price: High to Low
+                            <a href="{{ request()->fullUrlWithQuery(['sort' => 'new']) }}"
+                                class="filter-link stext-106 trans-04 {{ request('sort') == 'new' ? 'filter-link-active' : '' }}">
+                                الأحدث
                             </a>
                         </li>
                     </ul>
                 </div>
 
+                {{-- PRICE --}}
                 <div class="filter-col2 p-r-15 p-b-27">
                     <div class="mtext-102 cl2 black p-b-15">
-                        Price
+                        السعر
                     </div>
 
                     <ul>
                         <li class="p-b-6">
-                            <a href="#" class="filter-link stext-106 trans-04 filter-link-active">
-                                All
+                            <a href="{{ request()->fullUrlWithQuery(['price' => null]) }}"
+                                class="filter-link stext-106 trans-04 {{ !request('price') ? 'filter-link-active' : '' }}">
+                                كل الأسعار
                             </a>
                         </li>
 
+                        @foreach(['0-250','250-350','350-500','500+'] as $range)
                         <li class="p-b-6">
-                            <a href="#" class="filter-link stext-106 trans-04">
-                                $0.00 - $50.00
+                            <a href="{{ request()->fullUrlWithQuery(['price' => $range]) }}"
+                                class="filter-link stext-106 trans-04 {{ request('price') == $range ? 'filter-link-active' : '' }}">
+                                {{ $range }}
                             </a>
                         </li>
-
-                        <li class="p-b-6">
-                            <a href="#" class="filter-link stext-106 trans-04">
-                                $50.00 - $100.00
-                            </a>
-                        </li>
-
-                        <li class="p-b-6">
-                            <a href="#" class="filter-link stext-106 trans-04">
-                                $100.00 - $150.00
-                            </a>
-                        </li>
-
-                        <li class="p-b-6">
-                            <a href="#" class="filter-link stext-106 trans-04">
-                                $150.00 - $200.00
-                            </a>
-                        </li>
-
-                        <li class="p-b-6">
-                            <a href="#" class="filter-link stext-106 trans-04">
-                                $200.00+
-                            </a>
-                        </li>
+                        @endforeach
                     </ul>
                 </div>
 
+                {{-- COLORS --}}
                 <div class="filter-col3 p-r-15 p-b-27">
                     <div class="mtext-102 cl2 black p-b-15">
-                        Color
+                        الألوان
                     </div>
 
                     <ul>
+
                         <li class="p-b-6">
-                            <span class="fs-15 lh-12 m-r-6" style="color: #222;">
+                            <a href="{{ request()->fullUrlWithQuery(['color' => null]) }}"
+                                class="filter-link stext-106 trans-04 {{ !request('color') ? 'filter-link-active' : '' }}">
+                                كل الألوان
+                            </a>
+                        </li>
+
+                        @foreach(['أسود','#222','ازرق','#4272d7','رمادي','#b3b3b3','أخضر','#00ad5f','أحمر','#fa4251','أبيض','#aaa']
+                        as $index => $value)
+                        @if($index % 2 == 0)
+                        <li class="p-b-6">
+                            <span class="fs-15 lh-12 m-r-6"
+                                style="color: {{ ['#222','#4272d7','#b3b3b3','#00ad5f','#fa4251','#aaa'][$index/2] }}">
                                 <i class="zmdi zmdi-circle"></i>
                             </span>
 
-                            <a href="#" class="filter-link stext-106 trans-04">
-                                Black
+                            <a href="{{ request()->fullUrlWithQuery(['color' => $value]) }}"
+                                class="filter-link stext-106 trans-04 {{ request('color') == $value ? 'filter-link-active' : '' }}">
+                                {{ $value }}
                             </a>
                         </li>
+                        @endif
+                        @endforeach
 
-                        <li class="p-b-6">
-                            <span class="fs-15 lh-12 m-r-6" style="color: #4272d7;">
-                                <i class="zmdi zmdi-circle"></i>
-                            </span>
-
-                            <a href="#" class="filter-link stext-106 trans-04 filter-link-active">
-                                Blue
-                            </a>
-                        </li>
-
-                        <li class="p-b-6">
-                            <span class="fs-15 lh-12 m-r-6" style="color: #b3b3b3;">
-                                <i class="zmdi zmdi-circle"></i>
-                            </span>
-
-                            <a href="#" class="filter-link stext-106 trans-04">
-                                Grey
-                            </a>
-                        </li>
-
-                        <li class="p-b-6">
-                            <span class="fs-15 lh-12 m-r-6" style="color: #00ad5f;">
-                                <i class="zmdi zmdi-circle"></i>
-                            </span>
-
-                            <a href="#" class="filter-link stext-106 trans-04">
-                                Green
-                            </a>
-                        </li>
-
-                        <li class="p-b-6">
-                            <span class="fs-15 lh-12 m-r-6" style="color: #fa4251;">
-                                <i class="zmdi zmdi-circle"></i>
-                            </span>
-
-                            <a href="#" class="filter-link stext-106 trans-04">
-                                Red
-                            </a>
-                        </li>
-
-                        <li class="p-b-6">
-                            <span class="fs-15 lh-12 m-r-6" style="color: #aaa;">
-                                <i class="zmdi zmdi-circle-o"></i>
-                            </span>
-
-                            <a href="#" class="filter-link stext-106 trans-04">
-                                White
-                            </a>
-                        </li>
                     </ul>
                 </div>
 
+                {{-- CATEGORIES --}}
                 <div class="filter-col4 p-b-27">
                     <div class="mtext-102 cl2 black p-b-15">
-                        Tags
+                        الأقسام
                     </div>
 
                     <div class="flex-w p-t-4 m-r--5">
-                        <a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-                            Fashion
+
+                        {{-- ALL --}}
+                        <a href="{{ url('/product') }}" class="flex-c-m stext-107 size-301 bor7 p-lr-15 trans-04 m-r-5 m-b-5
+                   {{ request()->segment(2) == null ? 'filter-link-active' : 'cl6 hov-tag1' }}">
+                            كل الأقسام
                         </a>
 
-                        <a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-                            Lifestyle
+                        {{-- CATEGORIES --}}
+                        @foreach($categories as $cat)
+                        <a href="{{ url('/product/'.$cat->id) }}" class="flex-c-m stext-107 size-301 bor7 p-lr-15 trans-04 m-r-5 m-b-5
+                   {{ request()->segment(2) == $cat->id ? 'filter-link-active' : 'cl6 hov-tag1' }}">
+                            {{ $cat->name }}
                         </a>
+                        @endforeach
 
-                        <a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-                            Denim
-                        </a>
-
-                        <a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-                            Streetstyle
-                        </a>
-
-                        <a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-                            Crafts
-                        </a>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
@@ -341,11 +274,11 @@
     </div>
 
     <!-- Load more -->
-    <div class="flex-c-m flex-w w-full p-t-45">
-        <a href="#" class="flex-c-m stext-101 cl5 size-103 bg2 bor1 hov-btn1 p-lr-15 trans-04">
-            Load More
-        </a>
+    <div class="flex-c-m flex-w w-full p-t-38">
+        {{ $products->links('vendor.pagination.custom') }}
     </div>
+
+
     </div>
 </section>
 

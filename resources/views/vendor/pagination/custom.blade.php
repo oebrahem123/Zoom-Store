@@ -1,36 +1,48 @@
 @if ($paginator->hasPages())
-    <ul>
-        {{-- Previous Page Link --}}
-        @if ($paginator->onFirstPage())
-            <li class="disabled"><span>Prev</span></li>
-        @else
-            <li><a href="{{ $paginator->previousPageUrl() }}" rel="prev">Prev</a></li>
-        @endif
+<div class="flex-c-m flex-w w-full p-t-38">
 
-        {{-- Pagination Elements --}}
-        @foreach ($elements as $element)
-            {{-- "Three Dots" Separator --}}
-            @if (is_string($element))
-                <li class="disabled"><span>{{ $element }}</span></li>
-            @endif
+    {{-- Previous --}}
+    @if ($paginator->onFirstPage())
+    <span class="flex-c-m how-pagination1 trans-04 m-all-7 opacity-50">‹</span>
+    @else
+    <a href="{{ $paginator->previousPageUrl() }}" class="flex-c-m how-pagination1 trans-04 m-all-7">‹</a>
+    @endif
 
-            {{-- Array Of Links --}}
-            @if (is_array($element))
-                @foreach ($element as $page => $url)
-                    @if ($page == $paginator->currentPage())
-                        <li><a class="active">{{ $page }}</a></li>
-                    @else
-                        <li><a href="{{ $url }}">{{ $page }}</a></li>
-                    @endif
-                @endforeach
-            @endif
-        @endforeach
 
-        {{-- Next Page Link --}}
-        @if ($paginator->hasMorePages())
-            <li><a href="{{ $paginator->nextPageUrl() }}" rel="next">Next</a></li>
-        @else
-            <li class="disabled"><span>Next</span></li>
-        @endif
-    </ul>
+    {{-- Page Numbers --}}
+    @foreach ($elements as $element)
+
+    {{-- "..." --}}
+    @if (is_string($element))
+    <span class="m-all-7">{{ $element }}</span>
+    @endif
+
+    {{-- Array --}}
+    @if (is_array($element))
+    @foreach ($element as $page => $url)
+
+    @if ($page == $paginator->currentPage())
+    <span class="flex-c-m how-pagination1 trans-04 m-all-7 active-pagination1">
+        {{ $page }}
+    </span>
+    @else
+    <a href="{{ $url }}" class="flex-c-m how-pagination1 trans-04 m-all-7">
+        {{ $page }}
+    </a>
+    @endif
+
+    @endforeach
+    @endif
+
+    @endforeach
+
+
+    {{-- Next --}}
+    @if ($paginator->hasMorePages())
+    <a href="{{ $paginator->nextPageUrl() }}" class="flex-c-m how-pagination1 trans-04 m-all-7">›</a>
+    @else
+    <span class="flex-c-m how-pagination1 trans-04 m-all-7 opacity-50">›</span>
+    @endif
+
+</div>
 @endif

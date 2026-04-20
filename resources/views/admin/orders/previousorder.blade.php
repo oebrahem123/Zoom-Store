@@ -136,7 +136,7 @@
 
                     <div class="row">
                         <div class="col-md-12">
-                            <label>  تم إنشاء الطلب بتاريخ : </label>
+                            <label> تم إنشاء الطلب بتاريخ : </label>
                             <input type="datetime-local" class="form-control mb-3 text-right"
                                 value="{{ \Carbon\Carbon::parse($item->created_at)->format('Y-m-d\TH:i') }}" readonly
                                 disabled>
@@ -175,7 +175,9 @@
                             <thead>
                                 <tr>
                                     <th>الصورة</th>
-                                    <th>الاسم</th>
+                                    <th>اسم المنتج</th>
+                                    <th>المقاس</th>
+                                    <th>اللون</th>
                                     <th>السعر</th>
                                     <th>الكمية</th>
                                     <th>الإجمالي</th>
@@ -185,13 +187,14 @@
                                 @foreach ($item->orderdetails as $detail)
                                 <tr>
                                     <td>
-                                        <img src="{{ asset($detail->product->imagepath) }}" alt="">
+                                        <img src="{{ asset($detail->product->imagepath) }}" width="50">
                                     </td>
-                                    <td class="product-name"><a href="/single-product/{{ $detail->product->id }}">{{
-                                            $detail->product->name }}</a></td>
-                                    <td>{{ $detail->product->price }} ج.م</td>
+                                    <td>{{ $detail->product->name }}</td>
+                                    <td>{{ $detail->size ?? '—' }}</td>
+                                    <td>{{ $detail->color ?? '—' }}</td>
+                                    <td>{{ $detail->price }} ج.م</td>
                                     <td>{{ $detail->quantity }}</td>
-                                    <td>{{ $detail->product->price * $detail->quantity }} ج.م</td>
+                                    <td>{{ $detail->price * $detail->quantity }} ج.م</td>
                                 </tr>
                                 @endforeach
                                 <tr class="total-data">

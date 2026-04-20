@@ -177,14 +177,18 @@
                                 </a>
                             </div>
                         </div> --}}
-                        <div class="p-t-18"
-                            style=" align-items: center; justify-content: center; position: relative; display: flex;">
-                            <a href=" /addproducttocart/{{ $product->id }}" class="zoom-btn" dir="ltr">
+                        <form action="{{ route('cart.add', $product->id) }}" method="POST" id="addToCartForm">
+                            @csrf
+
+                            <!-- hidden input للـ variant -->
+                            <input type="hidden" name="variant_id" id="variant_id">
+
+                            <button type="submit" class="zoom-btn m-t-20">
                                 <span class="icon">→</span>
                                 <span class="btn-text"> إضافة إلى السلة </span>
                                 <span class="hover-bg"></span>
-                            </a>
-                        </div>
+                            </button>
+                        </form>
                     </div>
 
                 </div>
@@ -556,6 +560,44 @@
         }
 
         resetProductImages();
+    });
+
+});
+document.addEventListener("DOMContentLoaded", function () {
+
+    const variants = @json($product->variants);
+
+    const sizeSelect = document.getElementById('sizeSelect');
+    const colorSelect = document.getElementById('colorSelect');
+    const variantInput = document.getElementById('variant_id');
+
+    // لما يختار لون
+    colorSelect.addEventListener('change', function () {
+
+        let size = sizeSelect.value;
+        let color = this.value;
+
+        let variant = variants.find(v => v.size === size && v.color === color);
+
+        if (variant) {
+            variantInput.value = variant.id;
+        } else {
+            variantInput.value = '';
+        }
+    });
+
+    // منع الإرسال لو مفيش اختيار
+    document.getElementById('addToCartForm').addEventListener('submit', function(e) {
+
+        const size = sizeSelect.value;
+        const color = colorSelect.value;
+
+        if (!size || !color) {
+            e.preventDefault();
+            alert('❌ يجب أختيار المقاس واللون قبل إضافة المنتج إلى السلة');
+            return false;
+        }
+
     });
 
 });

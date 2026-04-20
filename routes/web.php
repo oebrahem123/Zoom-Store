@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\FirstController;
 use App\Models\Cart;
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -60,14 +61,15 @@ Route::get('/category', [FirstController::class, 'GetAllGetCategoryWithProducts'
 // تخزين ريفيو جديد
 Route::post('/storeReview', [FirstController::class, 'storeReview'])->name('storeReview');
 // صفحة أراء العملاء
-Route::get('/reviews', [FirstController::class, 'reviews']);
+Route::get('/reviews', [FirstController::class, 'reviews'])->name('reviews');
 
 Route::get('/single-product/{id}', [FirstController::class, 'showProduct']);
 // البحث عن منتج
 Route::post('/search', function (Request $request) {
-    $products = Product::where('name', 'like', '%'.$request->searchkey.'%')->get();
+    $products = Product::where('name', 'like', '%'.$request->searchkey.'%')->paginate(8);
+    $categories = Category::all();
 
-    return view('product', ['products' => $products]);
+    return view('product', compact('products', 'categories'));
 });
 // صفحه الشراء cart
 // صفحة عرض السلة
@@ -75,7 +77,7 @@ Route::get('/cart', [CartController::class, 'cart'])
     ->middleware('auth')
     ->name('cart');
 // إضافة منتج للسلة
-Route::get('/addproducttocart/{productid}', [CartController::class, 'addProductToCart'])
+Route::post('/addproducttocart/{productid}', [CartController::class, 'addProductToCart'])
     ->middleware('auth')
     ->name('cart.add');
 

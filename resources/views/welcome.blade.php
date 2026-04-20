@@ -202,129 +202,145 @@
 @extends('layouts.master')
 @section('content')
 <!-- Banner -->
-<div class="sec-banner bg0 p-t-80">
-    <div class="container">
+<div class="sec-banner bg0 p-t-50">
+    <div class="containe.r">
 
         <!-- العنوان -->
-        <div class="container text-center p-b-50">
+        <div class="container text-center p-b-30">
             <h2 class="section-title">
                 أقسام الموقع
             </h2>
             <p>متعة التسوق عبر فرعنا</p>
         </div>
 
+        @php
+        $homeCategories = $categories->take(4);
 
-    </div>
-</div>
+        $main = $homeCategories->get(0);
+        $top = $homeCategories->get(3);
+        $bottom1 = $homeCategories->get(2);
+        $bottom2 = $homeCategories->get(1);
+        @endphp
 
+        <div class="container my-5 " dir="rtl">
+            <div class="row g-3 align-items-stretch">
 
-{{-- <div class="sec-banner bg0">
-    <div class="flex-w flex-c-m">
-        @foreach ($categories as $item)
-        <div class="size-202 m-lr-auto respon4" dir="rtl">
+                {{-- LEFT BIG --}}
+                @if($main)
+                <div class="col-lg-6">
+                    <div class="block1 wrap-pic-w h-100">
 
-            <!-- Block1 -->
-            <div class="block1 wrap-pic-w">
+                        <img src="{{ asset($main->imagepath) }}" class="w-100 h-100 object-fit-cover">
 
-                <img src="{{ asset($item->imagepath) }}" alt="{{ $item->name }}">
+                        <a href="{{ route('prods', $main->id) }}" class="block1-txt ab-t-l s-full flex-col-l-sb p-5">
 
-                <a href="{{ route('prods', $item->id) }}"
-                    class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
-                    <div class="block1-txt-child1 flex-col-l">
-                        <span class="block1-name ltext-102 trans-04 p-b-8">
-                            {{ $item->name }}
-                        </span>
+                            <div class="block1-txt-child1 d-flex flex-column">
+                                <span class="block1-name ltext-102 p-b-8">
+                                    {{ $main->name }}
+                                </span>
 
-                        <span class="block1-info stext-102 trans-04">
-                            {{ $item->description ?? 'تسوق الآن' }}
-                        </span>
-                    </div>
+                                <span class="block1-info stext-102">
+                                    {{ $main->description }}
+                                </span>
+                            </div>
 
-                    <div class="block1-txt-child2 p-b-4 trans-05">
-                        <div class="block1-link stext-101 cl0 trans-09">
-                            ابدأ التسوق
-
-                        </div>
-                    </div>
-                </a>
-
-            </div>
-
-        </div>
-        @endforeach
-    </div>
-</div> --}}
-<div class="sec-banner bg0">
-    <div class="flex-w flex-c-m">
-        @foreach ($categories->take(3) as $item)
-        <div class="size-202 m-lr-auto respon4" dir="rtl">
-            <!-- Block1 -->
-            <div class="block1 wrap-pic-w om-o">
-                <img class="im" src="{{ asset($item->imagepath) }}" alt="{{ $item->name }}">
-                <a href="{{ route('prods', $item->id) }}"
-                    class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
-                    <div class="block1-txt-child1 flex-col-l">
-                        <span class="block1-name ltext-102 trans-04 p-b-8">
-                            {{ $item->name }}
-                        </span>
-                        <span class="block1-info stext-102 trans-04">
-                            {{ $item->description ?? 'تسوق الآن' }}
-                        </span>
-                    </div>
-                    <div class="block1-txt-child2 p-b-4 trans-05">
-                        <div class="block1-link stext-101 cl0 trans-09">
-                            ابدأ التسوق
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </div>
-        @endforeach
-    </div>
-
-
-    <div class="flex-c-m m-t-30 m-b-30">
-        <button id="showMoreCategoriesBtn" class="btn-showmore">
-            المزيد من الأقسام
-            <i class="fa fa-chevron-down m-l-5"></i>
-        </button>
-    </div>
-
-
-    <div id="moreCategories" style="display: none;">
-        <div class="flex-w flex-c-m m-t-30">
-            @foreach ($categories->skip(3) as $item)
-            <div class="size-202 m-lr-auto respon4" dir="rtl">
-
-                <div class="block1 wrap-pic-w om-o">
-                    <img class="im" src="{{ asset($item->imagepath) }}" alt="{{ $item->name }}">
-                    <a href="{{ route('prods', $item->id) }}"
-                        class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
-                        <div class="block1-txt-child1 flex-col-l">
-                            <span class="block1-name ltext-102 trans-04 p-b-8">
-                                {{ $item->name }}
-                            </span>
-                            <span class="block1-info stext-102 trans-04">
-                                {{ $item->description ?? 'تسوق الآن' }}
-                            </span>
-                        </div>
-                        <div class="block1-txt-child2 p-b-4 trans-05">
-                            <div class="block1-link stext-101 cl0 trans-09">
+                            <div class="block1-link stext-101">
                                 ابدأ التسوق
                             </div>
-                        </div>
-                    </a>
+
+                        </a>
+                    </div>
                 </div>
+                @endif
+
+
+                {{-- RIGHT --}}
+                <div class="col-lg-6 d-flex flex-column">
+
+                    {{-- TOP --}}
+                    @if($top)
+                    <div class="mb-3" style="flex:1.3;">
+                        <div class="block1 wrap-pic-w h-100">
+
+                            <img src="{{ asset($top->imagepath) }}" class="w-100 h-100 object-fit-cover">
+
+                            <a href="{{ route('prods', $top->id) }}" class="block1-txt ab-t-l s-full flex-col-l-sb p-4">
+
+                                <div class="block1-txt-child1 d-flex flex-column">
+                                    <span class="block1-name ltext-102 p-b-8">
+                                        {{ $top->name }}
+                                    </span>
+
+                                    <span class="block1-info stext-102 white white">
+                                        {{ $top->description}}
+                                    </span>
+                                </div>
+
+                                <div class="block1-link stext-101">
+                                    ابدأ التسوق
+                                </div>
+
+                            </a>
+
+                        </div>
+                    </div>
+                    @endif
+
+
+                    {{-- BOTTOM --}}
+                    <div class="row g-3 flex-fill">
+
+                        @foreach([$bottom1, $bottom2] as $item)
+                        @if($item)
+                        <div class="col-md-6">
+                            <div class="block1 wrap-pic-w h-100">
+
+                                <img src="{{ asset($item->imagepath) }}" class="w-100 h-100 object-fit-cover">
+
+                                <a href="{{ route('prods', $item->id) }}"
+                                    class="block1-txt ab-t-l s-full flex-col-l-sb p-3">
+
+                                    <div>
+                                        <span class="block1-name stext-102">
+                                            {{ $item->name }}
+                                        </span>
+                                        <br>
+                                        <span class="block1-info stext-102">
+                                            {{ $item->description }}
+                                        </span>
+                                    </div>
+
+
+                                    <div class="block1-link stext-101">
+                                        تسوق الآن
+                                    </div>
+
+                                </a>
+
+                            </div>
+                        </div>
+                        @endif
+                        @endforeach
+
+                    </div>
+
+                </div>
+
             </div>
-            @endforeach
         </div>
     </div>
 </div>
 
 
+
+
+{{-- --}}
+
+{{-- --}}
 @include('partials.product')
 
 @include('partials.reviews')
+
 
 <section class="contact-us" id="contact-section">
     <div class="container">
@@ -442,6 +458,7 @@
 
 
 </section>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const showMoreBtn = document.getElementById('showMoreCategoriesBtn');

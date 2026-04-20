@@ -3,7 +3,6 @@
 @section('content')
 
 
-
 <form class="bg0 p-t-75 p-b-85">
     <div class="container">
         <div class="row">
@@ -18,10 +17,12 @@
 
                                 <tr class="table_head">
                                     <th class="column-1">المنتج</th>
-                                    <th class="column-2"></th>
-                                    <th class="column-3">السعر</th>
+                                    <th class="column-6"></th>
+                                    <th class="column-3"> المقاس </th>
+                                    <th class="column-4"> اللون </th>
+                                    <th class="column-2">السعر</th>
                                     <th class="column-4">الكمية</th>
-                                    <th class="column-5 text-right">الإجمالي</th>
+                                    <th class="column-2 text-center">الإجمالي</th>
                                 </tr>
 
                                 @forelse($cartProducts as $item)
@@ -41,11 +42,15 @@
                                         </div>
                                     </td>
 
-                                    <td class="column-2">
-                                        {{ $item->product->name }}
+                                    <td class="column-6 texx">
+                                        <a href="{{ route('product.details', $item->product->id) }}">
+                                            {{ $item->product->name }}
+                                        </a>
                                     </td>
+                                    <td class="column-3 text-center">{{ $item->size ?? '—' }}</td>
+                                    <td class="column-4 text-center">{{ $item->color ?? '—' }}</td>
 
-                                    <td class="column-3">
+                                    <td class="column-2 text-center">
                                         {{ number_format($item->product->price, 2) }} ج.م
                                     </td>
 
@@ -55,7 +60,7 @@
                                     </td>
 
                                     <!-- الإجمالي -->
-                                    <td class="column-5">
+                                    <td class="column-2 text-center">
                                         {{ number_format($item->product->price * $item->quantity, 2) }} ج.م
                                     </td>
 
@@ -63,7 +68,7 @@
 
                                 @empty
                                 <tr>
-                                    <td colspan="5" class="text-center py-5">
+                                    <td colspan="7" class="text-center py-5">
                                         سلة المشتريات فارغة حالياً
                                     </td>
                                 </tr>
@@ -113,7 +118,7 @@
 
                         <div class="size-209">
                             <span class="stext-111 cl6">
-                                مجاني
+                                يتم احتساب تكلفة الشحن عند إتمام الطلب
                             </span>
                         </div>
                     </div>

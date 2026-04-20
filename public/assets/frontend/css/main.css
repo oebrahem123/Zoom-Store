@@ -730,14 +730,14 @@ body.dark .fix-menu-desktop .wrap-menu-desktop .main-menu .dropdown-toggle::afte
     color: #fff;
     line-height: 15px;
     text-align: center;
-    border-radius: 50%;
+    /* border-radius: 2%; */
     display: block;
     position: absolute;
     top: -7px;
     right: -8px;
     min-width: 15px;
     height: 15px;
-    padding: 0 3px;
+    padding: 1px 3px;
     background-color: var(--secondary-color);
 }
 
@@ -2117,13 +2117,15 @@ button.mfp-close {
 }
 
 .filter-link:hover {
-    color: #6c7ae0;
-    border-bottom: 1px solid #6c7ae0;
+    color: var(--secondary-color);
+    border-bottom: 1px solid var(--secondary-color);
 }
 
 .filter-link-active {
-    color: #6c7ae0;
-    border-bottom: 1px solid #6c7ae0;
+
+    border-bottom: 1px solid var(--secondary-color);
+    color: var(--secondary-color);
+    border-color: var(--secondary-color);
 }
 
 @media (max-width: 767px) {
@@ -3485,14 +3487,14 @@ input.num-product::-webkit-inner-spin-button {
 }
 
 .how-pagination1:hover {
-    background-color: #999;
-    border-color: #999;
+    background-color: #ff6e26;
+    border-color: #ff6e26;
     color: #fff;
 }
 
 .active-pagination1 {
-    background-color: #999;
-    border-color: #999;
+    background-color: #ff6e26;
+    border-color: #ff6e26;
     color: #fff;
 }
 
@@ -4530,7 +4532,7 @@ body.dark .table-shopping-cart td {
 
 /********** Review section home  *****************/
 .reviews-section {
-    padding: 60px 0;
+    /* padding: 60px 0; */
     background: var(--background-light);
     overflow: hidden;
     position: relative;
@@ -4602,6 +4604,10 @@ body.dark .table-shopping-cart td {
 
 .reviewSwiper .swiper-wrapper {
     align-items: center;
+}
+
+.swiper-wrapper {
+    height: 70% !important;
 }
 
 .reviewSwiper .swiper-slide {
@@ -4740,4 +4746,296 @@ body.dark .table-shopping-cart td {
 .reviewSwiper .swiper-slide-prev {
     transform: scale(0.85) translateZ(0) !important;
     opacity: 0.7;
+}
+
+.texx a {
+    font-family: Poppins-Regular;
+    font-size: 14px;
+    color: #555 !important;
+    line-height: 1.3;
+    margin-right: 7px;
+}
+
+.texx a:hover {
+    color: #ff6e26 !important;
+}
+
+.om {
+    color: var(--bg-light) !important;
+
+}
+
+.om:hover {
+    color: var(--primary-color) !important;
+}
+
+
+
+
+/* - */
+
+.product-card {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    border-radius: 6px;
+    overflow: hidden;
+    padding: 30px;
+    height: 100%;
+
+    color: #fff;
+}
+
+.product-card>* {
+    position: relative;
+    z-index: 2;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    transition: all 0.5s ease;
+}
+
+/* LEFT */
+.main-card {
+    min-height: 600px;
+}
+
+.main-img {
+    max-height: 380px;
+    object-fit: contain;
+}
+
+/* RIGHT TOP */
+.smart-watch-card {
+    /* background: #e5533d; */
+    color: #fff;
+}
+
+.smart-watch-card h3 {
+    font-size: 18px;
+    margin: 0;
+}
+
+.side-img {
+    max-height: 160px;
+}
+
+/* BOTTOM */
+.sub-card {
+    min-height: 260px;
+}
+
+.mini-img {
+    max-height: 140px;
+    object-fit: contain;
+}
+
+/* TEXT */
+.price-green {
+    color: #79a33d;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.price-red {
+    color: #e5533d;
+    font-weight: bold;
+}
+
+.price-white {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.product-name {
+    font-size: 14px;
+    color: #555;
+}
+
+/* BUTTON */
+.shop-now {
+    color: #e5533d;
+    font-size: 12px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+/* PLAY BTN */
+.play-btn {
+    width: 45px;
+    height: 45px;
+    border: 1px solid #fff;
+    border-radius: 50%;
+    display: flex;
+
+}
+
+/* GRID */
+.g-3 {
+    --bs-gutter-x: 1rem;
+    --bs-gutter-y: 1rem;
+}
+
+.object-fit-cover {
+    object-fit: cover;
+}
+
+.block1 img {
+    height: 100%;
+}
+
+.flex-col-l {
+    display: flex;
+    flex-direction: column;
+}
+
+.block1-link {
+    position: relative;
+    display: inline-block;
+
+    opacity: 0;
+    transform: translateY(15px);
+    transition: 0.3s;
+}
+
+
+
+/* hover */
+.block1:hover .block1-link {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.block1:hover .block1-link::after {
+    width: 100%;
+}
+
+
+
+
+
+
+/* زر تابع طلبك */
+
+
+.floating-track-btn i {
+    font-size: 12px;
+}
+
+.floating-track-btn:hover {
+    /* transform: scale(1.07); */
+    background-color: #ff6e26;
+    color: #eee;
+}
+
+/* أنيميشن */
+@keyframes pulseAnim {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 140, 0, 0.6);
+    }
+
+    70% {
+        box-shadow: 0 0 0 18px rgba(255, 140, 0, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 140, 0, 0);
+    }
+}
+
+/* الإنتهاء من زر تابع طلبك */
+.floating-track-btn {
+    position: fixed;
+    bottom: 0px;
+    left: 25px;
+    display: inline-flex !important;
+    width: fit-content !important;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    padding: 12px 18px;
+    border-radius: 1px;
+    background-color: #ff6e266a;
+    color: #fff;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, .2);
+    z-index: 9999;
+    white-space: nowrap;
+    text-decoration: none;
+    transition: all 0.25s ease-in-out;
+    animation: pulseAnim 1.8s infinite;
+    justify-content: center;
+}
+
+
+
+.white {
+    color: var(--bg-light);
+}
+
+
+
+/* ================= MOBILE FIX FOR CATEGORY SECTION ================= */
+/* ================= FIX MOBILE WITHOUT CHANGING DESIGN ================= */
+
+@media (max-width: 768px) {
+    .sec-banner .container {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+
+    /* تقليل المسافات بين العناصر */
+    .sec-banner .row {
+        --bs-gutter-x: 8px;
+        --bs-gutter-y: 12px;
+    }
+
+    /* كل الأعمدة تبقى تحت بعض */
+    .sec-banner .col-lg-6 {
+        width: 100%;
+    }
+
+    /* نشيل flex اللي مكسر الدنيا */
+    .sec-banner .col-lg-6.d-flex {
+        display: block !important;
+    }
+
+    /* نشيل التمدد */
+    .sec-banner .h-100 {
+        height: auto !important;
+    }
+
+    /* الكارت نفسه */
+    .sec-banner .block1 {
+        min-height: auto;
+        overflow: hidden;
+    }
+
+    /* الصورة */
+    .sec-banner .block1 img {
+        height: 320px !important;
+        object-fit: cover;
+        margin-top: 16px;
+    }
+
+    /* المسافات */
+    .sec-banner .mb-3 {
+        margin-bottom: 15px !important;
+    }
+
+    /* padding النص */
+    .sec-banner .block1-txt {
+        padding: 15px !important;
+    }
+
+    /* النص */
+    .sec-banner .block1-name {
+        font-size: 16px;
+    }
+
+    .sec-banner .block1-info {
+        font-size: 13px;
+    }
 }

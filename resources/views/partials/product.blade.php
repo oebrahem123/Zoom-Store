@@ -1,112 +1,52 @@
-{{-- <style>
-    .slick-slide {
-        height: auto;
-    }
-</style>
-<section class="sec-product bg0 p-t-100 p-b-50">
+<section class="bg0 p-t-6 p-b-0">
     <div class="container">
-        <div class="p-b-32">
-            <h3 class="ltext-105 cl5 txt-center respon1">
-                Store Overview
-            </h3>
+
+        <div class="text-center p-b-40">
+            <h2 class="section-title">منتجاتنا</h2>
+            <p>أحدث المنتجات المضافة</p>
         </div>
 
-        <!-- Tab01 -->
-        <div class="tab01">
-            <!-- Nav tabs -->
-            <ul class="nav nav-tabs" role="tablist">
-                <li class="nav-item p-b-10">
-                    <a class="nav-link active" data-toggle="tab" href="#best-seller" role="tab" aria-expanded="true">
-                        الأكثر مبيعاً
-                    </a>
-                </li>
-                <li class="nav-item p-b-10">
-                    <a class="nav-link" data-toggle="tab" href="#featured" role="tab" aria-expanded="false">
-                        مميزة
-                    </a>
-                </li>
-                <li class="nav-item p-b-10">
-                    <a class="nav-link" data-toggle="tab" href="#sale" role="tab" aria-expanded="false">
-                        عروض وتخفيضات
-                    </a>
-                </li>
-                <li class="nav-item p-b-10">
-                    <a class="nav-link" data-toggle="tab" href="#top-rate" role="tab" aria-expanded="false">
-                        أعلى تقييم
-                    </a>
-                </li>
-            </ul>
+        <div class="row">
+            @foreach ($products->take(8) as $item)
+            <div class="col-sm-6 col-md-4 col-lg-3 p-b-35">
 
-            <!-- Tab panes -->
-            <div class="tab-content p-t-50">
-                <!-- Best Seller Tab -->
-                <div class="tab-pane fade active show" id="best-seller" role="tabpanel">
-                    <div class="wrap-slick2">
-                        <div class="slick2">
-                            @foreach($bestSeller->chunk(4) as $chunk)
-                            <div class="item-slick2">
-                                @foreach($chunk as $product)
-                                <div class="p-l-15 p-r-15 p-t-15 p-b-15" style="display: inline-block; width: 25%;">
-                                    @include('partials.product-card', ['product' => $product])
-                                </div>
-                                @endforeach
-                            </div>
-                            @endforeach
-                        </div>
+                <div class="block2" dir="rtl">
+                    <div class="block2-pic hov-img0">
+                        <img src="{{ url($item->imagepath) }}">
+
+                        <a href="/single-product/{{ $item->id }}"
+                            class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1">
+                            عرض المنتج
+                        </a>
+                    </div>
+
+                    <div class="block2-txt-child1 flex-col-l ">
+                        <a href="/single-product/{{ $item->id }}"
+                            class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                            {{ $item->name }}
+                        </a>
+
+                        <span class="stext-105 cl3">
+                            {{ $item->price }} ج.م
+                        </span>
                     </div>
                 </div>
 
-                <!-- Featured Tab -->
-                <div class="tab-pane fade" id="featured" role="tabpanel">
-                    <div class="wrap-slick2">
-                        <div class="slick2">
-                            @foreach($featured->chunk(4) as $chunk)
-                            <div class="item-slick2">
-                                @foreach($chunk as $product)
-                                <div class="p-l-15 p-r-15 p-t-15 p-b-15" style="display: inline-block; width: 25%;">
-                                    @include('partials.product-card', ['product' => $product])
-                                </div>
-                                @endforeach
-                            </div>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Sale Tab -->
-                <div class="tab-pane fade" id="sale" role="tabpanel">
-                    <div class="wrap-slick2">
-                        <div class="slick2">
-                            @foreach($sale->chunk(4) as $chunk)
-                            <div class="item-slick2">
-                                @foreach($chunk as $product)
-                                <div class="p-l-15 p-r-15 p-t-15 p-b-15" style="display: inline-block; width: 25%;">
-                                    @include('partials.product-card', ['product' => $product])
-                                </div>
-                                @endforeach
-                            </div>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Top Rated Tab -->
-                <div class="tab-pane fade" id="top-rate" role="tabpanel">
-                    <div class="wrap-slick2">
-                        <div class="slick2">
-                            @foreach($topRated->chunk(4) as $chunk)
-                            <div class="item-slick2">
-                                @foreach($chunk as $product)
-                                <div class="p-l-15 p-r-15 p-t-15 p-b-15" style="display: inline-block; width: 25%;">
-                                    @include('partials.product-card', ['product' => $product])
-                                </div>
-                                @endforeach
-                            </div>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
             </div>
+            @endforeach
         </div>
+
+        <!-- زر يوديك لصفحة المنتجات -->
+        <div class="text-center">
+
+            <a href="/product" class="zoom-btn " dir="ltr">
+
+                <span class="btn-text om"> عرض كل المنتجات </span>
+
+            </a>
+
+
+        </div>
+
     </div>
-</section> --}}
+</section>

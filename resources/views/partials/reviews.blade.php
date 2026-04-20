@@ -1,11 +1,11 @@
 <!-- Swiper CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-<section class="reviews-section">
+<section class="reviews-section p-t-50">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 offset-lg-2 text-center">
                 <!-- العنوان -->
-                <div class="container text-center p-b-50">
+                <div class="container text-center p-b-45">
                     <h2 class="section-title">
                         أراء العملاء
                     </h2>
@@ -79,7 +79,7 @@
             slidesPerView: 1,
             spaceBetween: 20,
             centeredSlides: true,
-
+ initialSlide: Math.floor({{ count($reviews) }} / 2),
             // الحلقة اللانهائية
             loop: {{ count($reviews) > 3 ? 'true' : 'false' }},
 
@@ -101,10 +101,10 @@
             speed: 500,
 
             // تشغيل تلقائي (اختياري)
-            autoplay: {
-                delay: 4000,
-                disableOnInteraction: false,
-            },
+            // autoplay: {
+            //     delay: 4000,
+            //     disableOnInteraction: false,
+            // },
 
             // التجاوب مع الشاشات المختلفة
             breakpoints: {
