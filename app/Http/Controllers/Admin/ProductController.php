@@ -134,33 +134,38 @@ class ProductController extends Controller
         $request->validate([
             'name' => 'required',
             'price' => 'required|numeric',
-            'quantity' => 'required|integer',
             'description' => 'required',
             'category_id' => 'nullable|integer',
             'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'variants' => 'required|array|min:1',
+            'variants.*.size' => 'required|string',
+            'variants.*.color' => 'required|string',
+            'variants.*.quantity' => 'required|integer|min:0',
         ]);
 
         $product = new Product;
         $product->name = $request->name;
         $product->price = $request->price;
-        $product->quantity = $request->quantity;
         $product->description = $request->description;
         $product->category_id = $request->category_id;
 
+        // ✅ مؤقتاً نحط 0، وبعدين هتتحسب تلقائياً
+        $product->quantity = 0;
+
+        // حفظ الصورة
         $fileName = Str::uuid()->toString().'-'.$request->file('photo')->getClientOriginalName();
         $request->file('photo')->move(public_path('uploads'), $fileName);
         $product->imagepath = 'uploads/'.$fileName;
 
         $product->save();
+
+        // إضافة المتغيرات
         if ($request->has('variants')) {
-
             foreach ($request->variants as $variant) {
-
-                if (! empty($variant['size'])) {
-
+                if (! empty($variant['size']) && ! empty($variant['color'])) {
                     $product->variants()->create([
                         'size' => $variant['size'],
-                        'color' => $variant['color'] ?? null,
+                        'color' => $variant['color'],
                         'quantity' => $variant['quantity'] ?? 0,
                         'material' => $variant['material'] ?? null,
                         'weight' => $variant['weight'] ?? null,
@@ -168,6 +173,11 @@ class ProductController extends Controller
                 }
             }
         }
+
+        // ✅ بعد إضافة المتغيرات، نحسب الكمية الإجمالية
+        $totalQuantity = $product->variants()->sum('quantity');
+        $product->quantity = $totalQuantity;
+        $product->saveQuietly(); // حفظ بدون تشغيل أحداث إضافية
 
         return redirect()->route('admin.products.index')->with('success', 'تمت إضافة المنتج بنجاح ✅');
     }
@@ -198,18 +208,21 @@ class ProductController extends Controller
         $request->validate([
             'name' => 'required',
             'price' => 'required|numeric',
-            'quantity' => 'required|integer',
             'description' => 'required',
             'category_id' => 'nullable|integer',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'variants' => 'required|array|min:1',
+            'variants.*.size' => 'required|string',
+            'variants.*.color' => 'required|string',
+            'variants.*.quantity' => 'required|integer|min:0',
         ]);
 
         $product->update([
             'name' => $request->name,
             'price' => $request->price,
-            'quantity' => $request->quantity,
             'description' => $request->description,
             'category_id' => $request->category_id,
+            // ❌ لا نحدث quantity هنا، هتتحسب تلقائياً بعد تعديل المتغيرات
         ]);
 
         // الصورة
@@ -217,29 +230,21 @@ class ProductController extends Controller
             if ($product->imagepath && file_exists(public_path($product->imagepath))) {
                 unlink(public_path($product->imagepath));
             }
-
             $fileName = Str::uuid()->toString().'-'.$request->file('photo')->getClientOriginalName();
             $request->file('photo')->move(public_path('uploads'), $fileName);
             $product->imagepath = 'uploads/'.$fileName;
             $product->save();
         }
 
-        // 🔥 أهم جزء (variants)
+        // التعامل مع المتغيرات
         if ($request->has('variants')) {
-
             $existingIds = $product->variants->pluck('id')->toArray();
-
             $requestIds = [];
 
             foreach ($request->variants as $variant) {
-
-                // لو فيه id → update
                 if (isset($variant['id'])) {
-
                     $requestIds[] = $variant['id'];
-
                     $existing = ProductVariant::find($variant['id']);
-
                     if ($existing) {
                         $existing->update([
                             'size' => $variant['size'],
@@ -249,9 +254,7 @@ class ProductController extends Controller
                             'weight' => $variant['weight'] ?? null,
                         ]);
                     }
-
                 } else {
-                    // create جديد
                     $new = $product->variants()->create([
                         'size' => $variant['size'],
                         'color' => $variant['color'],
@@ -259,16 +262,18 @@ class ProductController extends Controller
                         'material' => $variant['material'] ?? null,
                         'weight' => $variant['weight'] ?? null,
                     ]);
-
                     $requestIds[] = $new->id;
                 }
             }
 
-            // 🔥 هنا السحر
             $idsToDelete = array_diff($existingIds, $requestIds);
-
             ProductVariant::whereIn('id', $idsToDelete)->delete();
         }
+
+        // ✅ إعادة حساب الكمية الإجمالية بعد كل التعديلات
+        $totalQuantity = $product->variants()->sum('quantity');
+        $product->quantity = $totalQuantity;
+        $product->saveQuietly();
 
         return redirect()->route('admin.products.index')->with('success', 'تم التعديل بنجاح 🔥');
     }

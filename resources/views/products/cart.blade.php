@@ -26,19 +26,12 @@
                                 </tr>
 
                                 @forelse($cartProducts as $item)
-                                <tr class="table_row">
+                                <tr class="table_row {{ !$item->isAvailable ? 'opacity-50 bg-light' : '' }}">
 
                                     <td class="column-1">
                                         <div class="how-itemcart1 delete-item" data-id="{{ $item->id }}">
 
-                                            @php
-                                            $variantImage = $item->product->productphotos
-                                            ->where('color', $item->color)
-                                            ->first();
-                                            @endphp
-
-                                            <img
-                                                src="{{ asset($variantImage->imagepath ?? $item->product->imagepath) }}">
+                                            <img src="{{ asset($item->display_image) }}" alt="">
 
                                             <form id="delete-{{ $item->id }}"
                                                 action="{{ route('cart.delete', $item->id) }}" method="POST">
@@ -50,16 +43,45 @@
                                     </td>
 
                                     <td class="column-6 texx">
-                                        <a
-                                            href="{{ route('product.details', $item->product->id) }}?size={{ $item->size }}&color={{ $item->color }}&cart_item_id={{ $item->id }}">
-                                            {{ $item->product->name }}
+
+                                        @if($item->product_id)
+                                        <a href="{{ route('product.details', [
+                'productid' => $item->product_id,
+                'size' => $item->size,
+                'color' => $item->color,
+                'cart_item_id' => $item->id
+            ]) }}" class="hov-cl1 trans-04" style="text-decoration: none;">
+
+                                            <span
+                                                class="{{ !$item->isAvailable ? 'text-decoration-line-through' : '' }}"
+                                                style="display:inline-block;">
+
+                                                {{ $item->display_name }}
+
+                                            </span>
+
                                         </a>
+                                        @else
+                                        <span
+                                            class="text-danger {{ !$item->isAvailable ? 'text-decoration-line-through' : '' }}">
+                                            {{ $item->display_name }}
+                                        </span>
+                                        @endif
+
+
+                                        @if(!$item->isAvailable)
+                                        <span class="d-block"
+                                            style="font-size:12px;margin-top:6px;color:{{ $item->availabilityStatus === 'out_of_stock' ? '#dc3545' : '#6c757d' }};">
+                                            {{ $item->availabilityMessage }}
+                                        </span>
+                                        @endif
+
                                     </td>
                                     <td class="column-3 text-center">{{ $item->size ?? '—' }}</td>
                                     <td class="column-4 text-center">{{ $item->color ?? '—' }}</td>
 
                                     <td class="column-2 text-center">
-                                        {{ number_format($item->product->price, 2) }} ج.م
+                                        {{ number_format($item->display_price, 2) }} ج.م
                                     </td>
 
                                     <!-- الكمية -->
@@ -69,7 +91,7 @@
 
                                     <!-- الإجمالي -->
                                     <td class="column-2 text-center">
-                                        {{ number_format($item->product->price * $item->quantity, 2) }} ج.م
+                                        {{ number_format($item->display_price * $item->quantity, 2) }} ج.م
                                     </td>
 
                                 </tr>
@@ -110,7 +132,7 @@
 
                         <div class="size-209">
                             <span class="mtext-110 black cl2">
-                                {{ number_format($cartProducts->sum(fn($i) => $i->product->price * $i->quantity), 2) }}
+                                {{ number_format($cartProducts->sum(fn($i) => $i->display_price * $i->quantity), 2) }}
                                 ج
                             </span>
                         </div>
@@ -141,7 +163,7 @@
 
                         <div class="size-209 p-t-1">
                             <span class="mtext-110 black cl2">
-                                {{ number_format($cartProducts->sum(fn($i) => $i->product->price * $i->quantity), 2) }}
+                                {{ number_format($cartProducts->sum(fn($i) => $i->display_price * $i->quantity), 2) }}
                                 ج
                             </span>
                         </div>

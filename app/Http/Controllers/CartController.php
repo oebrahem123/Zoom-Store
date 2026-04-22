@@ -8,16 +8,18 @@ use App\Models\orderdetails;
 use App\Models\Product;
 use App\Models\ProductVariant;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
 
 class CartController extends Controller
 {
     public function cart()
     {
         $user_id = auth()->id();
-        $cartProducts = Cart::with('product')
+
+        $cartProducts = Cart::with(['product.productphotos', 'variant'])
             ->where('user_id', $user_id)
-            ->get();
+            ->get()
+            ->map(fn ($item) => $item->enrichAvailabilityAttributes());
 
         return view('products.cart', compact('cartProducts'));
     }
@@ -67,11 +69,17 @@ class CartController extends Controller
                 return back()->with('error', '❌ الكمية المطلوبة غير متوفرة لهذا المزيج');
             }
             $cartItem->quantity += 1;
+            $cartItem->product_name = $product->name;
+            $cartItem->product_price = $product->price;
+            $cartItem->product_image = $product->imagepath;
             $cartItem->save();
         } else {
             Cart::create([
                 'user_id' => $user_id,
                 'product_id' => $productid,
+                'product_name' => $product->name,
+                'product_price' => $product->price,
+                'product_image' => $product->imagepath,
                 'quantity' => 1,
                 'size' => $variant->size,
                 'color' => $variant->color,
@@ -84,8 +92,9 @@ class CartController extends Controller
 
     public function removeItem($cartid)
     {
-        $cartItem = Cart::findOrFail($cartid);
-
+        $cartItem = Cart::where('id', $cartid)
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
         if ($cartItem->quantity > 1) {
             // 👇 ينقص واحد بس
             $cartItem->decrement('quantity');
@@ -100,9 +109,10 @@ class CartController extends Controller
     public function Completeorder()
     {
         $user_id = auth()->user()->id;
-        $cartProducts = Cart::with('product')
+        $cartProducts = Cart::with(['product.productphotos', 'variant'])
             ->where('user_id', $user_id)
-            ->get();
+            ->get()
+            ->map(fn ($item) => $item->enrichAvailabilityAttributes());
 
         return view('products.completeorder', ['cartProducts' => $cartProducts]);
     }
@@ -110,7 +120,7 @@ class CartController extends Controller
     // عرض صفحه عمليات الشراء
     public function previousorder()
     {
-        $result = Order::with('orderdetails')->get();
+        $result = Order::with(['orderdetails.product', 'orderdetails.variant'])->get();
 
         return view('admin.orders.previousorder', ['orders' => $result]);
     }
@@ -119,39 +129,71 @@ class CartController extends Controller
     {
         $user_id = auth()->user()->id;
 
-        $newOrder = new Order;
-        $newOrder->name = $request->name;
-        $newOrder->email = $request->email;
-        $newOrder->address = $request->address;
-        $newOrder->phone = $request->phone;
-        $newOrder->note = $request->note;
-        $newOrder->user_id = $user_id;
-        $newOrder->save();
+        $cartProducts = Cart::with(['product.productphotos', 'variant'])
+            ->where('user_id', $user_id)
+            ->get()
+            ->map(fn ($item) => $item->enrichAvailabilityAttributes());
 
-        $cartProducts = Cart::with('product')->where('user_id', $user_id)->get();
         foreach ($cartProducts as $item) {
-            $newOrderDetail = new orderdetails;
-
-            $newOrderDetail->product_id = $item->product_id;
-            $newOrderDetail->price = $item->product->price;
-            $newOrderDetail->quantity = $item->quantity;
-            $newOrderDetail->order_id = $newOrder->id;
-
-            // 👇 أهم حاجة
-            $newOrderDetail->size = $item->size;
-            $newOrderDetail->color = $item->color;
-            $newOrderDetail->variant_id = $item->variant_id;
-
-            $newOrderDetail->save();
+            if (! $item->isAvailable) {
+                return redirect()->route('cart')->with('error', 'يوجد منتجات غير متاحة في السلة (محذوفة أو غير متوفرة حالياً). راجع السلة ثم أعد المحاولة.');
+            }
         }
 
-        // مسح السلة
-        Cart::where('user_id', $user_id)->delete();
+        return DB::transaction(function () use ($request, $user_id, $cartProducts) {
+            $newOrder = new Order;
+            $newOrder->name = $request->name;
+            $newOrder->email = $request->email;
+            $newOrder->address = $request->address;
+            $newOrder->phone = $request->phone;
+            $newOrder->note = $request->note;
+            $newOrder->user_id = $user_id;
+            $newOrder->save();
 
-        // ✅ تخزين order ID في session
-        session(['last_order_id' => $newOrder->id]);
+            foreach ($cartProducts as $item) {
+                $unitPrice = $item->display_price;
 
-        return redirect()->route('order.confirmation', $newOrder->id);
+                $newOrderDetail = new orderdetails;
+                $newOrderDetail->product_id = $item->product_id;
+                $newOrderDetail->price = (int) round($unitPrice);
+                $newOrderDetail->quantity = $item->quantity;
+                $newOrderDetail->order_id = $newOrder->id;
+                $newOrderDetail->size = $item->size;
+                $newOrderDetail->color = $item->color;
+                $newOrderDetail->variant_id = $item->variant_id;
+                $newOrderDetail->product_name = $item->display_name;
+                $newOrderDetail->product_image = $item->product_image ?? $item->product?->imagepath;
+                $newOrderDetail->save();
+
+                $variant = ProductVariant::where('id', $item->variant_id)
+                    ->lockForUpdate()
+                    ->first();
+
+                if (! $variant) {
+                    throw new \Exception('المنتج غير موجود');
+                }
+
+                if ($variant->quantity < $item->quantity) {
+                    throw new \Exception('الكمية غير كافية');
+                }
+
+                $variant->decrement('quantity', $item->quantity);
+                $variant->save();
+
+                $product = $item->product;
+                if ($product) {
+                    $totalQuantity = $product->variants()->sum('quantity');
+                    $product->quantity = $totalQuantity;
+                    $product->saveQuietly();
+                }
+            }
+
+            Cart::where('user_id', $user_id)->delete();
+
+            session(['last_order_id' => $newOrder->id]);
+
+            return redirect()->route('order.confirmation', $newOrder->id);
+        });
     }
 
     public function orderConfirmation($id)
@@ -229,14 +271,14 @@ class CartController extends Controller
             ->firstOrFail();
 
         $request->validate([
-            'variant_id' => 'required|exists:product_variants,id',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email',
+            'address' => 'required|string',
+            'phone' => 'required',
         ]);
 
         $newVariant = ProductVariant::findOrFail($request->variant_id);
-
-        // ❗ لو الكمية = 1 → عادي update
         if ($oldCartItem->quantity == 1) {
-
             $oldCartItem->update([
                 'variant_id' => $newVariant->id,
                 'size' => $newVariant->size,
@@ -244,21 +286,16 @@ class CartController extends Controller
             ]);
 
         } else {
-
-            // 🔥 1. نقلل الكمية من القديم
             $oldCartItem->decrement('quantity');
-
-            // 🔥 2. نشوف هل فيه نفس الـ variant الجديد
             $existing = Cart::where('user_id', $user_id)
                 ->where('product_id', $oldCartItem->product_id)
                 ->where('variant_id', $newVariant->id)
                 ->first();
 
             if ($existing) {
-                // نزود عليه
                 $existing->increment('quantity');
             } else {
-                // نعمل item جديد
+                $product = Product::find($oldCartItem->product_id);
                 Cart::create([
                     'user_id' => $user_id,
                     'product_id' => $oldCartItem->product_id,
@@ -266,6 +303,9 @@ class CartController extends Controller
                     'size' => $newVariant->size,
                     'color' => $newVariant->color,
                     'variant_id' => $newVariant->id,
+                    'product_name' => $product?->name,
+                    'product_price' => $product?->price,
+                    'product_image' => $product?->imagepath,
                 ]);
             }
         }

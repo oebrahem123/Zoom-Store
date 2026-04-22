@@ -106,23 +106,47 @@ class FirstController extends Controller
 
     public function GetCategoryProducts(Request $request, $catid = null)
     {
-        $query = Product::query();
+        $query = Product::with('productphotos');
 
-        // category
+        // 🟢 المنتجات اللي في الكارت
+        $cartProductIds = [];
+        if (auth()->check()) {
+            $cartProductIds = \App\Models\Cart::where('user_id', auth()->id())
+                ->pluck('product_id')
+                ->toArray();
+        }
+
+        // 🟢 الشرط الأساسي
+        $query->where(function ($q) use ($cartProductIds) {
+
+            // 🟢 المنتجات اللي فيها variants وفيها stock
+            $q->whereHas('variants', function ($q2) {
+                $q2->where('quantity', '>', 0);
+            })
+
+            // 🟢 أو المنتجات اللي مفيهاش variants أصلاً
+                ->orDoesntHave('variants');
+
+            // 🟢 أو المنتجات اللي في الكارت
+            if (! empty($cartProductIds)) {
+                $q->orWhereIn('id', $cartProductIds);
+            }
+        });
+
+        // 🟢 category
         if ($catid) {
             $query->where('category_id', $catid);
         }
 
-        // color (variants)
+        // 🟢 color filter (صح)
         if ($request->filled('color')) {
             $query->whereHas('variants', function ($q) use ($request) {
                 $q->where('color', $request->color);
             });
         }
 
-        // price
+        // 🟢 price
         if ($request->price) {
-
             if ($request->price == '500+') {
                 $query->where('price', '>=', 500);
             } else {
@@ -131,7 +155,7 @@ class FirstController extends Controller
             }
         }
 
-        // sort
+        // 🟢 sort
         switch ($request->sort) {
             case 'low-high':
                 $query->orderBy('price', 'asc');
@@ -147,7 +171,6 @@ class FirstController extends Controller
         }
 
         $products = $query->paginate(8)->withQueryString();
-
         $categories = Category::all();
 
         return view('product', compact('products', 'categories', 'catid'));

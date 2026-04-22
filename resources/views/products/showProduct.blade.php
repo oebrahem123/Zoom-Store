@@ -88,7 +88,7 @@
 
                         <div class="slick3 gallery-lb">
 
-                            @foreach($baseImages as $img)
+                            @foreach ($baseImages as $img)
                             <div class="item-slick3" data-thumb="{{ asset($img) }}">
                                 <div class="wrap-pic-w pos-relative">
                                     <img src="{{ asset($img) }}" alt="IMG-PRODUCT">
@@ -120,7 +120,8 @@
                         {{ $product->price }} ج.م
                     </span>
                     <p class="stext-102 cl3 p-t-23">
-                        الكميه المتاحة : {{ $product->quantity }}
+                        الكميه المتاحة :
+                        <span id="availableQty">{{ $product->quantity }}</span>
                     </p>
                     <p class="stext-102 cl3 p-t-23">
                         {{ $product->description }}
@@ -138,7 +139,13 @@
                                     <select id="sizeSelect" class="form-control" name="size"
                                         style="padding: 8px 12px; border-radius: 5px;">
                                         <option value=""> اختر المقاس </option>
-                                        @foreach($product->variants->pluck('size')->unique() as $size)
+                                        @php
+                                        $sizes = $product->variants
+                                        ->where('quantity', '>', 0)
+                                        ->pluck('size')
+                                        ->unique();
+                                        @endphp
+                                        @foreach ($sizes as $size)
                                         <option value="{{ $size }}">{{ $size }}</option>
                                         @endforeach
                                     </select>
@@ -259,7 +266,9 @@
                                             الألوان المتاحة
                                         </span>
 
-                                        {{ $product->variants->pluck('color')->unique()->implode('، ') }}
+                                        {{ $product->variants->where('quantity', '>',
+                                        0)->pluck('color')->unique()->implode('،
+                                        ') }}
                                     </li>
 
                                     <li class="flex-w flex-t p-b-7">
@@ -267,7 +276,14 @@
                                             المقاسات
                                         </span>
 
-                                        {{ $product->variants->pluck('size')->unique()->implode(', ') }}
+                                        @php
+                                        $sizes = $product->variants
+                                        ->where('quantity', '>', 0)
+                                        ->pluck('size')
+                                        ->unique();
+                                        @endphp
+
+                                        {{ $sizes->implode(' , ') }}
                                     </li>
                                 </ul>
                             </div>
@@ -299,7 +315,7 @@
                                                     $halfStar = $review->rating - $fullStars >= 0.5;
                                                     @endphp
 
-                                                    @for($i = 1; $i <= 5; $i++) @if($i <=$fullStars) <i
+                                                    @for ($i = 1; $i <= 5; $i++) @if ($i <=$fullStars) <i
                                                         class="zmdi zmdi-star"></i>
                                                         @elseif($i == $fullStars + 1 && $halfStar)
                                                         <i class="zmdi zmdi-star-half"></i>
@@ -323,7 +339,8 @@
                                     <div class="alert alert-info text-center" dir="rtl"
                                         style="background: #f8f9fa; border: 1px solid #d1ecf1; color: #0c5460; padding: 20px; border-radius: 10px; margin-bottom: 30px;">
                                         <i class="zmdi zmdi-comment-outline" style="font-size: 24px;"></i>
-                                        <p style="margin-top: 10px; margin-bottom: 0;">لا توجد تعليقات على هذا المنتج
+                                        <p style="margin-top: 10px; margin-bottom: 0;">لا توجد تعليقات على هذا
+                                            المنتج
                                             بعد. كن أول من يقيّم!</p>
                                     </div>
                                     @endforelse
@@ -405,14 +422,14 @@
                                     </form>
 
                                     <!-- عرض رسائل النجاح أو الخطأ -->
-                                    @if(session('success'))
+                                    @if (session('success'))
                                     <div class="alert alert-success text-center" dir="rtl"
                                         style="background: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 12px; border-radius: 10px; margin-top: 20px;">
                                         <i class="zmdi zmdi-check-circle"></i> {{ session('success') }}
                                     </div>
                                     @endif
 
-                                    @if($errors->any())
+                                    @if ($errors->any())
                                     <div class="alert alert-danger text-center" dir="rtl"
                                         style="background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 12px; border-radius: 10px; margin-top: 20px;">
                                         <i class="zmdi zmdi-alert-circle"></i> يرجى التحقق من البيانات المدخلة
@@ -431,34 +448,32 @@
 
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function() {
+            const qtySpan = document.getElementById('availableQty');
+            const variants = @json($product->variants);
+            const baseImages = @json(array_values($baseImages));
+            const colorImages = @json($colorImages);
+            const selectedSizeFromCart = @json($selectedSize);
+            const selectedColorFromCart = @json($selectedColor);
+            const selectedVariantId = @json($selectedVariantId);
+            // ----------------------------------------
 
-        const variants = @json($product->variants);
-        const baseImages = @json(array_values($baseImages));
-        const colorImages = @json($colorImages);
+            const sizeSelect = document.getElementById('sizeSelect');
+            const colorSelect = document.getElementById('colorSelect');
+            const weightSpan = document.getElementById('weight');
+            const materialSpan = document.getElementById('material');
+            const variantInput = document.getElementById('variant_id');
+            const wrapSlick3 = document.querySelector('.wrap-slick3');
+            const slick3Container = wrapSlick3 ? wrapSlick3.querySelector('.slick3') : null;
 
-        // --- متغيرات جديدة من الـ Controller ---
-        const selectedSizeFromCart = @json($selectedSize);
-        const selectedColorFromCart = @json($selectedColor);
-        const selectedVariantId = @json($selectedVariantId);
-        // ----------------------------------------
+            function normalizeColor(value) {
+                return (value || '').toString().trim().toLowerCase();
+            }
 
-        const sizeSelect = document.getElementById('sizeSelect');
-        const colorSelect = document.getElementById('colorSelect');
-        const weightSpan = document.getElementById('weight');
-        const materialSpan = document.getElementById('material');
-        const variantInput = document.getElementById('variant_id');
-        const wrapSlick3 = document.querySelector('.wrap-slick3');
-        const slick3Container = wrapSlick3 ? wrapSlick3.querySelector('.slick3') : null;
-
-        function normalizeColor(value) {
-            return (value || '').toString().trim().toLowerCase();
-        }
-
-        function getSliderHtml(images) {
-            return images.map(function (img) {
-                const imageUrl = `{{ asset('') }}${img}`.replace(/([^:]\/)\/+/g, '$1');
-                return `
+            function getSliderHtml(images) {
+                return images.map(function(img) {
+                    const imageUrl = `{{ asset('') }}${img}`.replace(/([^:]\/)\/+/g, '$1');
+                    return `
                     <div class="item-slick3" data-thumb="${imageUrl}">
                         <div class="wrap-pic-w pos-relative">
                             <img src="${imageUrl}" alt="IMG-PRODUCT">
@@ -468,188 +483,186 @@
                         </div>
                     </div>
                 `;
-            }).join('');
-        }
-
-        function initSlick3() {
-            if (!window.jQuery || !slick3Container) return;
-            const $slick = window.jQuery(slick3Container);
-            $slick.slick({
-                slidesToShow: 1,
-                slidesToScroll: 1,
-                fade: true,
-                infinite: true,
-                autoplay: false,
-                autoplaySpeed: 6000,
-                arrows: true,
-                appendArrows: window.jQuery(wrapSlick3).find('.wrap-slick3-arrows'),
-                prevArrow:'<button class="arrow-slick3 prev-slick3"><i class="fa fa-angle-left" aria-hidden="true"></i></button>',
-                nextArrow:'<button class="arrow-slick3 next-slick3"><i class="fa fa-angle-right" aria-hidden="true"></i></button>',
-                dots: true,
-                appendDots: window.jQuery(wrapSlick3).find('.wrap-slick3-dots'),
-                dotsClass:'slick3-dots',
-                customPaging: function(slick, index) {
-                    var portrait = window.jQuery(slick.$slides[index]).data('thumb');
-                    return '<img src=" ' + portrait + ' "/><div class="slick3-dot-overlay"></div>';
-                },
-            });
-        }
-
-        function updateSlider(images) {
-            if (!window.jQuery || !slick3Container || !images.length) return;
-            const $slick = window.jQuery(slick3Container);
-            if ($slick.hasClass('slick-initialized')) {
-                $slick.slick('unslick');
+                }).join('');
             }
-            slick3Container.innerHTML = getSliderHtml(images);
-            initSlick3();
-        }
 
-        function resetProductImages() {
-            updateSlider(baseImages);
-        }
+            function initSlick3() {
+                if (!window.jQuery || !slick3Container) return;
+                const $slick = window.jQuery(slick3Container);
+                $slick.slick({
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                    fade: true,
+                    infinite: true,
+                    autoplay: false,
+                    autoplaySpeed: 6000,
+                    arrows: true,
+                    appendArrows: window.jQuery(wrapSlick3).find('.wrap-slick3-arrows'),
+                    prevArrow: '<button class="arrow-slick3 prev-slick3"><i class="fa fa-angle-left" aria-hidden="true"></i></button>',
+                    nextArrow: '<button class="arrow-slick3 next-slick3"><i class="fa fa-angle-right" aria-hidden="true"></i></button>',
+                    dots: true,
+                    appendDots: window.jQuery(wrapSlick3).find('.wrap-slick3-dots'),
+                    dotsClass: 'slick3-dots',
+                    customPaging: function(slick, index) {
+                        var portrait = window.jQuery(slick.$slides[index]).data('thumb');
+                        return '<img src=" ' + portrait + ' "/><div class="slick3-dot-overlay"></div>';
+                    },
+                });
+            }
 
-        // --- دالة جديدة: تحديث قائمة الألوان بناءً على المقاس المختار ---
-        function updateColorOptions(selectedSize, selectedColorValue = null) {
-            colorSelect.innerHTML = '<option value="">-- اختر اللون --</option>';
-
-            if (!selectedSize) return;
-
-            let colors = variants
-                .filter(v => v.size === selectedSize && v.color)
-                .map(v => v.color);
-
-            let uniqueColors = [...new Set(colors)];
-
-            uniqueColors.forEach(color => {
-                let option = document.createElement('option');
-                option.value = color;
-                option.text = color;
-                if (selectedColorValue && color === selectedColorValue) {
-                    option.selected = true;
+            function updateSlider(images) {
+                if (!window.jQuery || !slick3Container || !images.length) return;
+                const $slick = window.jQuery(slick3Container);
+                if ($slick.hasClass('slick-initialized')) {
+                    $slick.slick('unslick');
                 }
-                colorSelect.appendChild(option);
+                slick3Container.innerHTML = getSliderHtml(images);
+                initSlick3();
+            }
+
+            function resetProductImages() {
+                updateSlider(baseImages);
+            }
+            function updateColorOptions(selectedSize, selectedColorValue = null) {
+                colorSelect.innerHTML = '<option value="">-- اختر اللون --</option>';
+
+                if (!selectedSize) return;
+
+                let colors = variants
+                    .filter(v => v.size === selectedSize && v.color)
+                    .map(v => v.color);
+
+                let uniqueColors = [...new Set(colors)];
+
+              colors.forEach(color => {
+
+    let variant = variants.find(v => v.size === selectedSize && v.color === color);
+
+    let opt = document.createElement('option');
+    opt.value = color;
+
+    if (variant.quantity <= 0) {
+        opt.textContent = color + ' (نفذ)';
+        opt.disabled = true;
+    } else {
+        opt.textContent = color;
+    }
+
+    colorSelect.appendChild(opt);
+});
+
+                if (selectedColorValue && uniqueColors.includes(selectedColorValue)) {
+                    setTimeout(() => {
+                        colorSelect.dispatchEvent(new Event('change'));
+                    }, 50);
+                }
+            }
+            // ---------------------------------------------
+
+            if (selectedSizeFromCart && selectedColorFromCart) {
+                sizeSelect.value = selectedSizeFromCart;
+
+                updateColorOptions(selectedSizeFromCart, selectedColorFromCart);
+            }
+            // ---------------------------------------------
+
+
+            sizeSelect.addEventListener('change', function() {
+                let selectedSize = this.value;
+                updateColorOptions(selectedSize, null);
+
+                let totalQty = variants
+                    .filter(v => v.size === selectedSize && v.quantity > 0)
+                    .reduce((sum, v) => sum + v.quantity, 0);
+
+                qtySpan.innerText = totalQty > 0 ? totalQty : 'غير متوفر';
+
+                // reset
+                weightSpan.innerText = '--';
+                materialSpan.innerText = '--';
+                resetProductImages();
+                variantInput.value = '';
             });
 
-            // إذا كان هناك لون محدد من قبل، قم بتشغيل حدث change للون لجلب بياناته وصوره
-            if (selectedColorValue && uniqueColors.includes(selectedColorValue)) {
-                // تأخير بسيط للتأكد من إضافة الخيارات
-                setTimeout(() => {
-                    colorSelect.dispatchEvent(new Event('change'));
-                }, 50);
+            colorSelect.addEventListener('change', function() {
+                let size = sizeSelect.value;
+                let color = this.value;
+
+                if (!size || !color) {
+                    variantInput.value = '';
+                    weightSpan.innerText = '--';
+                    materialSpan.innerText = '--';
+                    resetProductImages();
+                    return;
+                }
+
+                let variant = variants.find(v => v.size === size && v.color === color);
+
+                if (variant) {
+                    variantInput.value = variant.id;
+                    weightSpan.innerText = variant.weight ? variant.weight + ' كجم' : 'غير محدد';
+                    materialSpan.innerText = variant.material || 'غير محدد';
+                    qtySpan.innerText = variant.quantity > 0 ? variant.quantity : 'غير متوفر';
+
+                } else {
+                    variantInput.value = '';
+                    weightSpan.innerText = '--';
+                    materialSpan.innerText = '--';
+                    qtySpan.innerText = '{{ $product->quantity }}';
+                }
+
+                const selectedColorKey = normalizeColor(color);
+                if (selectedColorKey && colorImages[selectedColorKey] && colorImages[selectedColorKey]
+                    .length) {
+                    updateSlider(colorImages[selectedColorKey]);
+                } else {
+                    resetProductImages();
+                }
+            });
+
+            document.getElementById('addToCartForm').addEventListener('submit', function(e) {
+                const size = sizeSelect.value;
+                const color = colorSelect.value;
+                if (!size || !color) {
+                    e.preventDefault();
+                    alert('❌ يجب اختيار المقاس واللون قبل إضافة المنتج إلى السلة');
+                    return false;
+                }
+            });
+
+            if (!selectedSizeFromCart) {
+                if (sizeSelect.options.length > 1) {
+
+                }
             }
-        }
-        // ---------------------------------------------
+            // ==============================================
+            // جزء جديد: التعامل مع تعديل منتج موجود في السلة
+            // ==============================================
+            // التحقق إذا كنا جايين من السلة (URL فيه cart_item_id)
+            const urlParams = new URLSearchParams(window.location.search);
+            const cartItemId = urlParams.get('cart_item_id');
 
-        // --- تنفيذ التحديد المسبق إذا جاء من السلة ---
-        if (selectedSizeFromCart && selectedColorFromCart) {
-            // 1. تحديد قيمة المقاس في الـ select
-            sizeSelect.value = selectedSizeFromCart;
+            // إذا وجد cart_item_id في الرابط
+            if (cartItemId) {
+                const form = document.getElementById('addToCartForm');
 
-            // 2. تحديث قائمة الألوان بناءً على المقاس المختار وتحديد اللون المطلوب
-            updateColorOptions(selectedSizeFromCart, selectedColorFromCart);
+                // تغيير action الفورم
+                form.action = `/cart/update/${cartItemId}`;
 
-            // 3. بما أن updateColorOptions ستقوم بتشغيل change للون،
-            //    الـ variant المناسب سيتم تحديده تلقائياً في حدث change الخاص باللون
-        }
-        // ---------------------------------------------
-
-        // --- أحداث الـ Select Boxes (نفس الكود القديم مع تعديلات بسيطة) ---
-
-        sizeSelect.addEventListener('change', function () {
-            let selectedSize = this.value;
-
-            // تحديث الألوان (بدون تحديد لون)
-            updateColorOptions(selectedSize, null);
-
-            // إعادة تعيين الصور والبيانات
-            weightSpan.innerText = '--';
-            materialSpan.innerText = '--';
-            resetProductImages();
-            variantInput.value = ''; // مسح الـ variant
-        });
-
-        colorSelect.addEventListener('change', function () {
-            let size = sizeSelect.value;
-            let color = this.value;
-
-            if (!size || !color) {
-                variantInput.value = '';
-                weightSpan.innerText = '--';
-                materialSpan.innerText = '--';
-                resetProductImages();
-                return;
-            }
-
-            let variant = variants.find(v => v.size === size && v.color === color);
-
-            if (variant) {
-                variantInput.value = variant.id;
-                weightSpan.innerText = variant.weight ? variant.weight + ' كجم' : 'غير محدد';
-                materialSpan.innerText = variant.material || 'غير محدد';
-            } else {
-                variantInput.value = '';
-                weightSpan.innerText = '--';
-                materialSpan.innerText = '--';
-            }
-
-            // تحديث الصور حسب اللون
-            const selectedColorKey = normalizeColor(color);
-            if (selectedColorKey && colorImages[selectedColorKey] && colorImages[selectedColorKey].length) {
-                updateSlider(colorImages[selectedColorKey]);
-            } else {
-                resetProductImages();
-            }
-        });
-
-        // --- منع إرسال الفورم بدون اختيار مقاس ولون (نفس الكود القديم) ---
-        document.getElementById('addToCartForm').addEventListener('submit', function(e) {
-            const size = sizeSelect.value;
-            const color = colorSelect.value;
-            if (!size || !color) {
-                e.preventDefault();
-                alert('❌ يجب اختيار المقاس واللون قبل إضافة المنتج إلى السلة');
-                return false;
-            }
-        });
-
-        // --- إذا لم يكن هناك تحديد مسبق من السلة، تأكد من تهيئة القوائم بشكل صحيح ---
-        if (!selectedSizeFromCart) {
-            // تهيئة عادية (المقاس الأول إذا وجد)
-            if (sizeSelect.options.length > 1) {
-                // اختيار أول مقاس تلقائياً (اختياري، يمكنك إلغاء تعليق السطر التالي إذا أردت)
-                // sizeSelect.selectedIndex = 1;
-                // sizeSelect.dispatchEvent(new Event('change'));
-            }
-        }
-// ==============================================
-// جزء جديد: التعامل مع تعديل منتج موجود في السلة
-// ==============================================
-// التحقق إذا كنا جايين من السلة (URL فيه cart_item_id)
-const urlParams = new URLSearchParams(window.location.search);
-const cartItemId = urlParams.get('cart_item_id');
-
-// إذا وجد cart_item_id في الرابط
-if (cartItemId) {
-    const form = document.getElementById('addToCartForm');
-
-    // تغيير action الفورم
-    form.action = `/cart/update/${cartItemId}`;
-
-    // تغيير نص الزر
-    const submitBtn = form.querySelector('button[type="submit"]');
-    if (submitBtn) {
-        submitBtn.innerHTML = `
+                // تغيير نص الزر
+                const submitBtn = form.querySelector('button[type="submit"]');
+                if (submitBtn) {
+                    submitBtn.innerHTML = `
             <span class="icon"> → </span>
             <span class="btn-text"> حفظ التعديلات </span>
             <span class="hover-bg"></span>
         `;
-    }
+                }
 
-    // للتحقق: اطبع الـ action الجديد في console
-    console.log('Form action changed to:', form.action);
-}
-    });
+                // للتحقق: اطبع الـ action الجديد في console
+                console.log('Form action changed to:', form.action);
+            }
+        });
 </script>
 
 @include('partials.related-products')

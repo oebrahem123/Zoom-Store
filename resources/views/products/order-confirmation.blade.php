@@ -3,105 +3,128 @@
 @section('content')
 
 <style>
-   /* حدد لونك البرتقالي المميز (يمكنك تغييره) */
-:root {
-    --orange-color: #f28123; /* اللون البرتقالي الأساسي */
-}
+    /* حدد لونك البرتقالي المميز (يمكنك تغييره) */
+    :root {
+        --orange-color: #f28123;
+        /* اللون البرتقالي الأساسي */
+    }
 
 
-.btn-outline-custom-orange {
-    color: var(--orange-color);
-    border: 1px solid var(--orange-color);
-    background-color: transparent;
-    border-radius: 7px;
-    padding: 0.5rem 1rem;
-    font-weight: 500;
-    text-decoration: none;
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    display: inline-flex;
-    align-items: center;
-}
+    .btn-outline-custom-orange {
+        color: var(--orange-color);
+        border: 1px solid var(--orange-color);
+        background-color: transparent;
+        border-radius: 7px;
+        padding: 0.5rem 1rem;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        display: inline-flex;
+        align-items: center;
+    }
 
-.btn-outline-custom-orange .fas {
-    margin-left: 8px;
-    font-size: 1rem;
-}
-.btn-outline-custom-orange:hover,
-.btn-outline-custom-orange:focus {
-    box-shadow: 0 2px 6px rgba(73, 59, 55, 0.6);
-    transform: translateY(-3px);
-    color: var(--orange-color);
-    border-color: var(--orange-color);
-    background-color: transparent;
-}
-.order-status-page {
-    direction: rtl;
-    text-align: right;
-    font-family: "Tajawal", sans-serif;
-}
+    .btn-outline-custom-orange .fas {
+        margin-left: 8px;
+        font-size: 1rem;
+    }
 
-.order-number-title {
-    font-weight: 700;
-    font-size: 26px;
-    margin-bottom: 10px;
-}
+    .btn-outline-custom-orange:hover,
+    .btn-outline-custom-orange:focus {
+        box-shadow: 0 2px 6px rgba(73, 59, 55, 0.6);
+        transform: translateY(-3px);
+        color: var(--orange-color);
+        border-color: var(--orange-color);
+        background-color: transparent;
+    }
 
-/* Timeline */
-.order-timeline-wrap {
-    position: relative;
-    padding-right: 30px;
-    margin-top: 10px;
-}
+    .order-status-page {
+        direction: rtl;
+        text-align: right;
+        font-family: "Tajawal", sans-serif;
+    }
 
-.order-timeline-wrap::before {
-content: '';
-    position: absolute;
-    top: 0;
-    right: 39px;
-    width: 2px;
-    height: 90%;
-    background-color: #e0e0e0;
-}
+    .order-number-title {
+        font-weight: 700;
+        font-size: 26px;
+        margin-bottom: 10px;
+    }
 
-.timeline-item {
-    position: relative;
-    padding-right: 40px;
-    margin-bottom: 45px;
-}
+    /* Timeline */
+    .order-timeline-wrap {
+        position: relative;
+        padding-right: 30px;
+        margin-top: 10px;
+    }
 
-.timeline-dot {
-    position: absolute;
-    top: 0;
-    right: -1px;
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    background-color: #cfcfcf;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 11px;
-    font-weight: bold;
-    border: 2px solid #fff;
-    box-shadow: 0 0 3px #888;
-}
+    .order-timeline-wrap::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 39px;
+        width: 2px;
+        height: 90%;
+        background-color: #e0e0e0;
+    }
 
-.timeline-item.completed .timeline-dot { background-color: #28a745; }
-.timeline-item.active .timeline-dot { background-color: #ffc107; color: #333; }
+    .timeline-item {
+        position: relative;
+        padding-right: 40px;
+        margin-bottom: 45px;
+    }
 
-.timeline-content h5 { font-size: 1.1rem; font-weight: bold; margin-bottom: 4px; }
-.timeline-content p { font-size: 0.9rem; color: #666; margin: 0; }
-.timeline-date { color: #777; font-size: 0.85rem; margin-top: 5px; }
+    .timeline-dot {
+        position: absolute;
+        top: 0;
+        right: -1px;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background-color: #cfcfcf;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 11px;
+        font-weight: bold;
+        border: 2px solid #fff;
+        box-shadow: 0 0 3px #888;
+    }
 
-/* Map */
-.map-container {
-    height: 400px;
-    border: 1px solid #ddd;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-}
+    .timeline-item.completed .timeline-dot {
+        background-color: #28a745;
+    }
+
+    .timeline-item.active .timeline-dot {
+        background-color: #ffc107;
+        color: #333;
+    }
+
+    .timeline-content h5 {
+        font-size: 1.1rem;
+        font-weight: bold;
+        margin-bottom: 4px;
+    }
+
+    .timeline-content p {
+        font-size: 0.9rem;
+        color: #666;
+        margin: 0;
+    }
+
+    .timeline-date {
+        color: #777;
+        font-size: 0.85rem;
+        margin-top: 5px;
+    }
+
+    /* Map */
+    .map-container {
+        height: 400px;
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
 </style>
 
 <div class="container order-status-page py-5">
@@ -115,12 +138,12 @@ content: '';
                 بتاريخ {{ $order->created_at->format('d-m-Y h:i A') }}
             </small>
         </div>
-       <div class="col-md-6 text-left">
-    <a href="tel:000000000" class="btn btn-outline-custom-orange px-4 py-2">
-        <i class="fas fa-phone-alt"></i>
-        خدمة العملاء
-    </a>
-</div>
+        <div class="col-md-6 text-left">
+            <a href="tel:000000000" class="btn btn-outline-custom-orange px-4 py-2">
+                <i class="fas fa-phone-alt"></i>
+                خدمة العملاء
+            </a>
+        </div>
     </div>
 
     <div class="row g-5">
@@ -173,11 +196,11 @@ content: '';
 {{-- Leaflet JS --}}
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <!-- رابط أيقونات FontAwesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
 <script>
-document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function() {
     let address = @json($order->address);
 
     // خريطة ابتدائية (مركز مؤقت) بدون zoom controls و attribution

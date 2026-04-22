@@ -3,69 +3,6 @@
 
 
 
-{{-- <div class="product-section mt-100 mb-100">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 offset-lg-2 text-center">
-                <div class="section-title">
-                    <h3><span class="orange-text">منتجاتنا</span></h3>
-                    <p>مجموعة متنوعة من المنتجات المتاحة حاليًا</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            @foreach ($products as $item)
-            <div class="col-lg-4 col-md-6 text-center d-flex mb-4">
-                <div class="single-product-item flex-fill">
-                    <a href="/single-product/{{ $item->id }}">
-                        <div class="product-image"> <img src="{{ url($item->imagepath) }}"
-                                style="width:250px; height:250px; object-fit:cover; border-radius:8px;" alt="">
-                        </div>
-                    </a>
-                    <div class="product-info mt-2">
-                        <div class="product-name">{{ $item->name }}</div>
-
-                        <div class="product-description" id="desc-{{ $item->id }}">
-                            {{ $item->description }}
-                        </div>
-
-                        <span class="read-more" id="read-more-{{ $item->id }}"
-                            onclick="toggleDescription({{ $item->id }})">
-                            اعرف أكثر <i class="fas fa-chevron-down small"></i>
-                        </span>
-
-                        <div class="product-price-section mt-">
-                            <div class="product-quantity-label">السعر</div>
-                            <div class="product-price">{{ $item->price }} ج.م</div>
-
-                            <div class="product-quantity-label">الكمية المتاحة</div>
-                            <div class="product-quantity-value">{{ $item->quantity }}</div>
-                        </div>
-                    </div>
-
-                    <div class="product-actions mt-3">
-                        <a href="/addproducttocart/{{ $item->id }}" class="cart-btn btn btn-success btn-sm"
-                            style="width: 100%">
-                            <i class="fas fa-shopping-cart"></i> إضافة إلى السلة
-                        </a>
-
-                    </div>
-                </div>
-            </div>
-            @endforeach
-        </div>
-
-        <div class="row">
-            <div class="col-lg-12 text-center" style="">
-                <div class="pagination-wrap">
-                    {{ $products->links('vendor.pagination.custom') }}
-                </div>
-            </div>
-        </div>
-    </div>
-
-</div> --}}
 
 <section class="bg0 p-t-23 p-b-140">
     <div class="container">
@@ -239,7 +176,19 @@
             <!-- Block2 -->
             <div class="block2">
                 <div class="block2-pic hov-img0">
-                    <img src="{{ url($item->imagepath) }}">
+                    @php
+                    $selectedColor = request('color');
+
+                    $variantImage = null;
+
+                    if ($selectedColor && $item->productphotos) {
+                    $variantImage = $item->productphotos
+                    ->where('color', $selectedColor)
+                    ->first();
+                    }
+                    @endphp
+
+                    <img src="{{ url($variantImage->imagepath ?? $item->imagepath) }}">
 
                     {{-- <a href="/addproducttocart/{{ $item->id }}"
                         class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1"

@@ -201,9 +201,11 @@
 </style>
 @extends('layouts.master')
 @section('content')
+
+
 <!-- Banner -->
 <div class="sec-banner bg0 p-t-50">
-    <div class="containe.r">
+    <div class="containe">
 
         <!-- العنوان -->
         <div class="container text-center p-b-30">

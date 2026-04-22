@@ -14,7 +14,7 @@
 <div class="checkout-section mt-150 mb-150">
     <div class="container">
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-lg-12 p-t-50 p-b-50">
                 <div class="checkout-accordion-wrap">
                     <div class="accordion" id="accordionExample">
                         <div class="card single-accordion">
@@ -90,13 +90,14 @@
                                                             </tr>
 
                                                             @forelse($cartProducts as $item)
-                                                            <tr class="table_row">
+                                                            <tr
+                                                                class="table_row {{ !$item->isAvailable ? 'opacity-50' : '' }}">
 
                                                                 <td class="column-1">
                                                                     <div class="how-itemcart1 delete-item"
                                                                         data-id="{{ $item->id }}">
-                                                                        <img src="{{ asset($item->product->imagepath) }}"
-                                                                            alt="IMG">
+                                                                        <img src="{{ asset($item->display_image) }}"
+                                                                            alt="">
 
                                                                         <form id="delete-{{ $item->id }}"
                                                                             action="{{ route('cart.delete', $item->id) }}"
@@ -108,23 +109,37 @@
                                                                 </td>
 
                                                                 <td class="column-6 texx">
+                                                                    @if($item->product)
                                                                     <a
                                                                         href="{{ route('product.details', $item->product->id) }}">
-                                                                        {{ $item->product->name }}
+                                                                        <span
+                                                                            class="{{ !$item->isAvailable ? 'text-decoration-line-through' : '' }}">{{
+                                                                            $item->display_name }}</span>
                                                                     </a>
+                                                                    @else
+                                                                    <span
+                                                                        class="{{ !$item->isAvailable ? 'text-decoration-line-through' : '' }}">{{
+                                                                        $item->display_name }}</span>
+                                                                    @endif
+                                                                    @if(!$item->isAvailable)
+                                                                    <span class="d-block"
+                                                                        style="font-size:12px;margin-top:6px;color:{{ $item->availabilityStatus === 'out_of_stock' ? '#dc3545' : '#6c757d' }};">
+                                                                        {{ $item->availabilityMessage }}
+                                                                    </span>
+                                                                    @endif
                                                                 </td>
 
                                                                 <td class="text-center">{{ $item->size ?? '—' }}</td>
                                                                 <td class="text-center">{{ $item->color ?? '—' }}</td>
 
                                                                 <td class="text-center">
-                                                                    {{ number_format($item->product->price, 2) }} ج.م
+                                                                    {{ number_format($item->display_price, 2) }} ج.م
                                                                 </td>
 
                                                                 <td class="text-center">{{ $item->quantity }}</td>
 
                                                                 <td class="text-center">
-                                                                    {{ number_format($item->product->price *
+                                                                    {{ number_format($item->display_price *
                                                                     $item->quantity, 2) }} ج.م
                                                                 </td>
 
@@ -156,7 +171,7 @@
 
                                                         <span class="mtext-110 black cl2">
                                                             {{ number_format($cartProducts->sum(fn($i) =>
-                                                            $i->product->price * $i->quantity), 2) }} ج
+                                                            $i->display_price * $i->quantity), 2) }} ج
                                                         </span>
                                                     </div>
 
@@ -180,7 +195,7 @@
 
                                                         <span class="mtext-110 black cl2">
                                                             {{ number_format($cartProducts->sum(fn($i) =>
-                                                            $i->product->price * $i->quantity), 2) }} ج
+                                                            $i->display_price * $i->quantity), 2) }} ج
                                                         </span>
                                                     </div>
 
@@ -223,7 +238,7 @@
                                     </p>
 
                                     <div class="p-t-18">
-                                        <button type="submit" form="store-order" class="zoom-btn">
+                                        <button type="submit" form="store-order" class="zoom-btn" dir="ltr">
                                             <span class="icon">→</span>
                                             <span class="btn-text"> الدفع الآمن </span>
                                             <span class="hover-bg"></span>
@@ -239,12 +254,12 @@
             </div>
 
 
-            <div class="col-lg-12 mt-2">
+            {{-- <div class="col-lg-12 mt-2">
                 <div class="cart-buttons">
                     <a onclick="event.preventDefault(); document.getElementById('store-order').submit();"
                         class="boxed-btn">Place Order</a>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
 </div>

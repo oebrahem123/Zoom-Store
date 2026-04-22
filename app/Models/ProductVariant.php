@@ -20,4 +20,18 @@ class ProductVariant extends Model
         'material',
         'weight',
     ];
+
+    // ✅ تحديث الكمية الإجمالية للمنتج تلقائياً عند تغيير أي variant
+    protected static function booted()
+    {
+        static::saved(function ($variant) {
+            $total = $variant->product->variants()->sum('quantity');
+            $variant->product->update(['quantity' => $total]);
+        });
+
+        static::deleted(function ($variant) {
+            $total = $variant->product->variants()->sum('quantity');
+            $variant->product->update(['quantity' => $total]);
+        });
+    }
 }

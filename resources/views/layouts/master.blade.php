@@ -399,28 +399,17 @@
                 <ul class="header-cart-wrapitem w-full">
 
                     @auth
-                    @php
-                    $cartItems = \App\Models\Cart::with('product')->where('user_id', auth()->id())->get();
-                    $total = 0;
-                    @endphp
 
-                    @forelse($cartItems as $item)
-                    @php
-                    $total += $item->product->price * $item->quantity;
-                    @endphp
-
-                    <li class="header-cart-item flex-w flex-t m-b-12" style="position:relative;">
+                    @forelse($headerCartItems as $item)
+                    <li class="header-cart-item flex-w flex-t m-b-12 {{ !$item->isAvailable ? 'opacity-50' : '' }}"
+                        style="position:relative;">
 
                         <div class="header-cart-item-img"
                             onclick="document.getElementById('delete-{{ $item->id }}').submit();">
 
-                            @php
-                            $variantImage = $item->product->productphotos
-                            ->where('color', $item->color)
-                            ->first();
-                            @endphp
+                            <img src="{{ asset($item->display_image) }}" alt="">
 
-                            <img src="{{ asset($variantImage->imagepath ?? $item->product->imagepath) }}">
+
 
                             <!-- form مخفي -->
                             <form id="delete-{{ $item->id }}" action="{{ route('cart.delete', $item->id) }}"
@@ -433,11 +422,36 @@
                         <!-- تفاصيل المنتج -->
                         <div class="header-cart-item-txt p-t-8" style="padding-right:10px;">
 
-                            <!-- اسم المنتج -->
-                            <a href="{{ route('product.details', $item->product->id) }}?size={{ $item->size }}&color={{ $item->color }}&cart_item_id={{ $item->id }}"
-                                class="header-cart-item-name m-b-6 hov-cl1 trans-04">
-                                {{ $item->product->name }}
+                            @if($item->product_id)
+                            <a href="{{ route('product.details', [
+                'productid' => $item->product_id,
+                'size' => $item->size,
+                'color' => $item->color,
+                'cart_item_id' => $item->id
+            ]) }}" class="header-cart-item-name hov-cl1 trans-04" style="text-decoration:none;">
+
+                                <span class="{{ !$item->isAvailable ? 'text-decoration-line-through' : '' }}"
+                                    style="display:inline-block;">
+
+                                    {{ $item->display_name }}
+
+                                </span>
+
                             </a>
+                            @else
+                            <span class="text-danger {{ !$item->isAvailable ? 'text-decoration-line-through' : '' }}">
+                                {{ $item->display_name }}
+                            </span>
+                            @endif
+
+
+                            @if(!$item->isAvailable)
+                            <span class="d-block" style="font-size:11px;margin-top:4px;
+            color:{{ $item->availabilityStatus === 'out_of_stock' ? '#dc3545' : '#6c757d' }};">
+                                {{ $item->availabilityMessage }}
+                            </span>
+                            @endif
+
                             <div>
                                 المقاس : {{ $item->size ?? '—' }}
                             </div>
@@ -451,7 +465,7 @@
 
                             <!-- السعر -->
                             <div>
-                                السعر: {{ $item->product->price }} ج
+                                السعر: {{ number_format($item->display_price, 2) }} ج
                             </div>
 
 
@@ -471,7 +485,7 @@
                 <div class="w-full">
 
                     <div class="header-cart-total w-full p-tb-40">
-                        الإجمالي: {{ $total ?? 0 }} ج
+                        الإجمالي: {{ number_format($headerCartTotal ?? 0, 2) }} ج
                     </div>
 
                     <div class="header-cart-buttons flex-w w-full">

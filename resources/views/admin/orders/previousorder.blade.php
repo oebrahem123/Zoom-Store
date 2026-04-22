@@ -131,7 +131,7 @@
             </div>
 
             <!-- Body -->
-            <div id="order{{ $item->id }}" class="collapse show" data-parent="#ordersAccordion">
+            <div id="order{{ $item->id }}" class="collapse" data-parent="#ordersAccordion">
                 <div class="order-body">
 
                     <div class="row">
@@ -187,22 +187,32 @@
                                 @foreach ($item->orderdetails as $detail)
                                 <tr>
                                     <td>
-                                        <img src="{{ asset($detail->product->imagepath) }}" width="50">
+                                        @php
+                                        $rowImg = $detail->displayImagePath();
+                                        @endphp
+                                        <img src="{{ $rowImg ? asset($rowImg) : asset('images/default.png') }}"
+                                            width="50" alt="">
                                     </td>
-                                    <td>{{ $detail->product->name }}</td>
+                                    <td>
+                                        {{ $detail->displayName() }}
+                                        @if($detail->catalogStatusMessage())
+                                        <span
+                                            style="display:inline-block;font-size:11px;color:#856404;background:#fff3cd;padding:2px 8px;border-radius:4px;margin-right:6px;vertical-align:middle;">{{
+                                            $detail->catalogStatusMessage() }}</span>
+                                        @endif
+                                    </td>
                                     <td>{{ $detail->size ?? '—' }}</td>
                                     <td>{{ $detail->color ?? '—' }}</td>
                                     <td>{{ $detail->price }} ج.م</td>
                                     <td>{{ $detail->quantity }}</td>
-                                    <td>{{ $detail->price * $detail->quantity }} ج.م</td>
+                                    <td>{{ number_format($detail->lineTotal(), 2) }} ج.م</td>
                                 </tr>
                                 @endforeach
                                 <tr class="total-data">
-                                    <td colspan="4" style="text-align: justify;"><strong> إجمالى المبلغ :</strong></td>
-                                    <td>{{ $item->orderdetails->sum(fn($x)=> $x->product->price * $x->quantity) }} ج.م
+                                    <td colspan="6" style="text-align: justify;"><strong> إجمالى المبلغ :</strong></td>
+                                    <td>{{ number_format($item->orderdetails->sum(fn($x) => $x->lineTotal()), 2) }} ج.م
                                     </td>
                                 </tr>
-                            </tbody>
                             </tbody>
                         </table>
 

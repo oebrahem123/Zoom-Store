@@ -34,12 +34,12 @@
                     </div>
 
                     {{-- الكمية --}}
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         <span class="text-danger">@error('quantity'){{ $message }}@enderror</span>
                         <label for="quantity">الكمية المتاحة</label>
                         <input type="number" class="form-control" name="quantity" id="quantity"
                             value="{{ old('quantity', $product->quantity) }}" placeholder="الكمية">
-                    </div>
+                    </div> --}}
 
                     {{-- الوصف --}}
                     <div class="form-group">
