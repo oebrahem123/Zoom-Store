@@ -43,7 +43,7 @@ class CartController extends Controller
 
         $variantId = $request->variant_id;
 
-        // التحقق من أن الـ variant يخص هذا المنتج
+        // ✅ نجيب الـ variant الأول (مهم جداً)
         $variant = ProductVariant::where('id', $variantId)
             ->where('product_id', $productid)
             ->first();
@@ -52,28 +52,63 @@ class CartController extends Controller
             return back()->with('error', '❌ هذا المزيج من المقاس واللون غير متوفر لهذا المنتج');
         }
 
-        // التحقق من وجود كمية كافية
+        // ✅ التحقق من الكمية
         if ($variant->quantity <= 0) {
             return back()->with('error', '❌ هذا المزيج من المقاس واللون غير متوفر حالياً');
         }
 
-        // البحث بنفس الـ variant
+        // =====================================================
+        // 🟢 حالة التعديل (لو جاي من الكارت)
+        // =====================================================
+        if ($request->filled('cart_item_id')) {
+
+            $cartItem = Cart::where('id', $request->cart_item_id)
+                ->where('user_id', $user_id)
+                ->first();
+
+            if ($cartItem) {
+
+                // 🧠 تعديل مباشر (بدون إضافة)
+                $cartItem->variant_id = $variantId;
+                $cartItem->size = $variant->size;
+                $cartItem->color = $variant->color;
+
+                // تحديث snapshot
+                $cartItem->product_name = $product->name;
+                $cartItem->product_price = $product->price;
+                $cartItem->product_image = $product->imagepath;
+
+                $cartItem->save();
+
+                return redirect()->route('cart')->with('success', '✅ تم تعديل المنتج');
+            }
+        }
+
+        // =====================================================
+        // 🟢 الإضافة العادية
+        // =====================================================
         $cartItem = Cart::where('user_id', $user_id)
             ->where('product_id', $productid)
             ->where('variant_id', $variantId)
             ->first();
 
         if ($cartItem) {
-            // التحقق من أن الكمية المطلوبة لا تتجاوز المتوفر
+
+            // التحقق من الكمية
             if ($cartItem->quantity + 1 > $variant->quantity) {
                 return back()->with('error', '❌ الكمية المطلوبة غير متوفرة لهذا المزيج');
             }
+
             $cartItem->quantity += 1;
+
             $cartItem->product_name = $product->name;
             $cartItem->product_price = $product->price;
             $cartItem->product_image = $product->imagepath;
+
             $cartItem->save();
+
         } else {
+
             Cart::create([
                 'user_id' => $user_id,
                 'product_id' => $productid,

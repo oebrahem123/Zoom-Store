@@ -18,9 +18,8 @@ class ProductController extends Controller
         $product = Product::with('category', 'productphotos', 'variants', 'reviews')->findOrFail($productid);
 
         // --- الحل الجديد: استقبال size و color من الرابط ---
-        $selectedSize = $request->query('size'); // بيجيب قيمة size من URL
-        $selectedColor = $request->query('color'); // بيجيب قيمة color من URL
-
+        $selectedSize = trim($request->query('size'));
+        $selectedColor = trim($request->query('color'));
         // متغير لتخزين الـ variant ID المطابق (لحالته في الـ select)
         $selectedVariantId = null;
 

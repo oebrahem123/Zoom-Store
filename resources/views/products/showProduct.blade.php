@@ -187,7 +187,7 @@
                         <form action="{{ route('cart.add', $product->id) }}" method="POST" id="addToCartForm">
                             @csrf
 
-                            <!-- hidden input للـ variant -->
+                            <input type="hidden" name="cart_item_id" value="{{ request('cart_item_id') }}">
                             <input type="hidden" name="variant_id" id="variant_id">
 
                             <button type="submit" class="zoom-btn m-t-20">
@@ -419,6 +419,7 @@
                                             class="flex-c-m stext-101 cl0 size-112 bg7 bor11 hov-btn3 p-lr-15 trans-04 m-b-10">
                                             إرسال
                                         </button>
+
                                     </form>
 
                                     <!-- عرض رسائل النجاح أو الخطأ -->
@@ -553,6 +554,8 @@
 
                 if (selectedColorValue && uniqueColors.includes(selectedColorValue)) {
                     setTimeout(() => {
+                            colorSelect.value = selectedColorValue;
+
                         colorSelect.dispatchEvent(new Event('change'));
                     }, 50);
                 }
@@ -647,7 +650,7 @@
                 const form = document.getElementById('addToCartForm');
 
                 // تغيير action الفورم
-                form.action = `/cart/update/${cartItemId}`;
+                // form.action = `/cart/update/${cartItemId}`;
 
                 // تغيير نص الزر
                 const submitBtn = form.querySelector('button[type="submit"]');
