@@ -44,7 +44,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [App\Http\Controllers\Frontend\HomeController::class, 'index'])->name('home');
 
 // الصفحة الرئيسية - اختر واحدة فقط
 Route::get('/', [FirstController::class, 'index']); // ← هذه للصفحة الرئيسية
