@@ -34,6 +34,10 @@ for($i = 1; $i<= 25 ;$i++){
     ]);
 };
 
-
+        $this->call([
+            RolesSeeder::class,
+            PermissionsSeeder::class,
+            RolePermissionSeeder::class,
+        ]);
     }
 }
