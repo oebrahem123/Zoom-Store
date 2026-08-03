@@ -133,6 +133,90 @@ class AdminDesignViewTest extends TestCase
         $this->assertEquals('Updated Text', $this->design->fresh()->elements->first()->content);
     }
 
+    public function test_admin_save_archives_immutable_original_elements_and_audit(): void
+    {
+        $this->actingAs($this->admin, 'admin');
+
+        $payload = [
+            'design_id' => $this->design->id,
+            'product_id' => $this->design->product_id,
+            'variant_id' => $this->design->variant_id,
+            'view' => '0',
+            'admin_mode' => true,
+            'change_summary' => 'first admin edit',
+            'designs' => [
+                [
+                    'view_index' => 0,
+                    'print_area_id' => null,
+                    'elements' => [
+                        [
+                            'type' => 'text',
+                            'content' => 'Updated Text',
+                            'position_x' => 100,
+                            'position_y' => 100,
+                            'rotation' => 0,
+                            'color' => '#000000',
+                            'font_family' => 'Cairo',
+                            'font_size' => 24,
+                            'font_weight' => 400,
+                            'z_index' => 0,
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $this->postJson(route('design.store'), $payload)->assertStatus(200);
+
+        $snapshot = $this->design->fresh()->snapshot;
+
+        $this->assertArrayHasKey('original_elements', $snapshot);
+        $this->assertSame('Hello World', $snapshot['original_elements'][0]['elements'][0]['content'] ?? null);
+        $this->assertArrayHasKey('admin_user_id', $snapshot);
+        $this->assertSame($this->admin->id, $snapshot['admin_user_id']);
+        $this->assertArrayHasKey('edited_at', $snapshot);
+        $this->assertSame('first admin edit', $snapshot['change_summary'] ?? null);
+
+        // Unknown keys must be preserved, not replaced.
+        $design = $this->design->fresh();
+        $design->update(['snapshot' => array_merge($design->snapshot, ['future_key' => 'kept'])]);
+
+        // Second admin edit: original_elements must NOT be overwritten.
+        $this->postJson(route('design.store'), [
+            'design_id' => $this->design->id,
+            'product_id' => $this->design->product_id,
+            'variant_id' => $this->design->variant_id,
+            'view' => '0',
+            'admin_mode' => true,
+            'designs' => [
+                [
+                    'view_index' => 0,
+                    'print_area_id' => null,
+                    'elements' => [
+                        [
+                            'type' => 'text',
+                            'content' => 'Second Edit',
+                            'position_x' => 50,
+                            'position_y' => 50,
+                            'rotation' => 0,
+                            'color' => '#000000',
+                            'font_family' => 'Cairo',
+                            'font_size' => 20,
+                            'font_weight' => 400,
+                            'z_index' => 0,
+                        ],
+                    ],
+                ],
+            ],
+        ])->assertStatus(200);
+
+        $snapshot2 = $this->design->fresh()->snapshot;
+
+        $this->assertSame('Hello World', $snapshot2['original_elements'][0]['elements'][0]['content'] ?? null);
+        $this->assertSame('kept', $snapshot2['future_key'] ?? null);
+        $this->assertEquals('Second Edit', $this->design->fresh()->elements->first()->content);
+    }
+
     public function test_customer_can_save_own_design(): void
     {
         $this->actingAs($this->customer);

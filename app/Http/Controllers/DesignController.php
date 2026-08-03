@@ -11,6 +11,7 @@ use App\Models\Product;
 use App\Models\ProductVariant;
 use App\Services\Order\OrderResubmitService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -49,29 +50,27 @@ class DesignController extends Controller
                             : $request->preview_image,
                     ]);
 
-                    // Admin mode: store admin edits in snapshot, do NOT touch original elements
+                    // Admin mode: archive the customer's original elements (once) plus audit metadata,
+                    // then fall through so the admin's edits are applied to the elements table.
+                    // Snapshot is an audit/archive object only - never a rendering source.
                     if ($request->input('admin_mode')) {
-                        if (! $design->snapshot) {
-                            $design->snapshot = [];
+                        $snapshot = $design->snapshot ?? [];
+
+                        // original_elements is immutable: capture only on the first admin edit.
+                        if (! array_key_exists('original_elements', $snapshot)) {
+                            $snapshot['original_elements'] = $this->serializeElements($design);
                         }
-                        // Save the complete designs payload as admin_edits in snapshot
-                        $adminEdits = [];
-                        if ($request->has('designs') && is_array($request->designs)) {
-                            foreach ($request->designs as $viewDesign) {
-                                $adminEdits[] = [
-                                    'view_index' => $viewDesign['view_index'] ?? 0,
-                                    'print_area_id' => $viewDesign['print_area_id'] ?? null,
-                                    'elements' => $viewDesign['elements'] ?? [],
-                                ];
-                            }
+
+                        $snapshot['admin_user_id'] = Auth::guard('admin')->id();
+                        $snapshot['edited_at'] = now()->toISOString();
+                        if ($request->filled('change_summary')) {
+                            $snapshot['change_summary'] = $request->input('change_summary');
                         }
-                        $snapshot = $design->snapshot;
-                        $snapshot['admin_edits'] = $adminEdits;
+
                         $design->snapshot = $snapshot;
                         $design->save();
-                        \Log::debug('[ADMIN_SNAPSHOT] Saved admin edits to snapshot, design_id='.$design->id.', elements table NOT modified');
 
-                        return $design;
+                        \Log::debug('[ADMIN_SNAPSHOT] design_id='.$design->id.' original_elements archived, audit metadata written, elements will be updated');
                     }
 
                     \Log::debug('[FLOW_TRACE_DB] PRE-DELETE: design_id='.$design->id.' elements count='.$design->elements()->count());
@@ -284,6 +283,88 @@ class DesignController extends Controller
         file_put_contents($fullPath, $binary);
 
         return 'uploads/design-elements/'.$filename;
+    }
+
+    /**
+     * Serialize a design's elements into the grouped-by-view payload shape
+     * used by the editor (view_index / print_area_id / elements[]).
+     * Only used to archive the immutable original_elements snapshot.
+     */
+    private function serializeElements(CustomDesign $design): array
+    {
+        $elementsByView = [];
+        foreach ($design->elements as $element) {
+            $viewIndex = $element->view ?? 0;
+            if (! isset($elementsByView[$viewIndex])) {
+                $elementsByView[$viewIndex] = [];
+            }
+
+            $elementData = [
+                'type' => $element->type,
+                'content' => $element->content,
+                'position_x' => $element->position_x,
+                'position_y' => $element->position_y,
+                'rotation' => $element->rotation,
+                'z_index' => $element->z_index,
+                'print_area_id' => $element->print_area_id,
+                'origin_x' => $element->origin_x,
+                'origin_y' => $element->origin_y,
+            ];
+
+            if ($element->type === 'image') {
+                $elementData['width'] = $element->width;
+                $elementData['height'] = $element->height;
+                $elementData['scale_x'] = $element->scale_x;
+                $elementData['scale_y'] = $element->scale_y;
+                $elementData['original_width'] = $element->original_width;
+                $elementData['original_height'] = $element->original_height;
+            } elseif ($element->type === 'text') {
+                $elementData['color'] = $element->color;
+                $elementData['font_family'] = $element->font_family;
+                $elementData['font_size'] = $element->width;
+                $elementData['font_weight'] = $element->height;
+                $elementData['scale_x'] = $element->scale_x;
+                $elementData['scale_y'] = $element->scale_y;
+                $meta = $element->metadata ?: [];
+                $elementData['font_style'] = $meta['font_style'] ?? null;
+                $elementData['text_align'] = $meta['text_align'] ?? null;
+                $elementData['char_spacing'] = $meta['char_spacing'] ?? 0;
+                $elementData['line_height'] = $meta['line_height'] ?? null;
+                $elementData['underline'] = $meta['underline'] ?? false;
+                $elementData['overline'] = $meta['overline'] ?? false;
+                $elementData['linethrough'] = $meta['linethrough'] ?? false;
+                $elementData['stroke'] = $meta['stroke'] ?? null;
+                $elementData['stroke_width'] = $meta['stroke_width'] ?? 0;
+                $elementData['shadow'] = $meta['shadow'] ?? null;
+                $elementData['direction'] = $meta['direction'] ?? null;
+                $elementData['width'] = $meta['textbox_width'] ?? null;
+            } elseif ($element->type === 'asset' || $element->type === 'badge') {
+                $elementData['color'] = $element->color;
+                $elementData['width'] = $element->width;
+                $elementData['height'] = $element->height;
+                $elementData['scale_x'] = $element->scale_x;
+                $elementData['scale_y'] = $element->scale_y;
+                $meta = $element->metadata ?: [];
+                $elementData['_assetMeta'] = $meta['_assetMeta'] ?? null;
+            } else {
+                $elementData['color'] = $element->color;
+                $elementData['font_family'] = $element->font_family;
+            }
+
+            $elementsByView[$viewIndex][] = $elementData;
+        }
+
+        $designs = [];
+        foreach ($elementsByView as $viewIndex => $elements) {
+            $printAreaId = collect($elements)->pluck('print_area_id')->first();
+            $designs[] = [
+                'view_index' => (int) $viewIndex,
+                'print_area_id' => $printAreaId,
+                'elements' => $elements,
+            ];
+        }
+
+        return $designs;
     }
 
     public function editor($variantId)
