@@ -1,4 +1,4 @@
-<div class="sec-banner bg0 p-t-80">
+<div class="sec-banner bg0 p-t-10">
     <div class="container">
         <div class="container text-center p-b-50">
             <h2 class="section-title">
@@ -21,15 +21,10 @@
                         <a href="/single-product/{{ $item->id }}">
                             <img src="{{ url($item->imagepath) }}">
                         </a>
-                        <a href="/addproducttocart/{{ $item->id }}"
-                            class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1"
-                            style="width: 80%">
-                            إضافة إلى السلة
-                        </a>
-                        {{-- <a href="/single-product/{{ $item->id }}"
+                        <a href="/single-product/{{ $item->id }}"
                             class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04">
                             عرض المنتج
-                        </a> --}}
+                        </a>
                     </div>
 
                     <div class="block2-txt flex-w flex-t p-t-14">

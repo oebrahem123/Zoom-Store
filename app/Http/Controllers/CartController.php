@@ -7,6 +7,8 @@ use App\Models\Order;
 use App\Models\orderdetails;
 use App\Models\Product;
 use App\Models\ProductVariant;
+use App\Models\ShipmentGroup;
+use App\Services\Shipment\ShipmentMergeService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -26,6 +28,19 @@ class CartController extends Controller
 
     public function addProductToCart(Request $request, $productid)
     {
+        \Log::info('[CHECKPOINT-10] cart.add request', [
+            'user_id' => auth()->id(),
+            'product_id' => $productid,
+            'variant_id' => $request->variant_id,
+            'design_id' => $request->design_id,
+            'cart_item_id' => $request->cart_item_id,
+            'has_design_id' => $request->filled('design_id'),
+            'session_all' => session()->all(),
+            'referer' => request()->header('referer'),
+            'url' => request()->fullUrl(),
+            'method' => request()->method(),
+        ]);
+
         $user_id = auth()->id();
 
         $product = Product::find($productid);
@@ -77,6 +92,7 @@ class CartController extends Controller
                 $cartItem->product_name = $product->name;
                 $cartItem->product_price = $product->price;
                 $cartItem->product_image = $product->imagepath;
+                $cartItem->design_id = $request->design_id;
 
                 $cartItem->save();
 
@@ -87,19 +103,23 @@ class CartController extends Controller
         // =====================================================
         // 🟢 الإضافة العادية
         // =====================================================
+        $quantity = max(1, (int) ($request->quantity ?? 1));
+
         $cartItem = Cart::where('user_id', $user_id)
             ->where('product_id', $productid)
             ->where('variant_id', $variantId)
+            ->where('design_id', $request->design_id)
             ->first();
 
         if ($cartItem) {
 
-            // التحقق من الكمية
-            if ($cartItem->quantity + 1 > $variant->quantity) {
+            $newQty = $cartItem->quantity + $quantity;
+
+            if ($newQty > $variant->quantity) {
                 return back()->with('error', '❌ الكمية المطلوبة غير متوفرة لهذا المزيج');
             }
 
-            $cartItem->quantity += 1;
+            $cartItem->quantity = $newQty;
 
             $cartItem->product_name = $product->name;
             $cartItem->product_price = $product->price;
@@ -107,19 +127,32 @@ class CartController extends Controller
 
             $cartItem->save();
 
+            if (! $user_id) {
+                session()->push('guest_cart_ids', $cartItem->id);
+            }
+
         } else {
 
-            Cart::create([
+            if ($quantity > $variant->quantity) {
+                return back()->with('error', '❌ الكمية المطلوبة غير متوفرة');
+            }
+
+            $newCart = Cart::create([
                 'user_id' => $user_id,
                 'product_id' => $productid,
                 'product_name' => $product->name,
                 'product_price' => $product->price,
                 'product_image' => $product->imagepath,
-                'quantity' => 1,
+                'quantity' => $quantity,
                 'size' => $variant->size,
                 'color' => $variant->color,
                 'variant_id' => $variantId,
+                'design_id' => $request->design_id,
             ]);
+
+            if (! $user_id) {
+                session()->push('guest_cart_ids', $newCart->id);
+            }
         }
 
         return redirect()->route('cart')->with('success', '✅ تم إضافة المنتج إلى السلة');
@@ -141,30 +174,73 @@ class CartController extends Controller
         return redirect()->route('cart')->with('success', 'تم تحديث السلة ✅');
     }
 
+    public function updateQuantity(Request $request, $cartId)
+    {
+        $request->validate([
+            'quantity' => 'required|integer|min:0',
+        ]);
+
+        $cartItem = Cart::with('variant')
+            ->where('id', $cartId)
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
+
+        $newQty = (int) $request->quantity;
+
+        if ($newQty <= 0) {
+            $cartItem->delete();
+            return redirect()->route('cart')->with('success', 'تمت إزالة المنتج من السلة ✅');
+        }
+
+        if ($cartItem->variant && $newQty > $cartItem->variant->quantity) {
+            return redirect()->route('cart')->with('error', '❌ الكمية المطلوبة غير متوفرة');
+        }
+
+        $cartItem->quantity = $newQty;
+        $cartItem->save();
+
+        return redirect()->route('cart')->with('success', 'تم تحديث الكمية ✅');
+    }
+
     public function Completeorder()
     {
-        $user_id = auth()->user()->id;
-        $cartProducts = Cart::with(['product.productphotos', 'variant'])
+        $user_id = auth()->id();
+        $cartProducts = Cart::with(['product.productphotos', 'variant', 'design'])
             ->where('user_id', $user_id)
             ->get()
             ->map(fn ($item) => $item->enrichAvailabilityAttributes());
 
-        return view('products.completeorder', ['cartProducts' => $cartProducts]);
+        $mergeService = app(ShipmentMergeService::class);
+        $editableShipments = $mergeService->getEditableShipments(auth()->user());
+
+        $shipmentShippingInfo = $editableShipments->mapWithKeys(fn($s) => [
+            $s->id => [
+                'name'    => $s->orders->last()?->name ?? '',
+                'email'   => $s->orders->last()?->email ?? '',
+                'address' => $s->orders->last()?->address ?? '',
+                'phone'   => $s->orders->last()?->phone ?? '',
+                'note'    => $s->orders->last()?->note ?? '',
+            ]
+        ]);
+
+        return view('products.completeorder', compact(
+            'cartProducts',
+            'editableShipments',
+            'shipmentShippingInfo',
+        ));
     }
 
     // عرض صفحه عمليات الشراء
     public function previousorder()
     {
-        $result = Order::with(['orderdetails.product', 'orderdetails.variant'])->get();
-
-        return view('admin.orders.previousorder', ['orders' => $result]);
+        return redirect()->route('admin.orders.previousorder');
     }
 
     public function StoreOrder(Request $request)
     {
         $user_id = auth()->user()->id;
 
-        $cartProducts = Cart::with(['product.productphotos', 'variant'])
+        $cartProducts = Cart::with(['product.productphotos', 'variant', 'design'])
             ->where('user_id', $user_id)
             ->get()
             ->map(fn ($item) => $item->enrichAvailabilityAttributes());
@@ -176,6 +252,10 @@ class CartController extends Controller
         }
 
         return DB::transaction(function () use ($request, $user_id, $cartProducts) {
+
+            // =============================================
+            // 1. Create the new order
+            // =============================================
             $newOrder = new Order;
             $newOrder->name = $request->name;
             $newOrder->email = $request->email;
@@ -185,6 +265,9 @@ class CartController extends Controller
             $newOrder->user_id = $user_id;
             $newOrder->save();
 
+            // =============================================
+            // 2. Save order details (cart items)
+            // =============================================
             foreach ($cartProducts as $item) {
                 $unitPrice = $item->display_price;
 
@@ -198,6 +281,7 @@ class CartController extends Controller
                 $newOrderDetail->variant_id = $item->variant_id;
                 $newOrderDetail->product_name = $item->display_name;
                 $newOrderDetail->product_image = $item->product_image ?? $item->product?->imagepath;
+                $newOrderDetail->design_id = $item->design_id;
                 $newOrderDetail->save();
 
                 $variant = ProductVariant::where('id', $item->variant_id)
@@ -223,19 +307,72 @@ class CartController extends Controller
                 }
             }
 
+            // =============================================
+            // 3. Set initial status based on design presence
+            // =============================================
+            $hasDesign = $newOrder->orderdetails->contains(fn($d) => !is_null($d->design_id));
+            $initialStatus = $hasDesign ? 'pending_review' : 'pending';
+            if ($newOrder->status !== $initialStatus) {
+                \Log::debug('[AUDIT_ORDER_STATUS] CartController@StoreOrder', [
+                    'order_id' => $newOrder->id,
+                    'from' => $newOrder->status,
+                    'to' => $initialStatus,
+                    'controller' => 'CartController@StoreOrder',
+                    'file' => 'CartController.php',
+                    'has_canTransition_check' => false,
+                    'has_design' => $hasDesign,
+                ]);
+                $newOrder->update(['status' => $initialStatus]);
+            }
+
+            \App\Services\Order\OrderTimelineService::log($newOrder, $initialStatus, null, 'إنشاء الطلب');
+
+            // =============================================
+            // 4. Shipment — merge or create
+            // =============================================
+            $mergeService = app(ShipmentMergeService::class);
+            $mergeShipmentId = $request->integer('merge_shipment_id');
+
+            if ($mergeShipmentId > 0) {
+                $targetShipment = ShipmentGroup::find($mergeShipmentId);
+
+                if ($targetShipment && $mergeService->validateRaceCondition($targetShipment)) {
+                    $mergeService->executeMerge($targetShipment, $newOrder);
+                } else {
+                    $mergeService->createShipmentWithOrder($newOrder);
+                    session()->flash('warning', 'تم إنشاء شحنة جديدة لأن الشحنة المختارة لم تعد تقبل إضافة طلبات.');
+                }
+            } else {
+                $mergeService->createShipmentWithOrder($newOrder);
+            }
+
+            // =============================================
+            // 5. Clear cart & redirect
+            // =============================================
             Cart::where('user_id', $user_id)->delete();
 
-            session(['last_order_id' => $newOrder->id]);
-
-            return redirect()->route('order.confirmation', $newOrder->id);
+            return redirect()->route('orders.index');
         });
     }
 
     public function orderConfirmation($id)
     {
-        $order = Order::findOrFail($id);
+        $order = Order::with([
+            'shipmentGroup.orders.orderdetails.product',
+            'shipmentGroup.orders.orderdetails.variant',
+            'shipmentGroup.orders.orderdetails.design',
+        ])->findOrFail($id);
 
-        return view('products.order-confirmation', compact('order'));
+        $viewData = compact('order');
+
+        if ($order->shipmentGroup) {
+            $shipment = $order->shipmentGroup;
+            $service = app(\App\Services\Shipment\CustomerShipmentViewService::class);
+            $prepared = $service->prepare($shipment);
+            $viewData = array_merge($viewData, ['shipment' => $shipment], $prepared);
+        }
+
+        return view('products.order-confirmation', $viewData);
     }
 
     // تحديث منتج موجود في السلة (مقاس/لون مختلف)

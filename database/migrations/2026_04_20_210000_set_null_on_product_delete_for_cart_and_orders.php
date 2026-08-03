@@ -17,7 +17,9 @@ return new class extends Migration
             $table->dropForeign(['product_id']);
         });
 
-        DB::statement('ALTER TABLE carts MODIFY product_id BIGINT UNSIGNED NULL');
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement('ALTER TABLE carts MODIFY product_id BIGINT UNSIGNED NULL');
+        }
 
         Schema::table('carts', function (Blueprint $table) {
             $table->foreign('product_id')->references('id')->on('products')->nullOnDelete();
@@ -27,7 +29,9 @@ return new class extends Migration
             $table->dropForeign(['product_id']);
         });
 
-        DB::statement('ALTER TABLE orderdetails MODIFY product_id BIGINT UNSIGNED NULL');
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement('ALTER TABLE orderdetails MODIFY product_id BIGINT UNSIGNED NULL');
+        }
 
         Schema::table('orderdetails', function (Blueprint $table) {
             if (! Schema::hasColumn('orderdetails', 'product_name')) {
@@ -53,7 +57,9 @@ return new class extends Migration
             $table->dropColumn(['product_name', 'product_image']);
         });
 
-        DB::statement('ALTER TABLE orderdetails MODIFY product_id BIGINT UNSIGNED NOT NULL');
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement('ALTER TABLE orderdetails MODIFY product_id BIGINT UNSIGNED NOT NULL');
+        }
 
         Schema::table('orderdetails', function (Blueprint $table) {
             $table->foreign('product_id')->references('id')->on('products')->cascadeOnDelete();
@@ -63,7 +69,9 @@ return new class extends Migration
             $table->dropForeign(['product_id']);
         });
 
-        DB::statement('ALTER TABLE carts MODIFY product_id BIGINT UNSIGNED NOT NULL');
+        if (DB::getDriverName() !== 'sqlite') {
+            DB::statement('ALTER TABLE carts MODIFY product_id BIGINT UNSIGNED NOT NULL');
+        }
 
         Schema::table('carts', function (Blueprint $table) {
             $table->foreign('product_id')->references('id')->on('products')->cascadeOnDelete();

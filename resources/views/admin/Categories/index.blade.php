@@ -101,9 +101,11 @@
 
 
                 {{-- زر إضافة قسم جديد --}}
+                @permission(\App\Permissions\Permission::CATEGORIES_CREATE)
                 <div class="mb-3 text-end">
                     <a href="{{ route('admin.categories.create') }}" class="btn btn-primary">إضافة قسم جديد</a>
                 </div>
+                @endpermission
 
                 {{-- إشعار نجاح --}}
                 @if (session('success'))
@@ -154,17 +156,19 @@
                                 {{-- التحكم للأقسام --}}
                                 <td>
                                     <div class="d-flex gap-2" style="justify-content: center;">
-                                        {{-- زر التعديل --}}
+                                                @permission(\App\Permissions\Permission::CATEGORIES_EDIT)
                                         <a href="{{ route('admin.categories.edit', $category->id) }}"
                                             class="btn btn-warning btn-sm control-btn">
                                             <i class="fas fa-edit"></i> تعديل
                                         </a>
+                                        @endpermission
 
-                                        {{-- زر الحذف --}}
+                                        @permission(\App\Permissions\Permission::CATEGORIES_DELETE)
                                         <button type="button" class="btn btn-danger btn-sm control-btn"
                                             onclick="confirmDelete({{ $category->id }}, '{{ $category->name }}', {{ $category->products_count }})">
                                             <i class="fas fa-trash"></i> حذف
                                         </button>
+                                        @endpermission
 
                                         <form id="delete-form-{{ $category->id }}"
                                             action="{{ route('admin.categories.destroy', $category->id) }}"

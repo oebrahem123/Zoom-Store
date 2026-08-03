@@ -1,0 +1,653 @@
+{
+  "updatedAt": "2026-07-06",
+  "version": 1,
+  "fonts": {
+    "cairo": {
+      "family": "Cairo",
+      "variants": {
+        "400": {
+          "weight": 400,
+          "style": "normal",
+          "files": [
+            {
+              "file": "400-39475a8b.woff2"
+            },
+            {
+              "file": "400-93eb7989.woff2"
+            },
+            {
+              "file": "400-e0637723.woff2"
+            }
+          ]
+        },
+        "600": {
+          "weight": 600,
+          "style": "normal",
+          "files": [
+            {
+              "file": "600-39475a8b.woff2"
+            },
+            {
+              "file": "600-93eb7989.woff2"
+            },
+            {
+              "file": "600-e0637723.woff2"
+            }
+          ]
+        },
+        "700": {
+          "weight": 700,
+          "style": "normal",
+          "files": [
+            {
+              "file": "700-39475a8b.woff2"
+            },
+            {
+              "file": "700-93eb7989.woff2"
+            },
+            {
+              "file": "700-e0637723.woff2"
+            }
+          ]
+        }
+      }
+    },
+    "inter": {
+      "family": "Inter",
+      "variants": {
+        "400": {
+          "weight": 400,
+          "style": "normal",
+          "files": [
+            {
+              "file": "400-39529051.woff2"
+            },
+            {
+              "file": "400-4ee8fc98.woff2"
+            },
+            {
+              "file": "400-56724408.woff2"
+            },
+            {
+              "file": "400-983e9094.woff2"
+            },
+            {
+              "file": "400-ec84a376.woff2"
+            },
+            {
+              "file": "400-eef1e497.woff2"
+            },
+            {
+              "file": "400-f55b8d39.woff2"
+            }
+          ]
+        },
+        "500": {
+          "weight": 500,
+          "style": "normal",
+          "files": [
+            {
+              "file": "500-39529051.woff2"
+            },
+            {
+              "file": "500-4ee8fc98.woff2"
+            },
+            {
+              "file": "500-56724408.woff2"
+            },
+            {
+              "file": "500-983e9094.woff2"
+            },
+            {
+              "file": "500-ec84a376.woff2"
+            },
+            {
+              "file": "500-eef1e497.woff2"
+            },
+            {
+              "file": "500-f55b8d39.woff2"
+            }
+          ]
+        },
+        "700": {
+          "weight": 700,
+          "style": "normal",
+          "files": [
+            {
+              "file": "700-39529051.woff2"
+            },
+            {
+              "file": "700-4ee8fc98.woff2"
+            },
+            {
+              "file": "700-56724408.woff2"
+            },
+            {
+              "file": "700-983e9094.woff2"
+            },
+            {
+              "file": "700-ec84a376.woff2"
+            },
+            {
+              "file": "700-eef1e497.woff2"
+            },
+            {
+              "file": "700-f55b8d39.woff2"
+            }
+          ]
+        }
+      }
+    },
+    "lato": {
+      "family": "Lato",
+      "variants": {
+        "400": {
+          "weight": 400,
+          "style": "normal",
+          "files": [
+            {
+              "file": "400-1ceff43a.woff2"
+            },
+            {
+              "file": "400-47b3d2f4.woff2"
+            }
+          ]
+        },
+        "700": {
+          "weight": 700,
+          "style": "normal",
+          "files": [
+            {
+              "file": "700-1e749525.woff2"
+            },
+            {
+              "file": "700-e10402ed.woff2"
+            }
+          ]
+        }
+      }
+    },
+    "montserrat": {
+      "family": "Montserrat",
+      "variants": {
+        "400": {
+          "weight": 400,
+          "style": "normal",
+          "files": [
+            {
+              "file": "400-1f0b86b9.woff2"
+            },
+            {
+              "file": "400-79ee104c.woff2"
+            },
+            {
+              "file": "400-b2c533f9.woff2"
+            },
+            {
+              "file": "400-ccd96bf8.woff2"
+            },
+            {
+              "file": "400-e56e84e5.woff2"
+            }
+          ]
+        },
+        "500": {
+          "weight": 500,
+          "style": "normal",
+          "files": [
+            {
+              "file": "500-1f0b86b9.woff2"
+            },
+            {
+              "file": "500-79ee104c.woff2"
+            },
+            {
+              "file": "500-b2c533f9.woff2"
+            },
+            {
+              "file": "500-ccd96bf8.woff2"
+            },
+            {
+              "file": "500-e56e84e5.woff2"
+            }
+          ]
+        },
+        "700": {
+          "weight": 700,
+          "style": "normal",
+          "files": [
+            {
+              "file": "700-1f0b86b9.woff2"
+            },
+            {
+              "file": "700-79ee104c.woff2"
+            },
+            {
+              "file": "700-b2c533f9.woff2"
+            },
+            {
+              "file": "700-ccd96bf8.woff2"
+            },
+            {
+              "file": "700-e56e84e5.woff2"
+            }
+          ]
+        }
+      }
+    },
+    "noto-sans": {
+      "family": "Noto Sans",
+      "variants": {
+        "400": {
+          "weight": 400,
+          "style": "normal",
+          "files": [
+            {
+              "file": "400-1636515e.woff2"
+            },
+            {
+              "file": "400-1a3360f1.woff2"
+            },
+            {
+              "file": "400-3c1f6190.woff2"
+            },
+            {
+              "file": "400-566ed611.woff2"
+            },
+            {
+              "file": "400-811cef89.woff2"
+            },
+            {
+              "file": "400-e72a3c3c.woff2"
+            },
+            {
+              "file": "400-f883fa8b.woff2"
+            },
+            {
+              "file": "400-fb11fb6e.woff2"
+            }
+          ]
+        },
+        "700": {
+          "weight": 700,
+          "style": "normal",
+          "files": [
+            {
+              "file": "700-1636515e.woff2"
+            },
+            {
+              "file": "700-1a3360f1.woff2"
+            },
+            {
+              "file": "700-3c1f6190.woff2"
+            },
+            {
+              "file": "700-566ed611.woff2"
+            },
+            {
+              "file": "700-811cef89.woff2"
+            },
+            {
+              "file": "700-e72a3c3c.woff2"
+            },
+            {
+              "file": "700-f883fa8b.woff2"
+            },
+            {
+              "file": "700-fb11fb6e.woff2"
+            }
+          ]
+        }
+      }
+    },
+    "open-sans": {
+      "family": "Open Sans",
+      "variants": {
+        "400": {
+          "weight": 400,
+          "style": "normal",
+          "files": [
+            {
+              "file": "400-15fd0ee6.woff2"
+            },
+            {
+              "file": "400-27125ddf.woff2"
+            },
+            {
+              "file": "400-2e9b46d5.woff2"
+            },
+            {
+              "file": "400-4572e289.woff2"
+            },
+            {
+              "file": "400-52962c5d.woff2"
+            },
+            {
+              "file": "400-53b47dad.woff2"
+            },
+            {
+              "file": "400-aaa1b5c3.woff2"
+            },
+            {
+              "file": "400-b7cd760c.woff2"
+            },
+            {
+              "file": "400-c67329f4.woff2"
+            },
+            {
+              "file": "400-ecacf0f4.woff2"
+            }
+          ]
+        },
+        "600": {
+          "weight": 600,
+          "style": "normal",
+          "files": [
+            {
+              "file": "600-15fd0ee6.woff2"
+            },
+            {
+              "file": "600-27125ddf.woff2"
+            },
+            {
+              "file": "600-2e9b46d5.woff2"
+            },
+            {
+              "file": "600-4572e289.woff2"
+            },
+            {
+              "file": "600-52962c5d.woff2"
+            },
+            {
+              "file": "600-53b47dad.woff2"
+            },
+            {
+              "file": "600-aaa1b5c3.woff2"
+            },
+            {
+              "file": "600-b7cd760c.woff2"
+            },
+            {
+              "file": "600-c67329f4.woff2"
+            },
+            {
+              "file": "600-ecacf0f4.woff2"
+            }
+          ]
+        },
+        "700": {
+          "weight": 700,
+          "style": "normal",
+          "files": [
+            {
+              "file": "700-15fd0ee6.woff2"
+            },
+            {
+              "file": "700-27125ddf.woff2"
+            },
+            {
+              "file": "700-2e9b46d5.woff2"
+            },
+            {
+              "file": "700-4572e289.woff2"
+            },
+            {
+              "file": "700-52962c5d.woff2"
+            },
+            {
+              "file": "700-53b47dad.woff2"
+            },
+            {
+              "file": "700-aaa1b5c3.woff2"
+            },
+            {
+              "file": "700-b7cd760c.woff2"
+            },
+            {
+              "file": "700-c67329f4.woff2"
+            },
+            {
+              "file": "700-ecacf0f4.woff2"
+            }
+          ]
+        }
+      }
+    },
+    "playfair-display": {
+      "family": "Playfair Display",
+      "variants": {
+        "400": {
+          "weight": 400,
+          "style": "normal",
+          "files": [
+            {
+              "file": "400-2ac5e2f2.woff2"
+            },
+            {
+              "file": "400-4136269b.woff2"
+            },
+            {
+              "file": "400-48d1e9cd.woff2"
+            },
+            {
+              "file": "400-64b566ad.woff2"
+            }
+          ]
+        },
+        "700": {
+          "weight": 700,
+          "style": "normal",
+          "files": [
+            {
+              "file": "700-2ac5e2f2.woff2"
+            },
+            {
+              "file": "700-4136269b.woff2"
+            },
+            {
+              "file": "700-48d1e9cd.woff2"
+            },
+            {
+              "file": "700-64b566ad.woff2"
+            }
+          ]
+        }
+      }
+    },
+    "poppins": {
+      "family": "Poppins",
+      "variants": {
+        "400": {
+          "weight": 400,
+          "style": "normal",
+          "files": [
+            {
+              "file": "400-1eec3dc1.woff2"
+            },
+            {
+              "file": "400-5078a175.woff2"
+            },
+            {
+              "file": "400-5a641377.woff2"
+            }
+          ]
+        },
+        "500": {
+          "weight": 500,
+          "style": "normal",
+          "files": [
+            {
+              "file": "500-17895657.woff2"
+            },
+            {
+              "file": "500-4754f611.woff2"
+            },
+            {
+              "file": "500-de86c995.woff2"
+            }
+          ]
+        },
+        "700": {
+          "weight": 700,
+          "style": "normal",
+          "files": [
+            {
+              "file": "700-293d06c4.woff2"
+            },
+            {
+              "file": "700-a6e2f572.woff2"
+            },
+            {
+              "file": "700-ddd02247.woff2"
+            }
+          ]
+        }
+      }
+    },
+    "roboto": {
+      "family": "Roboto",
+      "variants": {
+        "400": {
+          "weight": 400,
+          "style": "normal",
+          "files": [
+            {
+              "file": "400-0fb06be4.woff2"
+            },
+            {
+              "file": "400-12c74669.woff2"
+            },
+            {
+              "file": "400-312d19f4.woff2"
+            },
+            {
+              "file": "400-3df17f0b.woff2"
+            },
+            {
+              "file": "400-6d4c1d74.woff2"
+            },
+            {
+              "file": "400-8c9a50ab.woff2"
+            },
+            {
+              "file": "400-91fad9c8.woff2"
+            },
+            {
+              "file": "400-cb43c055.woff2"
+            },
+            {
+              "file": "400-da921208.woff2"
+            }
+          ]
+        },
+        "500": {
+          "weight": 500,
+          "style": "normal",
+          "files": [
+            {
+              "file": "500-0fb06be4.woff2"
+            },
+            {
+              "file": "500-12c74669.woff2"
+            },
+            {
+              "file": "500-312d19f4.woff2"
+            },
+            {
+              "file": "500-3df17f0b.woff2"
+            },
+            {
+              "file": "500-6d4c1d74.woff2"
+            },
+            {
+              "file": "500-8c9a50ab.woff2"
+            },
+            {
+              "file": "500-91fad9c8.woff2"
+            },
+            {
+              "file": "500-cb43c055.woff2"
+            },
+            {
+              "file": "500-da921208.woff2"
+            }
+          ]
+        },
+        "700": {
+          "weight": 700,
+          "style": "normal",
+          "files": [
+            {
+              "file": "700-0fb06be4.woff2"
+            },
+            {
+              "file": "700-12c74669.woff2"
+            },
+            {
+              "file": "700-312d19f4.woff2"
+            },
+            {
+              "file": "700-3df17f0b.woff2"
+            },
+            {
+              "file": "700-6d4c1d74.woff2"
+            },
+            {
+              "file": "700-8c9a50ab.woff2"
+            },
+            {
+              "file": "700-91fad9c8.woff2"
+            },
+            {
+              "file": "700-cb43c055.woff2"
+            },
+            {
+              "file": "700-da921208.woff2"
+            }
+          ]
+        }
+      }
+    },
+    "tajawal": {
+      "family": "Tajawal",
+      "variants": {
+        "400": {
+          "weight": 400,
+          "style": "normal",
+          "files": [
+            {
+              "file": "400-3a7b8d1a.woff2"
+            },
+            {
+              "file": "400-81dd27da.woff2"
+            }
+          ]
+        },
+        "500": {
+          "weight": 500,
+          "style": "normal",
+          "files": [
+            {
+              "file": "500-6bda0a5c.woff2"
+            },
+            {
+              "file": "500-96bd6487.woff2"
+            }
+          ]
+        },
+        "700": {
+          "weight": 700,
+          "style": "normal",
+          "files": [
+            {
+              "file": "700-37b92091.woff2"
+            },
+            {
+              "file": "700-b9affe67.woff2"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

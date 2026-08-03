@@ -35,9 +35,12 @@
         @php
         $baseImages = [];
         $colorImages = [];
+        $allImages = [];
 
         if ($product->imagepath) {
-        $baseImages[] = str_replace('\\', '/', $product->imagepath);
+        $path = str_replace('\\', '/', $product->imagepath);
+        $allImages[] = $path;
+        $baseImages[] = $path;
         }
 
         if ($product->productphotos) {
@@ -46,6 +49,10 @@
 
         if (!$path) {
         continue;
+        }
+
+        if (!in_array($path, $allImages)) {
+        $allImages[] = $path;
         }
 
         $normalizedColor = strtolower(trim((string) $img->color));
@@ -71,6 +78,10 @@
         if (empty($baseImages) && !empty($colorImages)) {
         $firstColorImages = reset($colorImages);
         $baseImages = is_array($firstColorImages) ? $firstColorImages : [];
+        }
+
+        if (empty($allImages) && !empty($colorImages)) {
+        $allImages = $baseImages;
         }
         @endphp
 
@@ -175,27 +186,49 @@
                         </div>
 
                         <!-- الكمية + زر -->
-                        {{-- <div class="flex-w flex-r-m p-b-10">
+
+
+                        <div class="flex-w flex-r-m p-b-10" dir="rtl">
+
                             <div class="size-204 flex-w flex-m respon6-next">
-                                <!-- زرار -->
-                                <a href="/addproducttocart/{{ $product->id }}"
-                                    class="flex-c-m stext-101 cl0 size-101 bg3 bor1 hov-btn3 p-lr-15">
-                                    إضافة إلى السلة
-                                </a>
+                                <div class="wrap-num-product flex-w m-r-20 m-tb-10">
+                                    <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
+                                        <i class="fs-16 zmdi zmdi-minus"></i>
+                                    </div>
+
+                                    <input class="mtext-104 cl3 txt-center num-product" type="number" name="quantity"
+                                        value="{{ $initialQty }}" form="addToCartForm" data-max="{{ $product->quantity }}">
+
+                                    <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
+                                        <i class="fs-16 zmdi zmdi-plus"></i>
+                                    </div>
+                                </div>
+
+                                <form action="{{ route('cart.add', $product->id) }}" method="POST" id="addToCartForm"
+                                    dir="ltr">
+                                    @csrf
+
+                                    <input type="hidden" name="cart_item_id" value="{{ request('cart_item_id') }}">
+                                    <input type="hidden" name="variant_id" id="variant_id">
+                                    <input type="hidden" name="design_id" value="{{ request('design_id') }}">
+
+                                    <button type="submit" class="zoom-btn m-t-20">
+                                        <span class="icon">→</span>
+                                        <span class="btn-text"> إضافة إلى السلة </span>
+                                        <span class="hover-bg"></span>
+                                    </button>
+                                </form>
+
+                                @if(request('cart_item_id'))
+                                <form action="{{ route('cart.quantity', ['cartId' => request('cart_item_id')]) }}" method="POST" id="qty-update-cart" style="display:none;">
+                                    @csrf
+                                    <input type="hidden" name="quantity" id="qty-hidden-cart" value="{{ $initialQty }}">
+                                </form>
+                                @endif
+
                             </div>
-                        </div> --}}
-                        <form action="{{ route('cart.add', $product->id) }}" method="POST" id="addToCartForm">
-                            @csrf
+                        </div>
 
-                            <input type="hidden" name="cart_item_id" value="{{ request('cart_item_id') }}">
-                            <input type="hidden" name="variant_id" id="variant_id">
-
-                            <button type="submit" class="zoom-btn m-t-20">
-                                <span class="icon">→</span>
-                                <span class="btn-text"> إضافة إلى السلة </span>
-                                <span class="hover-bg"></span>
-                            </button>
-                        </form>
                     </div>
 
                 </div>
@@ -300,7 +333,7 @@
                                     @forelse($product->reviews as $review)
                                     <div class="flex-w flex-t p-b-68" dir="rtl">
                                         <div class="wrap-pic-s size-109 bor0 of-hidden m-l-18 m-t-6">
-                                            <img src="{{ asset('assets/frontend/images/user.png') }}" alt="AVATAR">
+                                            <x-user-avatar :user="$review->user" alt="AVATAR" />
                                         </div>
 
                                         <div class="size-207">
@@ -397,7 +430,8 @@
                                                         class="text-danger">*</span></label>
                                                 <input class="size-111 bor8 stext-102 black cl2 p-lr-20" id="name"
                                                     type="text" name="name"
-                                                    value="{{ old('name', session('review_data.name')) }}" required>
+                                                    value="{{ old('name', auth()->check() ? auth()->user()->name : session('review_data.name')) }}"
+                                                    @auth readonly @endauth required>
                                                 @error('name')
                                                 <small class="text-danger">{{ $message }}</small>
                                                 @enderror
@@ -408,7 +442,8 @@
                                                         class="text-danger">*</span></label>
                                                 <input class="size-111 bor8 stext-102 cl2 black p-lr-20" id="email"
                                                     type="email" name="email"
-                                                    value="{{ old('email', session('review_data.email')) }}" required>
+                                                    value="{{ old('email', auth()->check() ? auth()->user()->email : session('review_data.email')) }}"
+                                                    @auth readonly @endauth required>
                                                 @error('email')
                                                 <small class="text-danger">{{ $message }}</small>
                                                 @enderror
@@ -450,13 +485,16 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
+
             const qtySpan = document.getElementById('availableQty');
             const variants = @json($product->variants);
             const baseImages = @json(array_values($baseImages));
             const colorImages = @json($colorImages);
+            const allImages = @json(array_values($allImages));
             const selectedSizeFromCart = @json($selectedSize);
             const selectedColorFromCart = @json($selectedColor);
             const selectedVariantId = @json($selectedVariantId);
+            const cartQtyMap = @json($userCartItems->mapWithKeys(fn($i) => [$i->variant_id => $i->quantity]));
             // ----------------------------------------
 
             const sizeSelect = document.getElementById('sizeSelect');
@@ -464,6 +502,7 @@
             const weightSpan = document.getElementById('weight');
             const materialSpan = document.getElementById('material');
             const variantInput = document.getElementById('variant_id');
+            const designBtn = document.getElementById('designNowBtn');
             const wrapSlick3 = document.querySelector('.wrap-slick3');
             const slick3Container = wrapSlick3 ? wrapSlick3.querySelector('.slick3') : null;
 
@@ -490,6 +529,8 @@
             function initSlick3() {
                 if (!window.jQuery || !slick3Container) return;
                 const $slick = window.jQuery(slick3Container);
+                const arrowEl = window.jQuery(wrapSlick3).find('.wrap-slick3-arrows');
+                const dotEl = window.jQuery(wrapSlick3).find('.wrap-slick3-dots');
                 $slick.slick({
                     slidesToShow: 1,
                     slidesToScroll: 1,
@@ -498,11 +539,11 @@
                     autoplay: false,
                     autoplaySpeed: 6000,
                     arrows: true,
-                    appendArrows: window.jQuery(wrapSlick3).find('.wrap-slick3-arrows'),
+                    appendArrows: arrowEl,
                     prevArrow: '<button class="arrow-slick3 prev-slick3"><i class="fa fa-angle-left" aria-hidden="true"></i></button>',
                     nextArrow: '<button class="arrow-slick3 next-slick3"><i class="fa fa-angle-right" aria-hidden="true"></i></button>',
                     dots: true,
-                    appendDots: window.jQuery(wrapSlick3).find('.wrap-slick3-dots'),
+                    appendDots: dotEl,
                     dotsClass: 'slick3-dots',
                     customPaging: function(slick, index) {
                         var portrait = window.jQuery(slick.$slides[index]).data('thumb');
@@ -517,7 +558,8 @@
                 if ($slick.hasClass('slick-initialized')) {
                     $slick.slick('unslick');
                 }
-                slick3Container.innerHTML = getSliderHtml(images);
+                const html = getSliderHtml(images);
+                slick3Container.innerHTML = html;
                 initSlick3();
             }
 
@@ -585,6 +627,9 @@
                 materialSpan.innerText = '--';
                 resetProductImages();
                 variantInput.value = '';
+                if (designBtn) designBtn.href = '#';
+                var nInput = document.querySelector('.num-product');
+                if (nInput) { nInput.setAttribute('data-max', totalQty > 0 ? totalQty : '1'); if (typeof validateNumProduct === 'function') validateNumProduct($(nInput)); }
             });
 
             colorSelect.addEventListener('change', function() {
@@ -596,6 +641,9 @@
                     weightSpan.innerText = '--';
                     materialSpan.innerText = '--';
                     resetProductImages();
+                    if (designBtn) designBtn.href = '#';
+                    var nInput = document.querySelector('.num-product');
+                    if (nInput) { nInput.setAttribute('data-max', '1'); if (typeof validateNumProduct === 'function') validateNumProduct($(nInput)); }
                     return;
                 }
 
@@ -606,18 +654,31 @@
                     weightSpan.innerText = variant.weight ? variant.weight + ' كجم' : 'غير محدد';
                     materialSpan.innerText = variant.material || 'غير محدد';
                     qtySpan.innerText = variant.quantity > 0 ? variant.quantity : 'غير متوفر';
+                    if (designBtn) designBtn.href = '/design/' + variant.id;
+                    var nInput = document.querySelector('.num-product');
+                    if (nInput) {
+                        nInput.value = cartQtyMap[variant.id] || 1;
+                        nInput.setAttribute('data-max', variant.quantity > 0 ? variant.quantity : '1');
+                        if (typeof validateNumProduct === 'function') validateNumProduct($(nInput));
+                    }
 
                 } else {
                     variantInput.value = '';
                     weightSpan.innerText = '--';
                     materialSpan.innerText = '--';
                     qtySpan.innerText = '{{ $product->quantity }}';
+                    if (designBtn) designBtn.href = '#';
+                    var nInput = document.querySelector('.num-product');
+                    if (nInput) { nInput.setAttribute('data-max', '1'); if (typeof validateNumProduct === 'function') validateNumProduct($(nInput)); }
                 }
 
                 const selectedColorKey = normalizeColor(color);
+
                 if (selectedColorKey && colorImages[selectedColorKey] && colorImages[selectedColorKey]
                     .length) {
                     updateSlider(colorImages[selectedColorKey]);
+                } else if (baseImages.length) {
+                    updateSlider(baseImages);
                 } else {
                     resetProductImages();
                 }
@@ -629,13 +690,26 @@
                 if (!size || !color) {
                     e.preventDefault();
                     alert('❌ يجب اختيار المقاس واللون قبل إضافة المنتج إلى السلة');
-                    return false;
+                    return;
+                }
+                // Edit mode (cart item update): let form submit natively
+                if (typeof cartItemId !== 'undefined' && cartItemId) return;
+                // Normal add-to-cart: loading SweetAlert → success animation → native POST submit
+                e.preventDefault();
+                const form = this;
+                const productName = (document.querySelector('.js-name-detail') || {}).textContent || '';
+                const zl = window.ZoomStore && ZoomStore.showAddToCartSuccess;
+                if (zl) {
+                    zl(productName, function() { form.submit(); });
+                } else {
+                    form.submit();
                 }
             });
 
             if (!selectedSizeFromCart) {
                 if (sizeSelect.options.length > 1) {
-
+                    sizeSelect.value = sizeSelect.options[1].value;
+                    sizeSelect.dispatchEvent(new Event('change'));
                 }
             }
             // ==============================================
@@ -649,8 +723,8 @@
             if (cartItemId) {
                 const form = document.getElementById('addToCartForm');
 
-                // تغيير action الفورم
-                // form.action = `/cart/update/${cartItemId}`;
+                // تغيير action الفورم إلى cart.quantity للاستفادة من نفس آلية التحديث في السلة
+                form.action = '{{ route("cart.quantity", ["cartId" => "__CART_ID__"]) }}'.replace('__CART_ID__', cartItemId);
 
                 // تغيير نص الزر
                 const submitBtn = form.querySelector('button[type="submit"]');
@@ -662,8 +736,19 @@
         `;
                 }
 
-                // للتحقق: اطبع الـ action الجديد في console
-                console.log('Form action changed to:', form.action);
+                // ربط أزرار + و - بإرسال الفورم (نفس آلية السلة)
+                const qtyInput = document.querySelector('.num-product');
+                const downBtn = document.querySelector('.btn-num-product-down');
+                const upBtn = document.querySelector('.btn-num-product-up');
+
+                function submitQtyForm() {
+                    document.getElementById('qty-hidden-cart').value = qtyInput.value;
+                    document.getElementById('qty-update-cart').submit();
+                }
+
+                if (downBtn) downBtn.addEventListener('click', function() { setTimeout(submitQtyForm, 50); });
+                if (upBtn) upBtn.addEventListener('click', function() { setTimeout(submitQtyForm, 50); });
+                if (qtyInput) qtyInput.addEventListener('blur', function() { setTimeout(submitQtyForm, 50); });
             }
         });
 </script>

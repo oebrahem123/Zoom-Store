@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\CustomDesign;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Review;
@@ -22,7 +23,7 @@ class FirstController extends Controller
     // صفحة عرض جميع آراء العملاء
     public function reviews()
     {
-        $reviews = Review::all();
+        $reviews = Review::with('user')->get();
 
         return view('reviews', ['reviews' => $reviews]);
     }
@@ -33,31 +34,41 @@ class FirstController extends Controller
         $categories = Category::all();
         $order = null;
 
-        $reviews = Review::orderBy('created_at', 'desc')->take(6)->get();
-        $allReviews = Review::orderBy('created_at', 'desc')->get();
+        $reviews = Review::with('user')->orderBy('created_at', 'desc')->take(6)->get();
+        $allReviews = Review::with('user')->orderBy('created_at', 'desc')->get();
 
         if (Auth::check()) {
             $order = Order::where('user_id', Auth::id())->latest()->first();
         }
 
         // 👇 المنتجات
-        $products = Product::latest()->take(8)->get(); // 👈 الحل هنا
+        $products = Product::where('is_designable', false)->latest()->take(8)->get();
 
-        $bestSeller = Product::inRandomOrder()->take(8)->get();
-        $featured = Product::latest()->take(8)->get();
-        $sale = Product::latest()->take(8)->get();
-        $topRated = Product::latest()->take(8)->get();
+        $bestSeller = Product::where('is_designable', false)->inRandomOrder()->take(8)->get();
+        $featured = Product::where('is_designable', false)->latest()->take(8)->get();
+        $sale = Product::where('is_designable', false)->latest()->take(8)->get();
+        $topRated = Product::where('is_designable', false)->latest()->take(8)->get();
+
+        $designs = collect();
+        if (Auth::check()) {
+            $designs = CustomDesign::where('user_id', Auth::id())
+                ->with('product', 'variant')
+                ->latest()
+                ->take(6)
+                ->get();
+        }
 
         return view('welcome', compact(
             'categories',
             'reviews',
             'order',
             'allReviews',
-            'products', // 👈 مهم
+            'products',
             'bestSeller',
             'featured',
             'sale',
-            'topRated'
+            'topRated',
+            'designs'
         ));
     }
 
@@ -97,7 +108,7 @@ class FirstController extends Controller
     public function allReviews()
     {
         // استخدم paginate(10) وليس get()
-        $reviews = Review::with('product')
+        $reviews = Review::with('product', 'user')
             ->orderBy('created_at', 'desc')
             ->paginate(10);  // مهم جداً: paginate وليس get
 
@@ -115,6 +126,9 @@ class FirstController extends Controller
                 ->pluck('product_id')
                 ->toArray();
         }
+
+        // 🟢 منتجات المتجر العادي فقط
+        $query->where('is_designable', false);
 
         // 🟢 الشرط الأساسي
         $query->where(function ($q) use ($cartProductIds) {
@@ -176,10 +190,85 @@ class FirstController extends Controller
         return view('product', compact('products', 'categories', 'catid'));
     }
 
+    public function designProducts(Request $request, $catid = null)
+    {
+        $query = Product::with('productphotos');
+
+        // 🟢 المنتجات اللي في الكارت
+        $cartProductIds = [];
+        if (auth()->check()) {
+            $cartProductIds = \App\Models\Cart::where('user_id', auth()->id())
+                ->pluck('product_id')
+                ->toArray();
+        }
+
+        // 🟢 منتجات التصميم فقط
+        $query->where('is_designable', true);
+
+        // 🟢 الشرط الأساسي
+        $query->where(function ($q) use ($cartProductIds) {
+
+            // 🟢 المنتجات اللي فيها variants وفيها stock
+            $q->whereHas('variants', function ($q2) {
+                $q2->where('quantity', '>', 0);
+            })
+
+            // 🟢 أو المنتجات اللي مفيهاش variants أصلاً
+                ->orDoesntHave('variants');
+
+            // 🟢 أو المنتجات اللي في الكارت
+            if (! empty($cartProductIds)) {
+                $q->orWhereIn('id', $cartProductIds);
+            }
+        });
+
+        // 🟢 category
+        if ($catid) {
+            $query->where('category_id', $catid);
+        }
+
+        // 🟢 color filter (صح)
+        if ($request->filled('color')) {
+            $query->whereHas('variants', function ($q) use ($request) {
+                $q->where('color', $request->color);
+            });
+        }
+
+        // 🟢 price
+        if ($request->price) {
+            if ($request->price == '500+') {
+                $query->where('price', '>=', 500);
+            } else {
+                [$min, $max] = explode('-', $request->price);
+                $query->whereBetween('price', [(int) $min, (int) $max]);
+            }
+        }
+
+        // 🟢 sort
+        switch ($request->sort) {
+            case 'low-high':
+                $query->orderBy('price', 'asc');
+                break;
+
+            case 'high-low':
+                $query->orderBy('price', 'desc');
+                break;
+
+            case 'new':
+                $query->latest();
+                break;
+        }
+
+        $products = $query->paginate(8)->withQueryString();
+        $categories = Category::all();
+
+        return view('design-products', compact('products', 'categories', 'catid'));
+    }
+
     public function GetAllGetCategoryWithProducts()
     {
         $categories = Category::all();
-        $products = Product::paginate(8);
+        $products = Product::where('is_designable', false)->paginate(8);
 
         return view('category', ['products' => $products, 'categories' => $categories]);
     }

@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\DeleteLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
@@ -50,7 +51,7 @@ class CategoryController extends Controller
             }
 
             // 2. حفظ الصورة الجديدة بنفس طريقة الإضافة
-            $fileName = time().'-'.$request->file('image')->getClientOriginalName();
+            $fileName = Str::uuid().'.'.$request->file('image')->extension();
             $request->file('image')->move(public_path('uploads/categories'), $fileName);
             $category->imagepath = 'uploads/categories/'.$fileName;
         }
@@ -73,7 +74,7 @@ class CategoryController extends Controller
         $category->description = $request->description;
 
         if ($request->hasFile('imagepath')) {
-            $fileName = time().'-'.$request->file('imagepath')->getClientOriginalName();
+            $fileName = Str::uuid().'.'.$request->file('imagepath')->extension();
             $request->file('imagepath')->move(public_path('uploads/categories'), $fileName);
             $category->imagepath = 'uploads/categories/'.$fileName;
         }

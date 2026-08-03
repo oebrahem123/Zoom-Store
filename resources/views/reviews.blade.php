@@ -25,7 +25,7 @@
                             @forelse($reviews as $review)
                             <div class="flex-w flex-t p-b-68" dir="rtl">
                                 <div class="wrap-pic-s size-109 bor0 of-hidden m-l-18 m-t-6">
-                                    <img src="{{ asset('assets/frontend/images/user.png') }}" alt="AVATAR">
+                                    <x-user-avatar :user="$review->user" alt="AVATAR" />
                                 </div>
 
                                 <div class="size-207">
@@ -160,7 +160,7 @@
                                         <label class="stext-102 cl3" for="name">الاسم <span
                                                 class="text-danger">*</span></label>
                                         <input class="size-111 bor8 stext-102 black cl2 p-lr-20" id="name" type="text"
-                                            name="name" value="{{ old('name', Auth::user()->name) }}" required>
+                                            name="name" value="{{ old('name', Auth::user()->name) }}" readonly required>
                                         @error('name')
                                         <small class="text-danger">{{ $message }}</small>
                                         @enderror
@@ -171,7 +171,7 @@
                                         <label class="stext-102 cl3" for="email">البريد الإلكتروني <span
                                                 class="text-danger">*</span></label>
                                         <input class="size-111 bor8 stext-102 cl2 black p-lr-20" id="email" type="email"
-                                            name="email" value="{{ old('email', Auth::user()->email) }}" required>
+                                            name="email" value="{{ old('email', Auth::user()->email) }}" readonly required>
                                         @error('email')
                                         <small class="text-danger">{{ $message }}</small>
                                         @enderror

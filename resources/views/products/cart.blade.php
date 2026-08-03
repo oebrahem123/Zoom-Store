@@ -1,7 +1,14 @@
 @extends('layouts.master')
-
 @section('content')
+<style>
+    .swal-button.swal-button--cancel {
+        background-color: #000000 !important;
+    }
 
+    .swal-button.swal-button--cancel:hover {
+        background-color: #ff6e26 !important;
+    }
+</style>
 
 <form class="bg0 p-t-75 p-b-85">
     <div class="container">
@@ -39,42 +46,53 @@
                                                 @method('DELETE')
                                             </form>
 
+                                            <form id="qty-update-{{ $item->id }}"
+                                                action="{{ route('cart.quantity', $item->id) }}" method="POST">
+                                                @csrf
+                                                <input type="hidden" name="quantity" id="qty-hidden-{{ $item->id }}"
+                                                    value="{{ $item->quantity }}">
+                                            </form>
+
                                         </div>
                                     </td>
 
                                     <td class="column-6 texx">
 
                                         @if($item->product_id)
-                                        <a href="{{ route('product.details', [
-                'productid' => $item->product_id,
-                'size' => $item->size,
-                'color' => $item->color,
-                'cart_item_id' => $item->id
-            ]) }}" class="hov-cl1 trans-04" style="text-decoration: none;">
+                                        @if(isset($item->design) && $item->design?->id)
+                                        <a
+                                            href="{{ route('design.edit', ['design' => $item->design->id, 'cart_item_id' => $item->id]) }}">
+                                            @else
+                                            <a href="{{ route('product.details', [
+                                                                'productid' => $item->product_id,
+                                                                'size' => $item->size,
+                                                                'color' => $item->color,
+                                                                'cart_item_id' => $item->id
+                                                            ]) }}">
+                                                @endif
+                                                <span
+                                                    class="{{ !$item->isAvailable ? 'text-decoration-line-through' : '' }}"
+                                                    style="display:inline-block;">
 
+                                                    {{ $item->display_name }}
+
+                                                </span>
+
+                                            </a>
+                                            @else
                                             <span
-                                                class="{{ !$item->isAvailable ? 'text-decoration-line-through' : '' }}"
-                                                style="display:inline-block;">
-
+                                                class="text-danger {{ !$item->isAvailable ? 'text-decoration-line-through' : '' }}">
                                                 {{ $item->display_name }}
-
                                             </span>
-
-                                        </a>
-                                        @else
-                                        <span
-                                            class="text-danger {{ !$item->isAvailable ? 'text-decoration-line-through' : '' }}">
-                                            {{ $item->display_name }}
-                                        </span>
-                                        @endif
+                                            @endif
 
 
-                                        @if(!$item->isAvailable)
-                                        <span class="d-block"
-                                            style="font-size:12px;margin-top:6px;color:{{ $item->availabilityStatus === 'out_of_stock' ? '#dc3545' : '#6c757d' }};">
-                                            {{ $item->availabilityMessage }}
-                                        </span>
-                                        @endif
+                                            @if(!$item->isAvailable)
+                                            <span class="d-block"
+                                                style="font-size:12px;margin-top:6px;color:{{ $item->availabilityStatus === 'out_of_stock' ? '#dc3545' : '#6c757d' }};">
+                                                {{ $item->availabilityMessage }}
+                                            </span>
+                                            @endif
 
                                     </td>
                                     <td class="column-3 text-center">{{ $item->size ?? '—' }}</td>
@@ -83,11 +101,27 @@
                                     <td class="column-2 text-center">
                                         {{ number_format($item->display_price, 2) }} ج.م
                                     </td>
-
                                     <!-- الكمية -->
-                                    <td class="column-4 text-center">
-                                        {{ $item->quantity }}
+                                    <td class="column-4">
+                                        <div class="wrap-num-product flex-w m-l-auto m-r-0">
+                                            <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
+                                                <i class="fs-16 zmdi zmdi-minus"></i>
+                                            </div>
+
+                                            <input class="mtext-104 cl3 txt-center num-product" type="number"
+                                                name="num-product1" value="{{ $item->quantity }}"
+                                                data-max="{{ $item->variant?->quantity ?? 0 }}"
+                                                data-id="{{ $item->id }}">
+
+                                            <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
+                                                <i class="fs-16 zmdi zmdi-plus"></i>
+                                            </div>
+                                        </div>
                                     </td>
+
+                                    {{-- <td class="column-4 text-center">
+                                        {{ $item->quantity }}
+                                    </td> --}}
 
                                     <!-- الإجمالي -->
                                     <td class="column-2 text-center">
@@ -192,34 +226,58 @@
 <script>
     document.querySelectorAll('.delete-item').forEach(item => {
 
-item.addEventListener('click', function () {
+            item.addEventListener('click', function () {
 
-let id = this.getAttribute('data-id');
+                let id = this.getAttribute('data-id');
 
-swal({
-title: "هل أنت متأكد؟",
-text: "سيتم حذف المنتج من السلة!",
-icon: "warning",
-buttons: ["إلغاء", "نعم، احذف"],
-dangerMode: true,
-})
-.then((willDelete) => {
+                swal({
+                    title: "هل أنت متأكد؟",
+                    text: "سيتم حذف المنتج من السلة!",
+                    icon: "warning",
+                    buttons: ["إلغاء", "نعم، احذف"],
+                    dangerMode: true,
+                })
+                    .then((willDelete) => {
 
-if (willDelete) {
+                        if (willDelete) {
 
-// تنفيذ الحذف
-document.getElementById('delete-' + id).submit();
+                            // تنفيذ الحذف
+                            document.getElementById('delete-' + id).submit();
 
-} else {
+                        } else {
 
-swal("تم الإلغاء 👍");
+                            swal("تم الإلغاء 👍");
 
-}
+                        }
 
-});
+                    });
 
-});
+            });
 
-});
+        });
+
+    // ---------------------------------------------
+    // cart quantity submit (value managed by theme main.js)
+    // ---------------------------------------------
+    document.querySelectorAll('.table_row .num-product').forEach(function(input) {
+        const cartId = input.getAttribute('data-id');
+        const downBtn = input.closest('.table_row').querySelector('.btn-num-product-down');
+        const upBtn = input.closest('.table_row').querySelector('.btn-num-product-up');
+
+        function submitForm() {
+            const hiddenInput = document.getElementById('qty-hidden-' + cartId);
+            if (hiddenInput) hiddenInput.value = input.value;
+            const form = document.getElementById('qty-update-' + cartId);
+            if (form) form.submit();
+        }
+
+        if (downBtn) {
+            downBtn.addEventListener('click', function() { setTimeout(submitForm, 10); });
+        }
+        if (upBtn) {
+            upBtn.addEventListener('click', function() { setTimeout(submitForm, 10); });
+        }
+        input.addEventListener('blur', function() { setTimeout(submitForm, 10); });
+    });
 </script>
 @endsection

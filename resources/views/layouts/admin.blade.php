@@ -40,6 +40,42 @@
             text-align: right;
             /* الكلام على اليمين */
         }
+
+        .social-btn {
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .social-btn:focus {
+            outline: 2px solid #f28123;
+            outline-offset: 2px;
+        }
+
+        .social-google {
+            background: #fff !important;
+            border: 1px solid #dee3eb !important;
+            color: #333 !important;
+        }
+
+        .social-google:hover {
+            background: #f8f9fa !important;
+            border-color: #c8ced6 !important;
+        }
+
+        .social-facebook {
+            background: #1877F2 !important;
+            border: 1px solid #1877F2 !important;
+            color: #fff !important;
+        }
+
+        .social-facebook:hover {
+            background: #166fe5 !important;
+            border-color: #166fe5 !important;
+        }
     </style>
 </head>
 

@@ -36,6 +36,63 @@
                                             @csrf
                                             <div class="billing-address-form" dir="rtl">
 
+                                                @if($editableShipments->isNotEmpty())
+                                                <div class="shipment-merge-selection"
+                                                    style="margin-bottom:25px;padding:16px;background:#f8f9fa;border-radius:12px;border:1px solid #e9ecef;">
+                                                    <div
+                                                        style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+                                                        <span style="font-size:24px;">📦</span>
+                                                        <div>
+                                                            <h5 style="margin:0;font-weight:700;">لديك {{
+                                                                $editableShipments->count() > 1 ? 'شحنات' : 'شحنة' }}
+                                                                قيد التنفيذ</h5>
+                                                            <small class="text-muted">اختر وجهة لهذا الطلب</small>
+                                                        </div>
+                                                    </div>
+                                                    <div style="display:flex;flex-direction:column;gap:10px;">
+                                                        @foreach($editableShipments as $s)
+                                                        @php $shipInfo = $shipmentShippingInfo[$s->id] ?? []; @endphp
+                                                        <label class="shipment-option"
+                                                            style="display:flex;align-items:center;gap:12px;padding:12px 16px;border:2px solid #e0e0e0;border-radius:12px;cursor:pointer;transition:all .2s;"
+                                                            data-shipment-name="{{ $shipInfo['name'] }}"
+                                                            data-shipment-email="{{ $shipInfo['email'] }}"
+                                                            data-shipment-address="{{ $shipInfo['address'] }}"
+                                                            data-shipment-phone="{{ $shipInfo['phone'] }}"
+                                                            data-shipment-note="{{ $shipInfo['note'] }}"
+                                                            onclick="document.querySelectorAll('.shipment-option').forEach(el=>el.style.borderColor='#e0e0e0'); this.style.borderColor='#f28123'; document.getElementById('merge_shipment_id').value='{{ $s->id }}'; populateShipping(this);">
+                                                            <input type="radio" name="shipment_choice"
+                                                                value="{{ $s->id }}" style="accent-color:#f28123;"
+                                                                onchange="this.closest('label').click();">
+                                                            <div style="flex:1;">
+                                                                <div style="font-weight:700;font-size:15px;">شحنة #{{
+                                                                    $s->id }}</div>
+                                                                <div style="font-size:12px;color:#888;">
+                                                                    {{ $s->orders->count() }} طلبات
+                                                                    • {{ $s->orders->sum(fn($o) =>
+                                                                    $o->orderdetails->count()) }} منتجات
+                                                                    • آخر تحديث: {{ $s->created_at->format('d-m-Y') }}
+                                                                </div>
+                                                            </div>
+                                                        </label>
+                                                        @endforeach
+                                                        <label class="shipment-option new-shipment-option"
+                                                            style="display:flex;align-items:center;gap:12px;padding:12px 16px;border:2px solid #e0e0e0;border-radius:12px;cursor:pointer;transition:all .2s;"
+                                                            onclick="document.querySelectorAll('.shipment-option').forEach(el=>el.style.borderColor='#e0e0e0'); this.style.borderColor='#28a745'; document.getElementById('merge_shipment_id').value='0'; clearShipping();">
+                                                            <input type="radio" name="shipment_choice" value="0"
+                                                                style="accent-color:#28a745;"
+                                                                onchange="this.closest('label').click();">
+                                                            <div style="flex:1;">
+                                                                <div
+                                                                    style="font-weight:700;font-size:15px;color:#28a745;">
+                                                                    + إنشاء شحنة جديدة</div>
+                                                                <div style="font-size:12px;color:#888;">شحنة مستقلة
+                                                                    جديدة</div>
+                                                            </div>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                @endif
+
                                                 <input class="size-111 bor8 stext-102 cl2 black p-lr-20 m-b-15"
                                                     type="text" name="name" placeholder="الاسم" required>
 
@@ -50,6 +107,9 @@
 
                                                 <textarea class="size-110 bor8 stext-102 cl2 black p-lr-20 p-tb-10"
                                                     name="note" placeholder="ملاحظات إضافية"></textarea>
+
+                                                <input type="hidden" name="merge_shipment_id" id="merge_shipment_id"
+                                                    value="0">
 
                                             </div>
                                         </form>
@@ -109,24 +169,38 @@
                                                                 </td>
 
                                                                 <td class="column-6 texx">
-                                                                    @if($item->product)
+                                                                    @if($item->product_id)
+                                                                    @if(isset($item->design) && $item->design?->id)
                                                                     <a
-                                                                        href="{{ route('product.details', $item->product->id) }}">
+                                                                        href="{{ route('design.edit', ['design' => $item->design->id, 'cart_item_id' => $item->id]) }}">
+                                                                        @else
+                                                                        <a href="{{ route('product.details', [
+                                                                'productid' => $item->product_id,
+                                                                'size' => $item->size,
+                                                                'color' => $item->color,
+                                                                'cart_item_id' => $item->id
+                                                            ]) }}">
+                                                                            @endif
+                                                                            <span
+                                                                                class="{{ !$item->isAvailable ? 'text-decoration-line-through' : '' }}"
+                                                                                style="display:inline-block;">
+
+                                                                                {{ $item->display_name }}
+
+                                                                            </span>
+
+                                                                        </a>
+                                                                        @else
                                                                         <span
                                                                             class="{{ !$item->isAvailable ? 'text-decoration-line-through' : '' }}">{{
                                                                             $item->display_name }}</span>
-                                                                    </a>
-                                                                    @else
-                                                                    <span
-                                                                        class="{{ !$item->isAvailable ? 'text-decoration-line-through' : '' }}">{{
-                                                                        $item->display_name }}</span>
-                                                                    @endif
-                                                                    @if(!$item->isAvailable)
-                                                                    <span class="d-block"
-                                                                        style="font-size:12px;margin-top:6px;color:{{ $item->availabilityStatus === 'out_of_stock' ? '#dc3545' : '#6c757d' }};">
-                                                                        {{ $item->availabilityMessage }}
-                                                                    </span>
-                                                                    @endif
+                                                                        @endif
+                                                                        @if(!$item->isAvailable)
+                                                                        <span class="d-block"
+                                                                            style="font-size:12px;margin-top:6px;color:{{ $item->availabilityStatus === 'out_of_stock' ? '#dc3545' : '#6c757d' }};">
+                                                                            {{ $item->availabilityMessage }}
+                                                                        </span>
+                                                                        @endif
                                                                 </td>
 
                                                                 <td class="text-center">{{ $item->size ?? '—' }}</td>
@@ -238,7 +312,8 @@
                                     </p>
 
                                     <div class="p-t-18">
-                                        <button type="submit" form="store-order" class="zoom-btn" dir="ltr">
+                                        <button type="submit" form="store-order" id="checkout-submit" class="zoom-btn"
+                                            dir="ltr">
                                             <span class="icon">→</span>
                                             <span class="btn-text"> الدفع الآمن </span>
                                             <span class="hover-bg"></span>
@@ -263,6 +338,25 @@
         </div>
     </div>
 </div>
-
+<script>
+    function populateShipping(el) {
+    var form = document.getElementById('store-order');
+    if (!form) return;
+    form.querySelector('[name="name"]').value = el.getAttribute('data-shipment-name');
+    form.querySelector('[name="email"]').value = el.getAttribute('data-shipment-email');
+    form.querySelector('[name="address"]').value = el.getAttribute('data-shipment-address');
+    form.querySelector('[name="phone"]').value = el.getAttribute('data-shipment-phone');
+    form.querySelector('[name="note"]').value = el.getAttribute('data-shipment-note');
+}
+function clearShipping() {
+    var form = document.getElementById('store-order');
+    if (!form) return;
+    form.querySelector('[name="name"]').value = '';
+    form.querySelector('[name="email"]').value = '';
+    form.querySelector('[name="address"]').value = '';
+    form.querySelector('[name="phone"]').value = '';
+    form.querySelector('[name="note"]').value = '';
+}
+</script>
 
 @endsection

@@ -1,0 +1,2103 @@
+{
+    "version": 1,
+    "updatedAt": "2026-07-06",
+    "providerVersion": 1,
+    "categories": [
+        {
+            "id": "football",
+            "name": "Football",
+            "nameAr": "كرة قدم",
+            "icon": "football",
+            "source": "file",
+            "displayOrder": 1,
+            "items": [
+                {
+                    "id": "football",
+                    "filename": "football.svg",
+                    "title": "Football",
+                    "titleAr": "كرة قدم",
+                    "capabilities": {
+                        "supportsColor": true,
+                        "supportsRecolor": true,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "goal",
+                    "filename": "goal.svg",
+                    "title": "Goal",
+                    "titleAr": "مرمى",
+                    "capabilities": {
+                        "supportsColor": true,
+                        "supportsRecolor": true,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "jersey",
+                    "filename": "jersey.svg",
+                    "title": "Jersey",
+                    "titleAr": "قميص",
+                    "capabilities": {
+                        "supportsColor": true,
+                        "supportsRecolor": true,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "trophy",
+                    "filename": "trophy.svg",
+                    "title": "Trophy",
+                    "titleAr": "كأس",
+                    "capabilities": {
+                        "supportsColor": true,
+                        "supportsRecolor": true,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "whistle",
+                    "filename": "whistle.svg",
+                    "title": "Whistle",
+                    "titleAr": "صفارة",
+                    "capabilities": {
+                        "supportsColor": true,
+                        "supportsRecolor": true,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "boots",
+                    "filename": "boots.svg",
+                    "title": "Boots",
+                    "titleAr": "حذاء",
+                    "capabilities": {
+                        "supportsColor": true,
+                        "supportsRecolor": true,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "stadium",
+                    "filename": "stadium.svg",
+                    "title": "Stadium",
+                    "titleAr": "ملعب",
+                    "capabilities": {
+                        "supportsColor": true,
+                        "supportsRecolor": true,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "football-field",
+                    "filename": "football-field.svg",
+                    "title": "Football Field",
+                    "titleAr": "ملعب كرة",
+                    "capabilities": {
+                        "supportsColor": true,
+                        "supportsRecolor": true,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "man-utd",
+                    "filename": "man-utd.svg",
+                    "title": "Manchester United",
+                    "titleAr": "مانشستر يونايتد",
+                    "capabilities": {
+                        "supportsColor": true,
+                        "supportsRecolor": true,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "liverpool",
+                    "filename": "liverpool.svg",
+                    "title": "Liverpool",
+                    "titleAr": "ليفربول",
+                    "capabilities": {
+                        "supportsColor": true,
+                        "supportsRecolor": true,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "arsenal",
+                    "filename": "arsenal.svg",
+                    "title": "Arsenal",
+                    "titleAr": "أرسنال",
+                    "capabilities": {
+                        "supportsColor": true,
+                        "supportsRecolor": true,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "chelsea",
+                    "filename": "chelsea.svg",
+                    "title": "Chelsea",
+                    "titleAr": "تشيلسي",
+                    "capabilities": {
+                        "supportsColor": true,
+                        "supportsRecolor": true,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "man-city",
+                    "filename": "man-city.svg",
+                    "title": "Manchester City",
+                    "titleAr": "مانشستر سيتي",
+                    "capabilities": {
+                        "supportsColor": true,
+                        "supportsRecolor": true,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "tottenham",
+                    "filename": "tottenham.svg",
+                    "title": "Tottenham",
+                    "titleAr": "توتنهام",
+                    "capabilities": {
+                        "supportsColor": true,
+                        "supportsRecolor": true,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "real-madrid",
+                    "filename": "real-madrid.svg",
+                    "title": "Real Madrid",
+                    "titleAr": "ريال مدريد",
+                    "capabilities": {
+                        "supportsColor": true,
+                        "supportsRecolor": true,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "barcelona",
+                    "filename": "barcelona.svg",
+                    "title": "Barcelona",
+                    "titleAr": "برشلونة",
+                    "capabilities": {
+                        "supportsColor": true,
+                        "supportsRecolor": true,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "atletico",
+                    "filename": "atletico.svg",
+                    "title": "Atletico Madrid",
+                    "titleAr": "أتلتيكو مدريد",
+                    "capabilities": {
+                        "supportsColor": true,
+                        "supportsRecolor": true,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "juventus",
+                    "filename": "juventus.svg",
+                    "title": "Juventus",
+                    "titleAr": "يوفنتوس",
+                    "capabilities": {
+                        "supportsColor": true,
+                        "supportsRecolor": true,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "ac-milan",
+                    "filename": "ac-milan.svg",
+                    "title": "AC Milan",
+                    "titleAr": "ميلان",
+                    "capabilities": {
+                        "supportsColor": true,
+                        "supportsRecolor": true,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "inter-milan",
+                    "filename": "inter-milan.svg",
+                    "title": "Inter Milan",
+                    "titleAr": "إنتر ميلان",
+                    "capabilities": {
+                        "supportsColor": true,
+                        "supportsRecolor": true,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "bayern",
+                    "filename": "bayern.svg",
+                    "title": "Bayern Munich",
+                    "titleAr": "بايرن ميونخ",
+                    "capabilities": {
+                        "supportsColor": true,
+                        "supportsRecolor": true,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "dortmund",
+                    "filename": "dortmund.svg",
+                    "title": "Borussia Dortmund",
+                    "titleAr": "بوروسيا دورتموند",
+                    "capabilities": {
+                        "supportsColor": true,
+                        "supportsRecolor": true,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "psg",
+                    "filename": "psg.svg",
+                    "title": "Paris Saint-Germain",
+                    "titleAr": "باريس سان جيرمان",
+                    "capabilities": {
+                        "supportsColor": true,
+                        "supportsRecolor": true,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "ajax",
+                    "filename": "ajax.svg",
+                    "title": "Ajax",
+                    "titleAr": "أياكس",
+                    "capabilities": {
+                        "supportsColor": true,
+                        "supportsRecolor": true,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "celtic",
+                    "filename": "celtic.svg",
+                    "title": "Celtic",
+                    "titleAr": "سيلتيك",
+                    "capabilities": {
+                        "supportsColor": true,
+                        "supportsRecolor": true,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "galatasaray",
+                    "filename": "galatasaray.svg",
+                    "title": "Galatasaray",
+                    "titleAr": "غلطة سراي",
+                    "capabilities": {
+                        "supportsColor": true,
+                        "supportsRecolor": true,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "al-ahly",
+                    "filename": "al-ahly.svg",
+                    "title": "Al Ahly",
+                    "titleAr": "الأهلي",
+                    "capabilities": {
+                        "supportsColor": true,
+                        "supportsRecolor": true,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "zamalek",
+                    "filename": "zamalek.svg",
+                    "title": "Zamalek",
+                    "titleAr": "الزمالك",
+                    "capabilities": {
+                        "supportsColor": true,
+                        "supportsRecolor": true,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "al-hilal",
+                    "filename": "al-hilal.svg",
+                    "title": "Al Hilal",
+                    "titleAr": "الهلال",
+                    "capabilities": {
+                        "supportsColor": true,
+                        "supportsRecolor": true,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "al-nassr",
+                    "filename": "al-nassr.svg",
+                    "title": "Al Nassr",
+                    "titleAr": "النصر",
+                    "capabilities": {
+                        "supportsColor": true,
+                        "supportsRecolor": true,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "porto",
+                    "filename": "porto.svg",
+                    "title": "FC Porto",
+                    "titleAr": "بورتو",
+                    "capabilities": {
+                        "supportsColor": true,
+                        "supportsRecolor": true,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "benfica",
+                    "filename": "benfica.svg",
+                    "title": "Benfica",
+                    "titleAr": "بنفيكا",
+                    "capabilities": {
+                        "supportsColor": true,
+                        "supportsRecolor": true,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "flamengo",
+                    "filename": "flamengo.svg",
+                    "title": "Flamengo",
+                    "titleAr": "فلامنغو",
+                    "capabilities": {
+                        "supportsColor": true,
+                        "supportsRecolor": true,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "river-plate",
+                    "filename": "river-plate.svg",
+                    "title": "River Plate",
+                    "titleAr": "ريفر بليت",
+                    "capabilities": {
+                        "supportsColor": true,
+                        "supportsRecolor": true,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "boca",
+                    "filename": "boca.svg",
+                    "title": "Boca Juniors",
+                    "titleAr": "بوكا جونيورز",
+                    "capabilities": {
+                        "supportsColor": true,
+                        "supportsRecolor": true,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                }
+            ]
+        },
+        {
+            "id": "emoji",
+            "name": "Emoji",
+            "nameAr": "إيموجي",
+            "icon": "emoji",
+            "source": "file",
+            "displayOrder": 2,
+            "items": [
+                {
+                    "id": "e_grin",
+                    "filename": "e_grin.svg",
+                    "title": "Grinning Face",
+                    "titleAr": "وجه مبتسم",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_joy",
+                    "filename": "e_joy.svg",
+                    "title": "Face with Tears of Joy",
+                    "titleAr": "وجه ضاحك",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_rofl",
+                    "filename": "e_rofl.svg",
+                    "title": "Rolling on Floor Laughing",
+                    "titleAr": "يتدحرج ضحكاً",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_smile",
+                    "filename": "e_smile.svg",
+                    "title": "Smiling Face",
+                    "titleAr": "وجه مبتسم بلطف",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_blush",
+                    "filename": "e_blush.svg",
+                    "title": "Flushed Face",
+                    "titleAr": "وجه محرج",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_wink",
+                    "filename": "e_wink.svg",
+                    "title": "Winking Face",
+                    "titleAr": "غمزة",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_heart_eyes",
+                    "filename": "e_heart_eyes.svg",
+                    "title": "Heart Eyes",
+                    "titleAr": "عيون قلب",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_kiss",
+                    "filename": "e_kiss.svg",
+                    "title": "Kissing Face",
+                    "titleAr": "قبلة",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_cool",
+                    "filename": "e_cool.svg",
+                    "title": "Cool Face",
+                    "titleAr": "وجه رائع",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_cry",
+                    "filename": "e_cry.svg",
+                    "title": "Crying Face",
+                    "titleAr": "وجه باكٍ",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_sweat",
+                    "filename": "e_sweat.svg",
+                    "title": "Sweating Face",
+                    "titleAr": "وجه متعرق",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_angry",
+                    "filename": "e_angry.svg",
+                    "title": "Angry Face",
+                    "titleAr": "وجه غاضب",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_devil",
+                    "filename": "e_devil.svg",
+                    "title": "Devil Face",
+                    "titleAr": "وجه شيطاني",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_poop",
+                    "filename": "e_poop.svg",
+                    "title": "Poop",
+                    "titleAr": "براز",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_clown",
+                    "filename": "e_clown.svg",
+                    "title": "Clown Face",
+                    "titleAr": "وجه مهرج",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_ghost",
+                    "filename": "e_ghost.svg",
+                    "title": "Ghost",
+                    "titleAr": "شبح",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_skull",
+                    "filename": "e_skull.svg",
+                    "title": "Skull",
+                    "titleAr": "جمجمة",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_alien",
+                    "filename": "e_alien.svg",
+                    "title": "Alien",
+                    "titleAr": "كائن فضائي",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_thumbsup",
+                    "filename": "e_thumbsup.svg",
+                    "title": "Thumbs Up",
+                    "titleAr": "ممتاز",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_thumbsdown",
+                    "filename": "e_thumbsdown.svg",
+                    "title": "Thumbs Down",
+                    "titleAr": "غير معجب",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_clap",
+                    "filename": "e_clap.svg",
+                    "title": "Clapping",
+                    "titleAr": "تصفيق",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_wave",
+                    "filename": "e_wave.svg",
+                    "title": "Waving Hand",
+                    "titleAr": "تلويح",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_fist",
+                    "filename": "e_fist.svg",
+                    "title": "Fist",
+                    "titleAr": "قبضة",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_ok",
+                    "filename": "e_ok.svg",
+                    "title": "OK Hand",
+                    "titleAr": "موافق",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_peace",
+                    "filename": "e_peace.svg",
+                    "title": "Peace Sign",
+                    "titleAr": "سلام",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_muscle",
+                    "filename": "e_muscle.svg",
+                    "title": "Muscle",
+                    "titleAr": "عضلة",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_fire",
+                    "filename": "e_fire.svg",
+                    "title": "Fire",
+                    "titleAr": "نار",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_hundred",
+                    "filename": "e_hundred.svg",
+                    "title": "100 Points",
+                    "titleAr": "مئة نقطة",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_party",
+                    "filename": "e_party.svg",
+                    "title": "Party Popper",
+                    "titleAr": "حفلة",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_celebration",
+                    "filename": "e_celebration.svg",
+                    "title": "Celebration",
+                    "titleAr": "احتفال",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_crown",
+                    "filename": "e_crown.svg",
+                    "title": "Crown",
+                    "titleAr": "تاج",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_prince",
+                    "filename": "e_prince.svg",
+                    "title": "Prince",
+                    "titleAr": "أمير",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_princess",
+                    "filename": "e_princess.svg",
+                    "title": "Princess",
+                    "titleAr": "أميرة",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_santa",
+                    "filename": "e_santa.svg",
+                    "title": "Santa Claus",
+                    "titleAr": "بابا نويل",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_superhero",
+                    "filename": "e_superhero.svg",
+                    "title": "Superhero",
+                    "titleAr": "بطل خارق",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_dog",
+                    "filename": "e_dog.svg",
+                    "title": "Dog",
+                    "titleAr": "كلب",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_cat",
+                    "filename": "e_cat.svg",
+                    "title": "Cat",
+                    "titleAr": "قطة",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_lion",
+                    "filename": "e_lion.svg",
+                    "title": "Lion",
+                    "titleAr": "أسد",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_tiger",
+                    "filename": "e_tiger.svg",
+                    "title": "Tiger",
+                    "titleAr": "نمر",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_bear",
+                    "filename": "e_bear.svg",
+                    "title": "Bear",
+                    "titleAr": "دب",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_panda",
+                    "filename": "e_panda.svg",
+                    "title": "Panda",
+                    "titleAr": "باندا",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_pig",
+                    "filename": "e_pig.svg",
+                    "title": "Pig",
+                    "titleAr": "خنزير",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_frog",
+                    "filename": "e_frog.svg",
+                    "title": "Frog",
+                    "titleAr": "ضفدع",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_monkey",
+                    "filename": "e_monkey.svg",
+                    "title": "Monkey",
+                    "titleAr": "قرد",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_chicken",
+                    "filename": "e_chicken.svg",
+                    "title": "Chicken",
+                    "titleAr": "دجاجة",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_penguin",
+                    "filename": "e_penguin.svg",
+                    "title": "Penguin",
+                    "titleAr": "بطريق",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_owl",
+                    "filename": "e_owl.svg",
+                    "title": "Owl",
+                    "titleAr": "بومة",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_eagle",
+                    "filename": "e_eagle.svg",
+                    "title": "Eagle",
+                    "titleAr": "نسر",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_horse",
+                    "filename": "e_horse.svg",
+                    "title": "Horse",
+                    "titleAr": "حصان",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_unicorn",
+                    "filename": "e_unicorn.svg",
+                    "title": "Unicorn",
+                    "titleAr": "وحيد القرن",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_butterfly",
+                    "filename": "e_butterfly.svg",
+                    "title": "Butterfly",
+                    "titleAr": "فراشة",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_snake",
+                    "filename": "e_snake.svg",
+                    "title": "Snake",
+                    "titleAr": "ثعبان",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_dragon",
+                    "filename": "e_dragon.svg",
+                    "title": "Dragon",
+                    "titleAr": "تنين",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_sunflower",
+                    "filename": "e_sunflower.svg",
+                    "title": "Sunflower",
+                    "titleAr": "عباد الشمس",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_rose",
+                    "filename": "e_rose.svg",
+                    "title": "Rose",
+                    "titleAr": "وردة",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_cactus",
+                    "filename": "e_cactus.svg",
+                    "title": "Cactus",
+                    "titleAr": "صبار",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_tree",
+                    "filename": "e_tree.svg",
+                    "title": "Tree",
+                    "titleAr": "شجرة",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_moon",
+                    "filename": "e_moon.svg",
+                    "title": "Moon",
+                    "titleAr": "قمر",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_sun",
+                    "filename": "e_sun.svg",
+                    "title": "Sun",
+                    "titleAr": "شمس",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_star_symbol",
+                    "filename": "e_star_symbol.svg",
+                    "title": "Star",
+                    "titleAr": "نجمة",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_rainbow",
+                    "filename": "e_rainbow.svg",
+                    "title": "Rainbow",
+                    "titleAr": "قوس قزح",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_thunder",
+                    "filename": "e_thunder.svg",
+                    "title": "Thunder",
+                    "titleAr": "صاعقة",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_snow",
+                    "filename": "e_snow.svg",
+                    "title": "Snowflake",
+                    "titleAr": "ندفة ثلج",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_water",
+                    "filename": "e_water.svg",
+                    "title": "Water Drop",
+                    "titleAr": "قطرة ماء",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_pizza",
+                    "filename": "e_pizza.svg",
+                    "title": "Pizza",
+                    "titleAr": "بيتزا",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_burger",
+                    "filename": "e_burger.svg",
+                    "title": "Burger",
+                    "titleAr": "برغر",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_fries",
+                    "filename": "e_fries.svg",
+                    "title": "Fries",
+                    "titleAr": "بطاطا مقلية",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_hotdog",
+                    "filename": "e_hotdog.svg",
+                    "title": "Hot Dog",
+                    "titleAr": "هوت دوغ",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_taco",
+                    "filename": "e_taco.svg",
+                    "title": "Taco",
+                    "titleAr": "تاكو",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_donut",
+                    "filename": "e_donut.svg",
+                    "title": "Donut",
+                    "titleAr": "دونات",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_cake",
+                    "filename": "e_cake.svg",
+                    "title": "Cake",
+                    "titleAr": "كعكة",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_icecream",
+                    "filename": "e_icecream.svg",
+                    "title": "Ice Cream",
+                    "titleAr": "آيس كريم",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_coffee",
+                    "filename": "e_coffee.svg",
+                    "title": "Coffee",
+                    "titleAr": "قهوة",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_beer",
+                    "filename": "e_beer.svg",
+                    "title": "Beer",
+                    "titleAr": "بيرة",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_wine",
+                    "filename": "e_wine.svg",
+                    "title": "Wine",
+                    "titleAr": "نبيذ",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_cocktail",
+                    "filename": "e_cocktail.svg",
+                    "title": "Cocktail",
+                    "titleAr": "كوكتيل",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_apple",
+                    "filename": "e_apple.svg",
+                    "title": "Apple",
+                    "titleAr": "تفاحة",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_grape",
+                    "filename": "e_grape.svg",
+                    "title": "Grape",
+                    "titleAr": "عنب",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_watermelon",
+                    "filename": "e_watermelon.svg",
+                    "title": "Watermelon",
+                    "titleAr": "بطيخ",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_plane",
+                    "filename": "e_plane.svg",
+                    "title": "Airplane",
+                    "titleAr": "طائرة",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_car",
+                    "filename": "e_car.svg",
+                    "title": "Car",
+                    "titleAr": "سيارة",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_bus",
+                    "filename": "e_bus.svg",
+                    "title": "Bus",
+                    "titleAr": "حافلة",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_train",
+                    "filename": "e_train.svg",
+                    "title": "Train",
+                    "titleAr": "قطار",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_bike",
+                    "filename": "e_bike.svg",
+                    "title": "Bicycle",
+                    "titleAr": "دراجة",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_rocket",
+                    "filename": "e_rocket.svg",
+                    "title": "Rocket",
+                    "titleAr": "صاروخ",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_helicopter",
+                    "filename": "e_helicopter.svg",
+                    "title": "Helicopter",
+                    "titleAr": "هليكوبتر",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_ship",
+                    "filename": "e_ship.svg",
+                    "title": "Ship",
+                    "titleAr": "سفينة",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_anchor",
+                    "filename": "e_anchor.svg",
+                    "title": "Anchor",
+                    "titleAr": "مرساة",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_map",
+                    "filename": "e_map.svg",
+                    "title": "Map",
+                    "titleAr": "خريطة",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_soccer",
+                    "filename": "e_soccer.svg",
+                    "title": "Soccer Ball",
+                    "titleAr": "كرة قدم",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_basketball",
+                    "filename": "e_basketball.svg",
+                    "title": "Basketball",
+                    "titleAr": "كرة سلة",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_tennis",
+                    "filename": "e_tennis.svg",
+                    "title": "Tennis",
+                    "titleAr": "تنس",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_football",
+                    "filename": "e_football.svg",
+                    "title": "Football",
+                    "titleAr": "كرة قدم أمريكية",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_swim",
+                    "filename": "e_swim.svg",
+                    "title": "Swimmer",
+                    "titleAr": "سباحة",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_run",
+                    "filename": "e_run.svg",
+                    "title": "Runner",
+                    "titleAr": "عداء",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_trophy",
+                    "filename": "e_trophy.svg",
+                    "title": "Trophy",
+                    "titleAr": "كأس",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_medal",
+                    "filename": "e_medal.svg",
+                    "title": "Medal",
+                    "titleAr": "ميدالية",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_gamepad",
+                    "filename": "e_gamepad.svg",
+                    "title": "Gamepad",
+                    "titleAr": "يد تحكم",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_guitar",
+                    "filename": "e_guitar.svg",
+                    "title": "Guitar",
+                    "titleAr": "غيتار",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_music",
+                    "filename": "e_music.svg",
+                    "title": "Music Notes",
+                    "titleAr": "نوتات موسيقية",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_microphone",
+                    "filename": "e_microphone.svg",
+                    "title": "Microphone",
+                    "titleAr": "ميكروفون",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_camera",
+                    "filename": "e_camera.svg",
+                    "title": "Camera",
+                    "titleAr": "كاميرا",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_phone",
+                    "filename": "e_phone.svg",
+                    "title": "Phone",
+                    "titleAr": "هاتف",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_computer",
+                    "filename": "e_computer.svg",
+                    "title": "Computer",
+                    "titleAr": "حاسوب",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_lightbulb",
+                    "filename": "e_lightbulb.svg",
+                    "title": "Lightbulb",
+                    "titleAr": "مصباح",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_gift",
+                    "filename": "e_gift.svg",
+                    "title": "Gift",
+                    "titleAr": "هدية",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_lock",
+                    "filename": "e_lock.svg",
+                    "title": "Lock",
+                    "titleAr": "قفل",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_key",
+                    "filename": "e_key.svg",
+                    "title": "Key",
+                    "titleAr": "مفتاح",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_money",
+                    "filename": "e_money.svg",
+                    "title": "Money",
+                    "titleAr": "مال",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_credit",
+                    "filename": "e_credit.svg",
+                    "title": "Credit Card",
+                    "titleAr": "بطاقة ائتمان",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_chart",
+                    "filename": "e_chart.svg",
+                    "title": "Chart",
+                    "titleAr": "رسم بياني",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_mail",
+                    "filename": "e_mail.svg",
+                    "title": "Email",
+                    "titleAr": "بريد إلكتروني",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_bell",
+                    "filename": "e_bell.svg",
+                    "title": "Bell",
+                    "titleAr": "جرس",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_calendar",
+                    "filename": "e_calendar.svg",
+                    "title": "Calendar",
+                    "titleAr": "تقويم",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_clock",
+                    "filename": "e_clock.svg",
+                    "title": "Clock",
+                    "titleAr": "ساعة",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_heart",
+                    "filename": "e_heart.svg",
+                    "title": "Red Heart",
+                    "titleAr": "قلب أحمر",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_warning",
+                    "filename": "e_warning.svg",
+                    "title": "Warning",
+                    "titleAr": "تحذير",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_question",
+                    "filename": "e_question.svg",
+                    "title": "Question",
+                    "titleAr": "استفهام",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_exclamation",
+                    "filename": "e_exclamation.svg",
+                    "title": "Exclamation",
+                    "titleAr": "تعجب",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_check_mark",
+                    "filename": "e_check_mark.svg",
+                    "title": "Check Mark",
+                    "titleAr": "علامة صح",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_cross_mark",
+                    "filename": "e_cross_mark.svg",
+                    "title": "Cross Mark",
+                    "titleAr": "علامة خطأ",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_plus",
+                    "filename": "e_plus.svg",
+                    "title": "Plus",
+                    "titleAr": "زائد",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_minus",
+                    "filename": "e_minus.svg",
+                    "title": "Minus",
+                    "titleAr": "ناقص",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_recycle",
+                    "filename": "e_recycle.svg",
+                    "title": "Recycle",
+                    "titleAr": "إعادة تدوير",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_infinity",
+                    "filename": "e_infinity.svg",
+                    "title": "Infinity",
+                    "titleAr": "لا نهاية",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_flag_black",
+                    "filename": "e_flag_black.svg",
+                    "title": "Black Flag",
+                    "titleAr": "راية سوداء",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_flag_white",
+                    "filename": "e_flag_white.svg",
+                    "title": "White Flag",
+                    "titleAr": "راية بيضاء",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_flag_red",
+                    "filename": "e_flag_red.svg",
+                    "title": "Red Flag",
+                    "titleAr": "راية حمراء",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_triangle_red",
+                    "filename": "e_triangle_red.svg",
+                    "title": "Red Triangle",
+                    "titleAr": "مثلث أحمر",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_circle_red",
+                    "filename": "e_circle_red.svg",
+                    "title": "Red Circle",
+                    "titleAr": "دائرة حمراء",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_circle_blue",
+                    "filename": "e_circle_blue.svg",
+                    "title": "Blue Circle",
+                    "titleAr": "دائرة زرقاء",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_circle_green",
+                    "filename": "e_circle_green.svg",
+                    "title": "Green Circle",
+                    "titleAr": "دائرة خضراء",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_circle_yellow",
+                    "filename": "e_circle_yellow.svg",
+                    "title": "Yellow Circle",
+                    "titleAr": "دائرة صفراء",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_circle_orange",
+                    "filename": "e_circle_orange.svg",
+                    "title": "Orange Circle",
+                    "titleAr": "دائرة برتقالية",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_circle_purple",
+                    "filename": "e_circle_purple.svg",
+                    "title": "Purple Circle",
+                    "titleAr": "دائرة بنفسجية",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_circle_brown",
+                    "filename": "e_circle_brown.svg",
+                    "title": "Brown Circle",
+                    "titleAr": "دائرة بنية",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_circle_black",
+                    "filename": "e_circle_black.svg",
+                    "title": "Black Circle",
+                    "titleAr": "دائرة سوداء",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                },
+                {
+                    "id": "e_circle_white",
+                    "filename": "e_circle_white.svg",
+                    "title": "White Circle",
+                    "titleAr": "دائرة بيضاء",
+                    "capabilities": {
+                        "supportsColor": false,
+                        "supportsRecolor": false,
+                        "supportsStroke": true,
+                        "supportsShadow": true
+                    }
+                }
+            ]
+        }
+    ]
+}

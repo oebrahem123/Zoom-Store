@@ -38,7 +38,6 @@
         display: none;
     }
 
-    /* الصندوق */
     .custom-checkbox .checkmark {
         width: 20px;
         height: 20px;
@@ -49,12 +48,10 @@
         transition: 0.2s;
     }
 
-    /* اللون عند التفعيل */
     .custom-checkbox input:checked+.checkmark {
         background: #f28123;
     }
 
-    /* علامة الصح */
     .custom-checkbox .checkmark::after {
         content: "";
         position: absolute;
@@ -69,15 +66,12 @@
         transition: 0.2s;
     }
 
-    /* تُعرض عند التفعيل */
     .custom-checkbox input:checked+.checkmark::after {
         opacity: 1;
     }
 
-    /* النص */
     .custom-checkbox .m2 {
         margin-right: 10px;
-        /* تبعد الكلمة شوية شمال */
         color: #333;
         font-size: 15px;
     }
@@ -98,6 +92,7 @@
 
                         <form method="POST" action="{{ route('register') }}" class="pt-3">
                             @csrf
+                            <input type="hidden" name="redirect_to" value="{{ request('redirect_to') }}">
 
                             <div class="form-group">
                                 <input type="text"
@@ -157,15 +152,55 @@
                             </div>
 
                             <div class="text-center mt-4 font-weight-light">
-                                لديك حساب بالفعل؟ <a href="{{ route('login') }}" class="text-primary">تسجيل الدخول</a>
+                                لديك حساب بالفعل؟ <a
+                                    href="{{ route('login', ['redirect_to' => request('redirect_to')]) }}"
+                                    class="text-primary">تسجيل الدخول</a>
                             </div>
                         </form>
+
+                        <div class="mt-4">
+
+                            <div class="text-center mb-3">
+                                <h6 class="text-muted font-weight-bold">أو سجل الدخول باستخدام</h6>
+                            </div>
+
+                            <div class="row">
+
+                                <div class="col-6 pr-1">
+
+                                    <a href="{{ route('social.redirect', 'google') }}?redirect_to={{ request('redirect_to') }}"
+                                        class="btn btn-light btn-block border d-flex align-items-center justify-content-center py-2">
+
+                                        <img src="{{ asset('assets/frontend/images/icons/google1.png') }}" width="22"
+                                            class="ml-2" alt="Google">
+
+                                        <span class="font-weight-bold text-dark">Google</span>
+
+                                    </a>
+
+                                </div>
+
+                                <div class="col-6 pl-1">
+
+                                    <a href="{{ route('social.redirect', 'facebook') }}?redirect_to={{ request('redirect_to') }}"
+                                        class="btn btn-primary btn-block d-flex align-items-center justify-content-center py-2">
+
+                                        <img src="{{ asset('assets/frontend/images/icons/facebook.png') }}" width="22"
+                                            class="ml-2" alt="Facebook">
+
+                                        <span class="font-weight-bold">Facebook</span>
+
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- content-wrapper ends -->
     </div>
-    <!-- page-body-wrapper ends -->
 </div>
 @endsection

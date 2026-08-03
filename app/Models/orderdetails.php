@@ -28,7 +28,13 @@ class orderdetails extends Model
         'variant_id',
         'product_name',
         'product_image',
+        'design_id',
     ];
+
+    public function design()
+    {
+        return $this->belongsTo(CustomDesign::class, 'design_id');
+    }
 
     public function lineTotal(): float
     {

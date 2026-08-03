@@ -4,6 +4,8 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -21,6 +23,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'google_id',
+        'facebook_id',
+        'avatar',
+        'role_id',
+        'is_active',
     ];
 
     /**
@@ -43,6 +50,38 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_active' => 'boolean',
         ];
+    }
+
+    public function role(): BelongsTo
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    public function userPermissions(): HasMany
+    {
+        return $this->hasMany(UserPermission::class);
+    }
+
+    public function scopeEmployees($query)
+    {
+        return $query->where('role_id', '!=', static::customerRoleId());
+    }
+
+    public function scopeCustomers($query)
+    {
+        return $query->where('role_id', '=', static::customerRoleId());
+    }
+
+    protected static function customerRoleId(): int
+    {
+        static $id = null;
+
+        if ($id === null) {
+            $id = Role::where('name', 'customer')->value('id');
+        }
+
+        return $id;
     }
 }

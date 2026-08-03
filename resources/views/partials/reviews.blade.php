@@ -1,6 +1,6 @@
 <!-- Swiper CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-<section class="reviews-section p-t-50">
+<section class="reviews-section p-t-50 p-b-140">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 offset-lg-2 text-center">
@@ -16,7 +16,7 @@
 
         <!-- Swiper Carousel -->
         <div class="swiper reviewSwiper">
-            <div class="swiper-wrapper">
+            <div class="swiper-wrapper p-b-70">
                 @forelse($reviews as $review)
                 <div class="swiper-slide">
                     <div class="review-card">
@@ -27,7 +27,7 @@
                         <div class="review-content" dir="rtl">
                             <!-- بيانات المستخدم -->
                             <div class="d-flex align-items-center mb-2">
-                                <img src="{{ asset('assets/frontend/images/user.png') }}" class="user-img">
+                                <x-user-avatar :user="$review->user" class="user-img" />
                                 <div class="ms-2 p-r-10">
                                     <div class="name">{{ $review->name }}</div>
                                     <small class="text-muted">{{ $review->created_at->diffForHumans() }}</small>

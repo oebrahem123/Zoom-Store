@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -40,6 +42,13 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
+    protected function registered(Request $request, $user)
+    {
+        if ($request->filled('redirect_to')) {
+            return redirect()->intended($request->redirect_to);
+        }
+    }
+
     /**
      * Get a validator for an incoming registration request.
      *
@@ -63,10 +72,13 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        $customerRole = Role::where('name', 'customer')->firstOrFail();
+
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'role_id' => $customerRole->id,
         ]);
     }
 }

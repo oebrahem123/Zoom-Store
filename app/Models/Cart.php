@@ -18,6 +18,7 @@ class Cart extends Model
         'size',
         'color',
         'variant_id',
+        'design_id',
         'product_name',
         'product_price',
         'product_image',
@@ -45,7 +46,8 @@ class Cart extends Model
 
         // 🧠 ترتيب الأولويات
         $this->display_image =
-            $variantImage?->imagepath
+            $this->design?->preview_image
+            ?? $variantImage?->imagepath
             ?? $this->product_image
             ?? $this->product?->imagepath
             ?? 'images/default.png';
@@ -75,5 +77,10 @@ class Cart extends Model
         $this->isAvailable = $this->availabilityStatus === 'available';
 
         return $this;
+    }
+
+    public function design()
+    {
+        return $this->belongsTo(CustomDesign::class);
     }
 }

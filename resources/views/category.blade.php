@@ -49,13 +49,15 @@
                         </div>
 
                         <div class="block2-txt-child2 flex-r p-t-3">
-                            <a href="/wishlist/add/{{ $item->id }}"
-                                class="btn-addwish-b2 dis-block pos-relative js-addwish-b2" tabindex="0">
+                            @auth
+                            <a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2 {{ in_array($item->id, $wishlistProductIds ?? []) ? 'js-addedwish-b2' : '' }}"
+                                data-product-id="{{ $item->id }}" tabindex="0">
                                 <img class="icon-heart1 dis-block trans-04"
                                     src="{{asset('assets/frontend/images/icons/icon-heart-01.png') }}" alt="ICON">
                                 <img class="icon-heart2 dis-block trans-04 ab-t-l"
                                     src="{{asset('assets/frontend/images/icons/icon-heart-02.png') }}" alt="ICON">
                             </a>
+                            @endauth
                         </div>
                         {{-- <div style="padding:10px;">
                             <a href="/addproducttocart/{{ $item->id }}" class="btn btn-warning w-100">

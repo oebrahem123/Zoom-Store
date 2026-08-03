@@ -8,6 +8,9 @@ use App\Models\Category;
 use App\Models\Order;
 use App\Models\User;
 use App\Models\orderdetails;
+use App\Services\Dashboard\DashboardOverviewService;
+use App\Services\Dashboard\QuickActionsService;
+use App\Services\Dashboard\RecentOrdersService;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -78,7 +81,11 @@ class AdminController extends Controller
         }
 
         // ✅ تمرير كل البيانات إلى الواجهة
-        return view('admin.index', compact(
+        $dashboardOverview = DashboardOverviewService::make();
+        $quickActions = QuickActionsService::make();
+        $recentOrders = RecentOrdersService::make();
+
+        $data = compact(
             'productsCount',
             'categoriesCount',
             'ordersCount',
@@ -92,6 +99,13 @@ class AdminController extends Controller
             'country',
             'weatherDesc',
             'weatherIcon'
+        );
+
+        return view('admin.index', array_merge(
+            $data,
+            $dashboardOverview,
+            $quickActions,
+            $recentOrders
         ));
     }
 

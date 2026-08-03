@@ -130,9 +130,10 @@
                         يمكنك تعديل أو حذف أي منتج من هنا
                     </p>
 
-                    {{-- زر إضافة منتج جديد --}}
+                    {{-- أزرار إضافة منتج --}}
                     <div class="mb-3 text-end">
-                        <a href="{{ route('admin.products.create') }}" class="btn btn-primary">إضافة منتج جديد</a>
+                        <a href="{{ route('admin.products.custom.create') }}" class="btn btn-primary">إضافة منتج مخصص</a>
+                        <a href="{{ route('admin.products.create') }}" class="btn btn-outline-secondary ml-2">إضافة منتج عادي</a>
                     </div>
 
                     {{-- إشعار نجاح --}}
@@ -150,6 +151,7 @@
                                     <th>السعر</th>
                                     <th>الكمية</th>
                                     <th>القسم</th>
+                                    <th>قابل للتصميم</th>
                                     <th>الوصف</th>
                                     <th>التحكم</th>
                                 </tr>
@@ -186,6 +188,15 @@
                                         {{-- القسم --}}
                                         <td>{{ $product->category->name ?? 'غير محدد' }}</td>
 
+                                        {{-- قابل للتصميم --}}
+                                        <td>
+                                            @if($product->is_designable)
+                                                <span class="badge bg-success" style="font-size:12px;">🔹 قابل للتصميم</span>
+                                            @else
+                                                <span class="badge bg-secondary" style="font-size:12px;">عادي</span>
+                                            @endif
+                                        </td>
+
                                         {{-- الوصف --}}
                                         <td style="max-width:200px;">
                                             <div class="text-truncate" title="{{ $product->description }}">
@@ -201,10 +212,10 @@
                                                     class="btn btn-warning btn-sm control-btn">
                                                     <i class="fas fa-edit"></i> تعديل
                                                 </a>
-                                                {{-- زر اضافه صورة --}}
-                                                <a href="{{ route('admin.products.AddProductImages', $product->id) }}"
+                                                {{-- زر الصور — يوجه لتعديل المنتج (قسم الصور) --}}
+                                                <a href="{{ route('admin.products.edit', $product->id) }}"
                                                     class="btn btn-dark btn-sm control-btn">
-                                                    <i class="fas fa-image"></i> إضافه صور المنتج
+                                                    <i class="fas fa-image"></i> إدارة الصور
                                                 </a>
 
                                                 {{-- زر الحذف --}}
@@ -222,12 +233,18 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="7" class="text-center text-muted">لا توجد منتجات حالياً</td>
+                                        <td colspan="8" class="text-center text-muted">لا توجد منتجات حالياً</td>
                                     </tr>
                                 @endforelse
                             </tbody>
                         </table>
                     </div>
+
+                    @if(method_exists($products, 'links') && $products->hasPages())
+                        <div class="mt-3 text-center">
+                            {{ $products->links() }}
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>

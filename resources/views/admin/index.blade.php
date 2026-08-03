@@ -8,8 +8,8 @@
             <div class="col-12 col-xl-8 mb-4 mb-xl-0">
                 <h3 class="font-weight-bold">
                     مرحباً
-                    @auth
-                    {{ Auth::user()->name }}
+                    @auth('admin')
+                    {{ Auth::guard('admin')->user()->name }}
                     @else
                     Guest
                     @endauth
@@ -145,7 +145,11 @@
     </div>
 </div>
 
-</div>
+
+@include('admin.partials.dashboard-overview')
+@include('admin.partials.quick-actions')
+@include('admin.partials.recent-orders')
+
 <!-- content-wrapper ends -->
 
 <!-- Footer مصحح -->
@@ -161,7 +165,6 @@
         </span>
     </div>
 </footer>
-</div>
 <!-- main-panel ends -->
 
 

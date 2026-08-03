@@ -5,7 +5,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Store Admin</title>
+    <title> Admin Store</title>
     <!-- plugins:css -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css">
     <!-- Feather Icons -->
@@ -25,7 +25,7 @@
     <!-- inject:css -->
     <link rel="stylesheet" href="{{ asset('assets/admin/css/vertical-layout-light/style.css') }}">
     <!-- endinject -->
-    <link rel="shortcut icon" href="{{ asset('assets/admin/images/omars.png') }}" />
+    <link rel="shortcut icon" href="{{ asset('assets/frontend/images/logo/icon.png') }}" />
     <link rel="stylesheet" href="{{ asset('assets/admin/css/style.css') }}">
 </head>
 
@@ -35,9 +35,9 @@
         <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
             <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
                 <a class="navbar-brand brand-logo-mini" href="index.html"><img
-                        src="{{ asset('assets/admin/images/omars.png') }}" alt="logo" /></a>
-                <a class="navbar-brand brand-logo mr-5" href="index.html"><img
-                        src="{{ asset('assets/admin/images/logo1.png') }}" class="mr-2" alt="logo" /></a>
+                        src="{{ asset('assets/frontend/images/logo/icon.png') }}" alt="logo" /></a>
+                <a class="navbar-brand brand-logo" href="index.html"><img
+                        src="{{ asset('assets/frontend/images/logo/logo-white.png') }}" class="mr-2" alt="logo" /></a>
             </div>
             <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
                 <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
@@ -46,49 +46,41 @@
 
                 <ul class="navbar-nav navbar-nav-right">
 
-                    @guest
-                    {{-- المستخدم غير مسجل الدخول --}}
-                    @if (Route::has('login'))
+                    @php $adminUser = Auth::guard('admin')->user(); @endphp
+                    @guest('admin')
+                    {{-- Admin غير مسجل --}}
+                    @if (Route::has('admin.login'))
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="{{ route('login') }}">{{ __('تسجيل الدخول') }}</a>
-                    </li>
-                    @endif
-
-                    @if (Route::has('register'))
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="{{ route('register') }}">{{ __('إنشاء حساب') }}</a>
+                        <a class="nav-link text-white" href="{{ route('admin.login') }}">{{ __('تسجيل الدخول') }}</a>
                     </li>
                     @endif
                     @else
-                    {{-- المستخدم مسجل الدخول --}}
+                    {{-- Admin مسجل الدخول --}}
                     <li class="nav-item nav-profile dropdown d-flex align-items-center">
                         <a class="nav-link dropdown-toggle d-flex align-items-center justify-content-end" href="#"
                             data-toggle="dropdown" id="profileDropdown"
                             style="gap: 8px; color: #fff; text-decoration: none;">
 
-                            {{-- اسم المستخدم على الشمال --}}
-                            <span class="fw-bold" style="color: #fff;">{{ Auth::user()->name }}</span>
+                            <span class="fw-bold" style="color: #fff;">{{ $adminUser->name }}</span>
 
-                            {{-- صورة المستخدم على اليمين --}}
-                            @if (Auth::user()->profile_image)
-                            <img src="{{ asset(Auth::user()->profile_image) }}" alt="profile" class="rounded-circle"
+                            @if ($adminUser->profile_image)
+                            <img src="{{ asset($adminUser->profile_image) }}" alt="profile" class="rounded-circle"
                                 style="width:32px; height:32px; object-fit:cover; margin-right:8px;">
                             @endif
 
-                            {{-- السهم --}}
                             <i class="ti-angle-down text-white" style="font-size:12px; margin-right:6px;"></i>
                         </a>
 
-                        {{-- القائمة المنسدلة --}}
                         <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown"
                             style="background-color: #fff; border-radius: 8px; min-width: 160px;">
 
-                            <a class="dropdown-item text-dark" href="{{ route('logout') }}"
-                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            <a class="dropdown-item text-dark" href="{{ route('admin.logout') }}"
+                                onclick="event.preventDefault(); document.getElementById('admin-logout-form').submit();">
                                 <i class="ti-power-off text-primary"></i> تسجيل الخروج
                             </a>
 
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            <form id="admin-logout-form" action="{{ route('admin.logout') }}" method="POST"
+                                class="d-none">
                                 @csrf
                             </form>
                         </div>
@@ -112,15 +104,41 @@
                 <ul class="nav">
 
 
-                    {{-- Dashboard --}}
+                    @permission(\App\Permissions\Permission::DASHBOARD_VIEW)
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('admin.index') }}">
                             <i class="icon-grid menu-icon"></i>
                             <span class="menu-title">Dashboard</span>
                         </a>
                     </li>
+                    @endpermission
 
-                    {{-- الأقسام --}}
+                    @anypermission([\App\Permissions\Permission::EMPLOYEES_VIEW, \App\Permissions\Permission::EMPLOYEES_CREATE])
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="collapse" href="#employeesMenu" aria-controls="employeesMenu"
+                            data-menu="employees">
+                            <i class="mdi mdi-account-multiple menu-icon"></i>
+                            <span class="menu-title">الموظفين</span>
+                            <i class="menu-arrow"></i>
+                        </a>
+                        <div class="collapse" id="employeesMenu">
+                            <ul class="nav flex-column sub-menu">
+                                @permission(\App\Permissions\Permission::EMPLOYEES_CREATE)
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('admin.employees.create') }}">إضافة موظف</a>
+                                </li>
+                                @endpermission
+                                @permission(\App\Permissions\Permission::EMPLOYEES_VIEW)
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('admin.employees.index') }}">كل الموظفين</a>
+                                </li>
+                                @endpermission
+                            </ul>
+                        </div>
+                    </li>
+                    @endanypermission
+
+                    @anypermission([\App\Permissions\Permission::CATEGORIES_VIEW, \App\Permissions\Permission::CATEGORIES_CREATE])
                     <li class="nav-item">
                         <a class="nav-link" data-toggle="collapse" href="#categoriesMenu" aria-controls="categoriesMenu"
                             data-menu="categories">
@@ -130,17 +148,22 @@
                         </a>
                         <div class="collapse " id="categoriesMenu">
                             <ul class="nav flex-column sub-menu">
+                                @permission(\App\Permissions\Permission::CATEGORIES_CREATE)
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('admin.categories.create') }}">إضافة قسم جديد</a>
                                 </li>
+                                @endpermission
+                                @permission(\App\Permissions\Permission::CATEGORIES_VIEW)
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('admin.categories.index') }}">كل الأقسام</a>
                                 </li>
+                                @endpermission
                             </ul>
                         </div>
                     </li>
+                    @endanypermission
 
-                    {{-- المنتجات --}}
+                    @anypermission([\App\Permissions\Permission::PRODUCTS_VIEW, \App\Permissions\Permission::PRODUCTS_CREATE])
                     <li class="nav-item ">
                         <a class="nav-link" data-toggle="collapse" href="#productsMenu" aria-controls="productsMenu"
                             data-menu="products">
@@ -150,17 +173,25 @@
                         </a>
                         <div class="collapse" id="productsMenu">
                             <ul class="nav flex-column sub-menu">
+                                @permission(\App\Permissions\Permission::PRODUCTS_CREATE)
                                 <li class="nav-item">
-                                    <a class="nav-link " href="{{ route('admin.products.create') }}">إضافة منتج جديد</a>
+                                    <a class="nav-link" href="{{ route('admin.products.create') }}">إضافة منتج عادي</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link fw-bold" href="{{ route('admin.products.custom.create') }}">إضافة منتج مخصص</a>
+                                </li>
+                                @endpermission
+                                @permission(\App\Permissions\Permission::PRODUCTS_VIEW)
                                 <li class="nav-item">
                                     <a class="nav-link " href="{{ route('admin.products.index') }}">كل المنتجات</a>
                                 </li>
+                                @endpermission
                             </ul>
                         </div>
                     </li>
+                    @endanypermission
 
-                    {{-- السجلات --}}
+                    @anypermission([\App\Permissions\Permission::DELETE_LOGS_VIEW, \App\Permissions\Permission::AUDIT_LOGS_VIEW])
                     <li class="nav-item ">
                         <a class="nav-link" data-toggle="collapse" href="#logsMenu" aria-controls="logsMenu"
                             data-menu="logs">
@@ -170,14 +201,47 @@
                         </a>
                         <div class="collapse" id="logsMenu">
                             <ul class="nav flex-column sub-menu">
+                                @permission(\App\Permissions\Permission::DELETE_LOGS_VIEW)
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('admin.delete_logs.index') }}">سجل الحذف</a>
                                 </li>
+                                @endpermission
+                                @permission(\App\Permissions\Permission::AUDIT_LOGS_VIEW)
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('admin.audit_logs.index') }}">سجل النشط</a>
+                                </li>
+                                @endpermission
                             </ul>
                         </div>
                     </li>
+                    @endanypermission
 
-                    {{-- 🔹 قسم الطلبات --}}
+                    @anypermission([\App\Permissions\Permission::DESIGNS_VIEW, \App\Permissions\Permission::DESIGNS_CREATE])
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="collapse" href="#designsMenu" aria-controls="designsMenu"
+                            data-menu="designs">
+                            <i class="mdi mdi-palette menu-icon"></i>
+                            <span class="menu-title">التصميمات</span>
+                            <i class="menu-arrow"></i>
+                        </a>
+                        <div class="collapse" id="designsMenu">
+                            <ul class="nav flex-column sub-menu">
+                                @permission(\App\Permissions\Permission::DESIGNS_CREATE)
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('admin.designs.create') }}">إضافة تصميم</a>
+                                </li>
+                                @endpermission
+                                @permission(\App\Permissions\Permission::DESIGNS_VIEW)
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('admin.designs.index') }}">مكتبة التصميمات</a>
+                                </li>
+                                @endpermission
+                            </ul>
+                        </div>
+                    </li>
+                    @endanypermission
+
+                    @permission(\App\Permissions\Permission::ORDERS_VIEW)
                     <li class="nav-item">
                         <a class="nav-link" data-toggle="collapse" href="#ordersMenu" aria-controls="ordersMenu">
                             <i class="mdi mdi-cart-plus menu-icon"></i>
@@ -193,20 +257,22 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="">
+                                    <a class="nav-link"
+                                        href="{{ route('admin.orders.previousorder', ['status' => 'delivered']) }}">
                                         الطلبات المكتملة
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link " href="">
+                                    <a class="nav-link "
+                                        href="{{ route('admin.orders.previousorder', ['status' => 'active']) }}">
                                         قيد التنفيذ
                                     </a>
                                 </li>
                             </ul>
                         </div>
                     </li>
+                    @endpermission
 
-                    {{-- 🔹 الموقع الرئيسي --}}
                     <li class="nav-item">
                         <a class="nav-link" data-toggle="collapse" href="#homeMenu" aria-controls="homeMenu">
                             <i class="mdi mdi-home menu-icon"></i>
