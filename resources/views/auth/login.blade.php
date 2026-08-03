@@ -14,6 +14,9 @@
 
                         <form method="POST" action="{{ route('login') }}" class="pt-3">
                             @csrf
+                            @if (request('redirect_to'))
+                            <input type="hidden" name="redirect_to" value="{{ request('redirect_to') }}">
+                            @endif
 
                             <div class="form-group">
                                 <input type="email"
@@ -59,21 +62,60 @@
                                         تذكرني
                                     </label>
                                 </div>
-
                             </div>
-
-
 
                             <div class="text-center mt-4 font-weight-light">
-                                ليس لديك حساب؟ <a href="{{ route('register') }}" class="text-primary">إنشاء حساب</a>
+                                ليس لديك حساب؟ <a
+                                    href="{{ route('register', ['redirect_to' => request('redirect_to')]) }}"
+                                    class="text-primary">إنشاء حساب</a>
                             </div>
                         </form>
+
+                        <div class="mt-4">
+
+                            <div class="text-center mb-3">
+                                <h6 class="text-muted font-weight-bold">أو سجل الدخول باستخدام</h6>
+                            </div>
+
+                            <div class="row">
+
+                                <div class="col-6 pr-1">
+
+                                    <a href="{{ route('social.redirect', ['provider' => 'google', 'redirect_to' => request('redirect_to')]) }}"
+                                        class="btn btn-light btn-block border d-flex align-items-center justify-content-center py-2">
+
+                                        <img src="{{ asset('assets/frontend/images/icons/google1.png') }}" width="22"
+                                            class="ml-2" alt="Google">
+
+                                        <span class="font-weight-bold text-dark">Google</span>
+
+                                    </a>
+
+                                </div>
+
+                                <div class="col-6 pl-1">
+
+                                    <a href="{{ route('social.redirect', ['provider' => 'facebook', 'redirect_to' => request('redirect_to')]) }}"
+                                        class="btn btn-primary btn-block d-flex align-items-center justify-content-center py-2">
+
+                                        <img src="{{ asset('assets/frontend/images/icons/facebook.png') }}" width="22"
+                                            class="ml-2" alt="Facebook">
+
+                                        <span class="font-weight-bold">Facebook</span>
+
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- content-wrapper ends -->
     </div>
-    <!-- page-body-wrapper ends -->
 </div>
+
+
 @endsection
